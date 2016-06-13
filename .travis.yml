@@ -4,6 +4,8 @@ python:
 before_install:
 - openssl aes-256-cbc -K $encrypted_c50ef8f16548_key -iv $encrypted_c50ef8f16548_iv
   -in uxgraph-client-secret.json.enc -out uxgraph-client-secret.json -d
+install:
+  true
 deploy:
   provider: gae
   keyfile: "uxgraph-client-secret.json"
