@@ -10,6 +10,6 @@ script:
 - echo "No Script to run"
 deploy:
   provider: gae
-  #skip_cleanup: true
+  skip_cleanup: true
   keyfile: uxgraph-client-secret.json
   project: tessa3-uxgraph
