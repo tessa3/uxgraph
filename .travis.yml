@@ -8,4 +8,3 @@ deploy:
   provider: gae
   keyfile: "uxgraph-client-secret.json"
   project: "tessa3-uxgraph"
-script: "main_test.py"
