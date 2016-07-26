@@ -1,1 +1,4 @@
 uxgraph-client-secret.json
+
+# Mac files
+.DS_Store
