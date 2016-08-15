@@ -142,6 +142,6 @@ gulp.task('copy.deps', (done: any) => {
         'node_modules/zone.js/dist/zone.js', // needed by index.html
         'node_modules/rxjs/bundles/Rx.js', // needed by index.html
 
-        '@angular/platform-browser-dynamic/package.json' // needed by zone.js
+        'node_modules/@angular/platform-browser-dynamic/package.json' // needed by zone.js
     ]).pipe(gulp.dest('dist/vendor'));
 });
