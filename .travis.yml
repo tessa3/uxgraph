@@ -9,10 +9,23 @@ before_install:
 install: # setting 'install' to 'true' bypasses the install process: https://goo.gl/Az43Ut
   true
 script:
+# Check node/npm versions
 - node -v
 - npm -v
+
+# These commands help upgrade Node (See http://goo.gl/5wkGPK)
+- . $HOME/.nvm/nvm.sh
+- nvm install stable
+- nvm use stable
+
 - npm install --verbose
+
+# Check node/npm versions once more
+- node -v
+- npm -v
+
 - npm run build.dev
+
 deploy:
   provider: gae
   skip_cleanup: true
