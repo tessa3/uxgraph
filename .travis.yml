@@ -26,10 +26,12 @@ install: # setting 'install' to 'true' bypasses the install process: https://goo
 - node -v
 - npm -v
 #  true
+
 script:
-
-
 - npm run build.dev
+
+before_deploy:
+- rm -rf node_modules
 
 deploy:
   provider: gae
