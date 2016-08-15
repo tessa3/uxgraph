@@ -131,4 +131,19 @@ gulp.task('clean.once', (done: any) => {
     util.log('Skipping clean on rebuild');
     done();
   }
-})
+});
+
+gulp.task('copy.deps', (done: any) => {
+    return gulp.src([
+        // node_modules/core-js/client/shim.min.js?1471243387532
+        'node_modules/core-js/client/shim.min.js',
+        // node_modules/systemjs/dist/system.src.js?1471243387533
+        // node_modules/systemjs/dist/system.src.js?1471243387533
+        'node_modules/systemjs/dist/system.js',
+        // node_modules/zone.js/dist/zone.js?1471243387536
+        // node_modules/zone.js/dist/zone.js?1471243387536
+        'node_modules/zone.js/dist/zone.js',
+        // node_modules/rxjs/bundles/Rx.js?1471243387536
+        'node_modules/rxjs/bundles/Rx.js',
+    ]).pipe(gulp.dest('dist/vendor'));
+});
