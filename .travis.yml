@@ -9,6 +9,8 @@ before_install:
 install: # setting 'install' to 'true' bypasses the install process: https://goo.gl/Az43Ut
   true
 script:
+- node -v
+- npm -v
 - npm install --verbose
 - npm run build.dev
 deploy:
