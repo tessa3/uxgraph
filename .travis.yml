@@ -6,13 +6,11 @@ node_js:
 before_install:
 - openssl aes-256-cbc -K $encrypted_c50ef8f16548_key -iv $encrypted_c50ef8f16548_iv
   -in uxgraph-client-secret.json.enc -out uxgraph-client-secret.json -d
-install: # setting 'install' to 'true' bypasses the install process: https://goo.gl/Az43Ut
-  true
-script:
 # Check node/npm versions
 - node -v
 - npm -v
 
+install: # setting 'install' to 'true' bypasses the install process: https://goo.gl/Az43Ut
 # These commands help upgrade Node (See http://goo.gl/5wkGPK)
 - . $HOME/.nvm/nvm.sh
 - nvm install stable
@@ -23,6 +21,9 @@ script:
 # Check node/npm versions once more
 - node -v
 - npm -v
+#  true
+script:
+
 
 - npm run build.dev
 
