@@ -2,6 +2,20 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+# TODO These static files are pointing directly to dev files when they surely shouldn't be
 handlers:
-- url: /.*
-  script: main.app
+- url: /
+  static_files: dist/dev/index.html
+  upload: dist/dev/index.html
+
+- url: /node_modules
+  static_dir: node_modules
+
+- url: /dist/dev
+  static_dir: dist/dev
+
+- url: /app
+  static_dir: dist/dev/app
+
+- url: /assets
+  static_dir: dist/dev/assets
