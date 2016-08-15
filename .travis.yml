@@ -12,11 +12,15 @@ before_install:
 
 install: # setting 'install' to 'true' bypasses the install process: https://goo.gl/Az43Ut
 # These commands help upgrade Node (See http://goo.gl/5wkGPK)
-- . $HOME/.nvm/nvm.sh
+#- . $HOME/.nvm/nvm.sh
 - nvm install stable
 - nvm use stable
 
-- npm install --verbose
+# Check node/npm versions
+- node -v
+- npm -v
+
+- npm install
 
 # Check node/npm versions once more
 - node -v
