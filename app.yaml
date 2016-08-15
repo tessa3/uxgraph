@@ -9,7 +9,7 @@ handlers:
   upload: dist/dev/index.html
 
 - url: /node_modules
-  static_dir: node_modules
+  static_dir: dist/vendor
 
 - url: /dist/dev
   static_dir: dist/dev
