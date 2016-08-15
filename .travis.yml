@@ -7,9 +7,11 @@ before_install:
 install: # setting 'install' to 'true' bypasses the install process: https://goo.gl/Az43Ut
   true
 script:
-- echo "No Script to run"
+- npm install
+- npm run build.dev
 deploy:
   provider: gae
   skip_cleanup: true
   keyfile: uxgraph-client-secret.json
   project: tessa3-uxgraph
+  on: angular2-seed
