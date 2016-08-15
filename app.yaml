@@ -8,7 +8,7 @@ handlers:
   static_files: dist/dev/index.html
   upload: dist/dev/index.html
 
-- url: /node_modules
+- url: /node_modules/.*/.*
   static_dir: dist/vendor
 
 - url: /dist/dev

@@ -133,17 +133,15 @@ gulp.task('clean.once', (done: any) => {
   }
 });
 
+// --------------
+// Copies dependencies from node_modules to dist/vendor
 gulp.task('copy.deps', (done: any) => {
     return gulp.src([
-        // node_modules/core-js/client/shim.min.js?1471243387532
-        'node_modules/core-js/client/shim.min.js',
-        // node_modules/systemjs/dist/system.src.js?1471243387533
-        // node_modules/systemjs/dist/system.src.js?1471243387533
-        'node_modules/systemjs/dist/system.js',
-        // node_modules/zone.js/dist/zone.js?1471243387536
-        // node_modules/zone.js/dist/zone.js?1471243387536
-        'node_modules/zone.js/dist/zone.js',
-        // node_modules/rxjs/bundles/Rx.js?1471243387536
-        'node_modules/rxjs/bundles/Rx.js',
+        'node_modules/core-js/client/shim.min.js', // needed by index.html
+        'node_modules/systemjs/dist/system.src.js', // needed by index.html
+        'node_modules/zone.js/dist/zone.js', // needed by index.html
+        'node_modules/rxjs/bundles/Rx.js', // needed by index.html
+
+        '@angular/platform-browser-dynamic/package.json' // needed by zone.js
     ]).pipe(gulp.dest('dist/vendor'));
 });
