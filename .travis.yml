@@ -7,7 +7,7 @@ before_install:
 install: # setting 'install' to 'true' bypasses the install process: https://goo.gl/Az43Ut
   true
 script:
-- npm install
+- npm install --verbose
 - npm run build.dev
 deploy:
   provider: gae
