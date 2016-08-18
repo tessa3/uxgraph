@@ -28,11 +28,7 @@ install: # setting 'install' to 'true' bypasses the install process: https://goo
 #  true
 
 script:
-- npm run build.dev
-- gulp copy.deps
-
-before_deploy:
-- rm -rf node_modules
+- npm run build.prod
 
 deploy:
   provider: gae
