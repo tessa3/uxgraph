@@ -16,16 +16,7 @@ install: # setting 'install' to 'true' bypasses the install process: https://goo
 - nvm install stable
 - nvm use stable
 
-# Check node/npm versions
-- node -v
-- npm -v
-
 - npm install
-
-# Check node/npm versions once more
-- node -v
-- npm -v
-#  true
 
 script:
 - npm run build.prod
