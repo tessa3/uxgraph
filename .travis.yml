@@ -30,6 +30,9 @@ install: # setting 'install' to 'true' bypasses the install process: https://goo
 script:
 - npm run build.prod
 
+before_deploy:
+- rm -rf node_modules
+
 deploy:
   provider: gae
   skip_cleanup: true
