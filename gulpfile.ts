@@ -132,16 +132,3 @@ gulp.task('clean.once', (done: any) => {
     done();
   }
 });
-
-// --------------
-// Copies dependencies from node_modules to dist/vendor
-gulp.task('copy.deps', (done: any) => {
-    return gulp.src([
-        'node_modules/core-js/client/shim.min.js', // needed by index.html
-        'node_modules/systemjs/dist/system.src.js', // needed by index.html
-        'node_modules/zone.js/dist/zone.js', // needed by index.html
-        'node_modules/rxjs/bundles/Rx.js', // needed by index.html
-
-        'node_modules/@angular/platform-browser-dynamic/package.json' // needed by zone.js
-    ]).pipe(gulp.dest('dist/vendor'));
-});
