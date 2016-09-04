@@ -1,7 +1,0 @@
-uxgraph-client-secret.json
-
-# Mac files
-.DS_Store
-node_modules
-dist
-coverage
