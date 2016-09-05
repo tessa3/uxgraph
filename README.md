@@ -7,4 +7,4 @@ A pet project by:
 * [girum](https://github.com/girum11)
 
 This is a [Material Design](https://material.google.com/) inspired app to model UX 
-experiences as PostIt Notes on an infinite, collaborative canvas.
+experiences as Post-It Notes on an infinite, collaborative canvas.
