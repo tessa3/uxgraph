@@ -2,6 +2,17 @@ var gulp = require('gulp');
 var browserSync = require('browser-sync').create();
 var concat = require('gulp-concat');
 var del = require('del');
+var gae = require('gulp-gae');
+
+var gae_dir = '/Users/eyuelt/Downloads/google_appengine';
+gulp.task('gae-serve', function() {
+  gulp.src('app.yaml').
+    pipe(gae('dev_appserver.py', [], {
+      port: 8081,
+      admin_port: 8001,
+    }, gae_dir));
+});
+
 
 // Clean
 gulp.task('clean:index', function() {
