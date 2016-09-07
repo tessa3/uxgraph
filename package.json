@@ -8,10 +8,13 @@
   "bugs": "https://github.com/tessa3/uxgraph/issues",
   "private": true,
   "license": "MIT",
+  "scripts": {
+    "build": "gulp build"
+  },
   "devDependencies": {
     "browser-sync": "^2.14.3",
+    "del": "^2.2.2",
     "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-gae": "0.0.4"
+    "gulp-concat": "^2.6.0"
   }
 }

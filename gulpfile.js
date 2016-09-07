@@ -1,15 +1,28 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync').create();
 var concat = require('gulp-concat');
+var del = require('del');
+
+// Clean
+gulp.task('clean:index', function() {
+  del(['dist/index.html']);
+});
+
+gulp.task('clean:css', function() {
+  del(['dist/css/*']);
+});
+
+gulp.task('clean', ['clean:index', 'clean:css']);
+
 
 // Build
-gulp.task('build:index', function() {
+gulp.task('build:index', ['clean:index'], function() {
   return gulp.src('src/index.html').
     pipe(gulp.dest('dist/')).
     pipe(browserSync.stream());
 });
 
-gulp.task('build:css', function() {
+gulp.task('build:css', ['clean:css'], function() {
   return gulp.src('src/css/*').
     pipe(concat('main.css')).
     pipe(gulp.dest('dist/css')).
@@ -25,7 +38,7 @@ gulp.task('watch', function() {
   gulp.watch('src/css/*', ['build:css']);
 });
 
-gulp.task('serve', ['watch'], function() {
+gulp.task('serve', ['build', 'watch'], function() {
   browserSync.init({
     server: {
       baseDir: 'dist'
