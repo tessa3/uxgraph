@@ -5,3 +5,7 @@ uxgraph-client-secret.json
 node_modules
 dist
 coverage
+
+# IntelliJ files
+*.iml
+.idea/
