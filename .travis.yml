@@ -27,3 +27,7 @@ deploy:
   keyfile: uxgraph-client-secret.json
   project: tessa3-uxgraph
   on: master
+
+cache:
+  directories:
+  - node_modules
