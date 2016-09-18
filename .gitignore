@@ -1,10 +1,11 @@
 uxgraph-client-secret.json
+node_modules
+dist
+typings
+coverage
 
 # Mac files
 .DS_Store
-node_modules
-dist
-coverage
 
 # IntelliJ files
 *.iml
