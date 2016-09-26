@@ -1,24 +1,21 @@
 :host {
-}
-
-#navbar-wrapper {
     background-color: #455A64;
     color: rgba(255, 255, 255, 0.87);
     height: 48px;
     display: flex;
 }
 
-#navbar-strip {
+app-header-strip {
     background-color: #607D8B;
-    flex: 0 0 50px;
+    flex: 0 0 60px;
     font-family: Roboto;
     font-weight: 100;
-    font-size: 28px;
-    padding-top: 4px;
+    font-size: 26px;
+    padding-top: 6px;
     text-align: center;
 }
 
-#navbar-content {
+app-header-content {
     background-color: transparent;
     font-size: 20px;
     font-weight: 300;
