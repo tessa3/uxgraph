@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
-import { Config, NavbarComponent, ToolbarComponent } from './shared/index';
+import { Config, NavbarComponent, ToolbarComponent, CardRendererComponent} from './shared/index';
+import './shared/card/card'
 
 /**
  * This class represents the main application component. Within the @Routes annotation is the configuration of the
@@ -10,11 +11,12 @@ import { Config, NavbarComponent, ToolbarComponent } from './shared/index';
   moduleId: module.id,
   selector: 'sd-app',
   templateUrl: 'app.component.html',
-  directives: [ROUTER_DIRECTIVES, NavbarComponent, ToolbarComponent]
+  directives: [ROUTER_DIRECTIVES, NavbarComponent, ToolbarComponent, CardRendererComponent]
 })
 
 export class AppComponent {
   constructor() {
     console.log('Environment config', Config);
+    this.card = new Card(50, 50, 50);
   }
 }
