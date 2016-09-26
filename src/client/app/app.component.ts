@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
-import { Config, NavbarComponent, ToolbarComponent, CardRendererComponent} from './shared/index';
+import { Config, NavbarComponent, ToolbarComponent, CardComponent} from './shared/index';
 import './shared/card/card'
 
 /**
@@ -11,7 +11,7 @@ import './shared/card/card'
   moduleId: module.id,
   selector: 'sd-app',
   templateUrl: 'app.component.html',
-  directives: [ROUTER_DIRECTIVES, NavbarComponent, ToolbarComponent, CardRendererComponent]
+  directives: [ROUTER_DIRECTIVES, NavbarComponent, ToolbarComponent, CardComponent]
 })
 
 export class AppComponent {

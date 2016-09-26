@@ -2,15 +2,15 @@ import { Component, Input, ElementRef } from '@angular/core';
 import './card';
 
 /**
- * This class represents the CardRenderer component.
+ * This class represents the Card component.
  */
 @Component({
   moduleId: module.id,
-  selector: '[card-renderer]',
-  templateUrl: 'card-renderer.component.html',
-  styleUrls: ['card-renderer.component.css']
+  selector: '[card]',
+  templateUrl: 'card.component.html',
+  styleUrls: ['card.component.css']
 })
-export class CardRendererComponent {
+export class CardComponent {
   // The card data to render on the canvas.
   @Input() card: Card = null;
   // The attributes passed to Snap for drawing the card shape.

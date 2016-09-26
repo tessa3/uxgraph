@@ -1,4 +1,4 @@
 /**
- * This barrel file provides the export for the shared CardRendererComponent.
+ * This barrel file provides the export for the shared CardComponent.
  */
-export * from './card-renderer.component';
+export * from './card.component';
