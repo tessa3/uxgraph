@@ -1,0 +1,8 @@
+:host {
+    background-color: white;
+    width: 100px;
+    height: 200px;
+}
+card-title {
+    font-color: green;
+}
