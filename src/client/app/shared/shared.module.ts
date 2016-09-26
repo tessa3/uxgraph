@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { ToolbarComponent } from './toolbar/index';
 import { NavbarComponent } from './navbar/index';
 import { AppHeaderComponent } from './app-header/index';
 import { NameListService } from './name-list/index';
@@ -14,8 +13,8 @@ import { NameListService } from './name-list/index';
 
 @NgModule({
   imports: [CommonModule, RouterModule],
-  declarations: [ToolbarComponent, NavbarComponent, AppHeaderComponent],
-  exports: [ToolbarComponent, NavbarComponent, AppHeaderComponent,
+  declarations: [NavbarComponent, AppHeaderComponent],
+  exports: [NavbarComponent, AppHeaderComponent,
     CommonModule, FormsModule, RouterModule]
 })
 export class SharedModule {
