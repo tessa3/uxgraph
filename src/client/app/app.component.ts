@@ -15,6 +15,7 @@ import './shared/card/card'
 })
 
 export class AppComponent {
+  card: Card = null;
   constructor() {
     console.log('Environment config', Config);
     this.card = new Card(50, 50, 50);

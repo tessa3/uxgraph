@@ -1,5 +1,5 @@
 import { Component, Input, ElementRef } from '@angular/core';
-import './Card';
+import './card';
 
 /**
  * This class represents the CardRenderer component.
@@ -14,11 +14,11 @@ export class CardRendererComponent {
   // The card data to render on the canvas.
   @Input() card: Card = null;
   // The attributes passed to Snap for drawing the card shape.
-  const drawingAttrs = { fill: "#fd6", stroke: "#000", strokeWidth: 1 };
+  drawingAttrs = { fill: "#fd6", stroke: "#000", strokeWidth: 1 };
   // The Snap element for rendering the card.
   snapElement = null;
   // The display offset. This changes as the map is panned around. Origin is top left.
-  displayOffset: Object = {x:0, y:0};
+  displayOffset = {x:0, y:0}; // TODO(eyuelt): define a Point interface
   // The current scale factor of the card shape.
   scale: number = 1;
   // A reference to the Snap object wrapping this component's dom element.
