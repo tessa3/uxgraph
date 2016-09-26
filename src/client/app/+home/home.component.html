@@ -1,4 +1,3 @@
 <ul>
-  <!--<li *ngFor="let card of cards">{{card.name}}: "{{card.text}}"</li>-->
-  <li *ngFor="let card of cards"><card></card></li>
+  <li *ngFor="let card of cards"><card [name]="card.name"></card></li>
 </ul>

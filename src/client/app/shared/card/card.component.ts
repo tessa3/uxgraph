@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 /**
  * This class represents the Card component.
@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
 })
 
 export class CardComponent {
-    name: string;
+    @Input() name: string;
     lastEdited: string;
 
     constructor() {

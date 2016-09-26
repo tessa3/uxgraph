@@ -3,9 +3,23 @@
   background-color: #f0f0f0;
   height: 100%;
   margin-top: -10px;
+  padding: 20px 40px;
 }
 
 ul {
   list-style-type: none;
   padding: 0 0 0 8px;
+}
+
+li {
+  width: 300px;
+  min-height: 200px;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: top;
+  margin: 20px;
+  zoom: 1;
+  *display: inline;
+  _height: 250px;
+  text-align: left;
 }
