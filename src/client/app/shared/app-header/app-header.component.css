@@ -1,0 +1,30 @@
+:host {
+}
+
+#navbar-wrapper {
+    background-color: #455A64;
+    color: rgba(255, 255, 255, 0.87);
+    height: 48px;
+    display: flex;
+}
+
+#navbar-strip {
+    background-color: #607D8B;
+    flex: 0 0 50px;
+    font-family: Roboto;
+    font-weight: 100;
+    font-size: 28px;
+    padding-top: 4px;
+    text-align: center;
+}
+
+#navbar-content {
+    background-color: transparent;
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0.1px;
+    line-height: 48px;
+    flex: 1;
+    font-family: Roboto;
+    padding-left: 15px;
+}
