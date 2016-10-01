@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import '../../shared/card/card'
 
 @Injectable()
-export class UxgCanvasService {
+export class CanvasService {
   cards: [Card] = [];
   constructor() {
     this.cards.push(new Card(20, 20, 20));

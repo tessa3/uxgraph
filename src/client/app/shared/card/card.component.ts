@@ -1,5 +1,5 @@
 import { Component, Input, ElementRef } from '@angular/core';
-import { UxgCanvasService } from '../uxg-canvas/uxg-canvas.service';
+import { CanvasService } from '../canvas/canvas.service';
 import './card';
 
 /**
@@ -26,7 +26,7 @@ export class CardComponent {
   snapWrap = null;
 
   // TODO(eyuelt): remove ElementRef once Snap is removed
-  constructor(domElemRef: ElementRef, public canvasService: UxgCanvasService) {
+  constructor(domElemRef: ElementRef, public canvasService: CanvasService) {
     this.snapWrap = Snap(domElemRef.nativeElement);
   }
 

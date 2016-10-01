@@ -6,4 +6,4 @@ export * from './navbar/index';
 export * from './toolbar/index';
 export * from './config/env.config';
 export * from './card/index';
-export * from './uxg-canvas/index';
+export * from './canvas/index';

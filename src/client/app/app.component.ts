@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
-import { Config, NavbarComponent, ToolbarComponent, UxgCanvasComponent } from './shared/index';
+import { Config, NavbarComponent, ToolbarComponent, CanvasComponent } from './shared/index';
 
 /**
  * This class represents the main application component. Within the @Routes annotation is the configuration of the
@@ -10,7 +10,7 @@ import { Config, NavbarComponent, ToolbarComponent, UxgCanvasComponent } from '.
   moduleId: module.id,
   selector: 'sd-app',
   templateUrl: 'app.component.html',
-  directives: [ROUTER_DIRECTIVES, NavbarComponent, ToolbarComponent, UxgCanvasComponent]
+  directives: [ROUTER_DIRECTIVES, NavbarComponent, ToolbarComponent, CanvasComponent]
 })
 
 export class AppComponent {
