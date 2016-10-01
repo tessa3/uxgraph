@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { CardComponent} from '../../shared/index';
-import '../../shared/card/card'
+import { CardComponent } from '../../shared/index';
+import { UxgCanvasService } from './uxg-canvas.service'; // Why doesn't ./index work?
 
 /**
  * This class represents the UxgCanvas component.
@@ -10,11 +10,9 @@ import '../../shared/card/card'
   selector: 'uxg-canvas',
   templateUrl: 'uxg-canvas.component.html',
   styleUrls: ['uxg-canvas.component.css'],
-  directives: [CardComponent]
+  directives: [CardComponent],
+  providers: [UxgCanvasService]
 })
 export class UxgCanvasComponent {
-  card: Card = null;
-  constructor() {
-    this.card = new Card(50, 50, 50);
-  }
+  constructor(public canvasService: UxgCanvasService) {}
 }
