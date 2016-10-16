@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import '../../shared/card/card'
+import '../../shared/card/card';
 
 @Injectable()
 export class CanvasService {

@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef } from '@angular/core';
+import { Component, Input, ElementRef, OnInit } from '@angular/core';
 import { CanvasService } from '../canvas/canvas.service';
 import './card';
 
@@ -11,11 +11,11 @@ import './card';
   templateUrl: 'card.component.html',
   styleUrls: ['card.component.css']
 })
-export class CardComponent {
+export class CardComponent implements OnInit {
   // The card data to render on the canvas.
   @Input() card: Card = null;
   // The attributes passed to Snap for drawing the card shape.
-  drawingAttrs = { fill: "#fd6", stroke: "#000", strokeWidth: 1 };
+  drawingAttrs = { fill: '#fd6', stroke: '#000', strokeWidth: 1 };
   // The Snap element for rendering the card.
   snapElement = null;
   // The display offset. This changes as the map is panned around. Origin is top left.
@@ -39,7 +39,7 @@ export class CardComponent {
   initSnapElement() {
     // Set the initial (x,y) to the origin to avoid having to account for the
     // initial (x,y) when doing transforms.
-    this.snapElement = this.snapWrap.circle(0, 0, this.card.radius)
+    this.snapElement = this.snapWrap.circle(0, 0, this.card.radius);
     this.snapElement.attr(this.drawingAttrs);
 
     // Don't scale the border when zooming.
