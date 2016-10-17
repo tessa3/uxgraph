@@ -14,14 +14,12 @@ import './card';
 export class CardComponent implements OnInit {
   // The card data to render on the canvas.
   @Input() card: Card = null;
+  // The current scale factor of the card shape.
+  scale: number = 1;
   // The attributes passed to Snap for drawing the card shape.
   drawingAttrs = { fill: '#fd6', stroke: '#000', strokeWidth: 1 };
   // The Snap element for rendering the card.
   snapElement = null;
-  // The display offset. This changes as the map is panned around. Origin is top left.
-  displayOffset = {x:0, y:0}; // TODO(eyuelt): define a Point interface
-  // The current scale factor of the card shape.
-  scale: number = 1;
   // A reference to the Snap object wrapping this component's dom element.
   snapWrap = null;
 
@@ -33,6 +31,7 @@ export class CardComponent implements OnInit {
   ngOnInit() {
     this.initSnapElement();
     this.performTransformations();
+    this.canvasService.addListener(this.update.bind(this));
   }
 
   // Create and init the Snap.svg element that is used for rendering the card.
@@ -43,16 +42,20 @@ export class CardComponent implements OnInit {
     this.snapElement.attr(this.drawingAttrs);
 
     // Don't scale the border when zooming.
-    var att = document.createAttribute('vector-effect');
+    let att = document.createAttribute('vector-effect');
     att.value = 'non-scaling-stroke';
     this.snapElement.node.setAttributeNode(att);
   }
 
+  update() {
+    this.scale = this.canvasService.zoomScale;
+    this.performTransformations();
+  };
+
   // Translate and scale the rendered card as required.
   performTransformations() {
-    const xPos = this.card.x + this.displayOffset.x;
-    const yPos = this.card.y + this.displayOffset.y;
-    const translateStr = `translate(${xPos},${yPos})`;
+    const {x, y} = this.canvasService.canvasCoordToViewportCoord({x:this.card.x, y:this.card.y});
+    const translateStr = `translate(${x},${y})`;
     const scaleStr = `scale(${this.scale})`;
     const transformStr = `${translateStr} ${scaleStr}`;
     this.snapElement.transform(transformStr);
