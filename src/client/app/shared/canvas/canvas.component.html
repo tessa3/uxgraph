@@ -1,3 +1,3 @@
-<svg id="svg" viewBox="0 0 400 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" (mousedown)="this.onMousedown($event)" (mousemove)="this.onMousemove($event)" (mouseup)="this.onMouseup($event)" (mousewheel)="this.onMousewheel($event)">
+<svg id="svg" viewBox="0 0 400 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" (mousedown)="this.onMousedown($event)" (mousewheel)="this.onMousewheel($event)">
   <g card *ngFor="let card of this.canvasService.cards" [card]="card"></g>
 </svg>

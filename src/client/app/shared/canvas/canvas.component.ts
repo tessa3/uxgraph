@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CardComponent } from '../../shared/index';
 import { CanvasService } from './canvas.service'; // Why doesn't ./index work?
 
@@ -28,7 +28,8 @@ export class CanvasComponent {
     return {top:0, left:0, bottom:0, right:0};
   }
 
-  onMousewheel(event: Event) {
+  // TODO(eyuelt): should this use HostListener or the template event binding?
+  onMousewheel(event: WheelEvent) {
     const canvasBounds = this.getCanvasBounds();
     const zoomScale = 1 + (event.deltaY * -0.01);
     const zoomPnt = {
@@ -40,7 +41,7 @@ export class CanvasComponent {
     event.preventDefault();
   }
 
-  onMousedown(event: Event) {
+  onMousedown(event: MouseEvent) {
     const canvasBounds = this.getCanvasBounds();
     this.panning = true;
     this.lastPanPnt = {
@@ -49,8 +50,8 @@ export class CanvasComponent {
     };
   }
 
-  // TODO(eyuelt): put this on window to handle the mouse leaving the canvas
-  onMousemove(event: Event) {
+  @HostListener('document:mousemove', ['$event'])
+  onMousemove(event: MouseEvent) {
     if (this.panning) {
       const canvasBounds = this.getCanvasBounds();
       const newPanPnt = {
@@ -66,8 +67,8 @@ export class CanvasComponent {
     }
   }
 
-  // TODO(eyuelt): put this on window to handle the mouse leaving the canvas
-  onMouseup(event: Event) {
+  @HostListener('document:mouseup', ['$event'])
+  onMouseup(event: MouseEvent) {
     this.panning = false;
     this.lastPanPnt = null;
   }
