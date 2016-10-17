@@ -2,6 +2,9 @@ import { Component, Input, ElementRef, OnInit } from '@angular/core';
 import { CanvasService } from '../canvas/canvas.service';
 import './card';
 
+// Forward declaring Snap.svg. Temporary.
+declare var Snap: any;
+
 /**
  * This class represents the Card component.
  */
@@ -19,9 +22,9 @@ export class CardComponent implements OnInit {
   // The attributes passed to Snap for drawing the card shape.
   drawingAttrs = { fill: '#fd6', stroke: '#000', strokeWidth: 1 };
   // The Snap element for rendering the card.
-  snapElement = null;
+  snapElement: any = null;
   // A reference to the Snap object wrapping this component's dom element.
-  snapWrap = null;
+  snapWrap: any = null;
 
   // TODO(eyuelt): remove ElementRef once Snap is removed
   constructor(domElemRef: ElementRef, public canvasService: CanvasService) {

@@ -1,6 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { CardComponent } from '../../shared/index';
-import { CanvasService } from './canvas.service'; // Why doesn't ./index work?
+import { CanvasService, Point } from './canvas.service';
 
 /**
  * This class represents the Canvas component.
@@ -17,7 +17,7 @@ export class CanvasComponent {
   // Whether or not panning is in progress.
   panning: boolean = false;
   // The last point seen during the pan that is currently in progress.
-  lastPanPnt: Point|undefined = null;
+  lastPanPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
 
   constructor(public canvasService: CanvasService) {
   }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import '../../shared/card/card';
 
 // TODO(eyuelt): where should this be defined?
-interface Point {
+export interface Point {
   x:number;
   y:number;
 }
@@ -30,7 +30,7 @@ export class CanvasService {
   kMinZoomScale: number = 0.1;
   kMaxZoomScale: number = 10.0;
   // The models of the cards to show on the canvas.
-  cards: [Card] = [];
+  cards: Card[] = [];
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
   // The offset from the original viewport position.
@@ -40,7 +40,7 @@ export class CanvasService {
   // TODO(eyuelt): I think I can use RXJS' Subject for this?
   // The list of functions to call when zoom or pan occurs. This is used to
   // essentially watch this class' properties.
-  listeners = [];
+  listeners: {():void}[] = [];
 
   constructor() {
     // TODO(eyuelt): fetch this card data from wherever it's stored
@@ -85,6 +85,6 @@ export class CanvasService {
     this.notifyListeners();
   }
 
-  addListener(listener) { this.listeners.push(listener); }
+  addListener(listener: {():void}) { this.listeners.push(listener); }
   notifyListeners() { this.listeners.forEach((listener) => { listener(); }); }
 }
