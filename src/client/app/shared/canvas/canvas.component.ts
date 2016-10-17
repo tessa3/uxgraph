@@ -22,19 +22,12 @@ export class CanvasComponent {
   constructor(public canvasService: CanvasService) {
   }
 
-  getCanvasBounds() {
-    // TODO(eyuelt): how to do getClientRects without accessing html elem?
-    //return canvas.getClientRects()[0];
-    return {top:0, left:0, bottom:0, right:0};
-  }
-
   // TODO(eyuelt): should this use HostListener or the template event binding?
   onMousewheel(event: WheelEvent) {
-    const canvasBounds = this.getCanvasBounds();
     const zoomScale = 1 + (event.deltaY * -0.01);
     const zoomPnt = {
-      x: event.clientX - canvasBounds.left,
-      y: event.clientY - canvasBounds.top
+      x: event.offsetX,
+      y: event.offsetY
     };
     this.canvasService.zoom(zoomPnt, zoomScale);
     event.stopPropagation();
@@ -42,21 +35,18 @@ export class CanvasComponent {
   }
 
   onMousedown(event: MouseEvent) {
-    const canvasBounds = this.getCanvasBounds();
     this.panning = true;
     this.lastPanPnt = {
-      x: event.clientX - canvasBounds.left,
-      y: event.clientY - canvasBounds.top
+      x: event.offsetX,
+      y: event.offsetY
     };
   }
 
-  @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
     if (this.panning) {
-      const canvasBounds = this.getCanvasBounds();
       const newPanPnt = {
-        x: event.clientX - canvasBounds.left,
-        y: event.clientY - canvasBounds.top
+        x: event.offsetX,
+        y: event.offsetY
       };
       const panVector = {
         x: this.lastPanPnt.x - newPanPnt.x,
@@ -67,6 +57,7 @@ export class CanvasComponent {
     }
   }
 
+  // Put mouseup on document to cancel pan even if mouseup is outside of canvas
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     this.panning = false;
