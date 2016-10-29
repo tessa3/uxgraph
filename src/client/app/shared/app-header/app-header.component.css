@@ -5,14 +5,16 @@
     display: flex;
 }
 
-logo {
-    background-color: #607D8B;
-    flex: 0 0 60px;
-    font-family: Roboto;
-    font-weight: 100;
-    font-size: 26px;
+#navbar-logo {
+    color: inherit;
+    text-decoration: none;
     padding-top: 7px;
     text-align: center;
+    background-color: #607D8B;
+    flex: 0 0 60px;
+    font-size: 26px;
+    font-family: Roboto;
+    font-weight: 100;
 }
 
 h1 {
