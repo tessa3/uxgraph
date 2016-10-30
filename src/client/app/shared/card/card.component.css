@@ -11,15 +11,17 @@ card-title {
   margin-top: 64px;
   margin-left: 35px;
   font-family: Roboto;
-  color: #455A64;
+  color: #455a64;
 }
+
 card-plus-sign {
   display: inline-block;
   margin-top: 52px;
   margin-left: 125px;
   font-size: 70px;
-  color: #455A64;
+  color: #455a64;
 }
+
 new-card-message {
   font-size: 12px;
 
