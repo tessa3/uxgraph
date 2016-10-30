@@ -6,7 +6,7 @@ import { CardListService } from '../shared/index';
  */
 @Component({
   moduleId: module.id,
-  selector: 'home',
+  selector: 'ux-home',
   templateUrl: 'home.component.html',
   styleUrls: ['home.component.css'],
 })

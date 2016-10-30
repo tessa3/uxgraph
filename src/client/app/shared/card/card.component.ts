@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
  */
 @Component({
     moduleId: module.id,
-    selector: 'card',
+    selector: 'ux-card',
     templateUrl: 'card.component.html',
     styleUrls: ['card.component.css']
 })

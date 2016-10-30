@@ -1,7 +1,7 @@
 <ul>
   <li *ngFor="let card of cards">
     <a [routerLink]="['/graph', card.name]" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
-      <card [name]="card.name"></card>
+      <ux-card [name]="card.name"></ux-card>
     </a>
   </li>
 </ul>
