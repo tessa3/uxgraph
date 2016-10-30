@@ -6,7 +6,7 @@
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 8px 0 rgba(0, 0, 0, 0.19);
 }
 
-card-title {
+graph-preview-title {
   display: inline-block;
   margin-top: 64px;
   margin-left: 35px;
@@ -14,7 +14,7 @@ card-title {
   color: #455a64;
 }
 
-card-plus-sign {
+graph-preview-plus-sign {
   display: inline-block;
   margin-top: 52px;
   margin-left: 125px;
@@ -22,7 +22,6 @@ card-plus-sign {
   color: #455a64;
 }
 
-new-card-message {
+new-graph-preview-message {
   font-size: 12px;
-
 }
