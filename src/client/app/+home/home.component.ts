@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
                      .subscribe(
                        cards => this.cards = cards,
                        error =>  this.errorMessage = <any>error
-                       );
+                     );
   }
 
   /**

@@ -15,7 +15,7 @@ export class CardComponent {
     lastEdited: string;
 
     constructor() {
-        this.name = 'random card';
-        this.lastEdited = 'Just now';
+        this.name = null;
+        this.lastEdited = null;
     }
 }

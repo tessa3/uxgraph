@@ -3,7 +3,7 @@
   background-color: #f0f0f0;
   height: 100%;
   margin-top: 0px;
-  padding: 20px 40px;
+  padding: 30px 40px;
 }
 
 ul {
@@ -22,4 +22,11 @@ li {
   *display: inline;
   _height: 250px;
   text-align: left;
+}
+
+new-app-card-header {
+  display: flex;
+  margin-top: -28px;
+  font-size: 15px;
+  margin-bottom: 10px;
 }
