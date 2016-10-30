@@ -1,7 +1,7 @@
 <ul>
-  <li *ngFor="let card of cards">
-    <a [routerLink]="['/graph', card.name]" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
-      <ux-card [name]="card.name"></ux-card>
+  <li *ngFor="let graphPreview of graphPreviews">
+    <a [routerLink]="['/graph', graphPreview.name]" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+      <uxg-graph-preview [name]="graphPreview.name"></uxg-graph-preview>
     </a>
   </li>
 </ul>
