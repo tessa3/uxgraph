@@ -15,7 +15,7 @@ export class GraphPreviewComponent {
     lastEdited: string;
 
     constructor() {
-        this.name = 'random graph';
-        this.lastEdited = 'Just now';
+        this.name = null;
+        this.lastEdited = null;
     }
 }

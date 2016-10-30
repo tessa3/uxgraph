@@ -1,15 +1,27 @@
 :host {
-    background-color: white;
-    width: 100%;
-    display: block;
-    height: 200px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 8px 0 rgba(0, 0, 0, 0.19);
+  background-color: white;
+  width: 100%;
+  display: block;
+  height: 200px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 8px 0 rgba(0, 0, 0, 0.19);
 }
 
-graph-title {
-    display: inline-block;
-    margin-top: 64px;
-    margin-left: 35px;
-    font-family: Roboto;
-    color: #455A64;
+graph-preview-title {
+  display: inline-block;
+  margin-top: 64px;
+  margin-left: 35px;
+  font-family: Roboto;
+  color: #455a64;
+}
+
+graph-preview-plus-sign {
+  display: inline-block;
+  margin-top: 52px;
+  margin-left: 125px;
+  font-size: 70px;
+  color: #455a64;
+}
+
+new-graph-preview-message {
+  font-size: 12px;
 }

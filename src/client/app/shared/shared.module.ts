@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { NavbarComponent } from './navbar/index';
 import { SidePanelComponent } from './side-panel/index';
 import { AppHeaderComponent } from './app-header/index';
 import { GraphPreviewComponent } from './graph-preview/index';
@@ -16,8 +15,8 @@ import { GraphPreviewListService } from './graph-preview-list/index';
 
 @NgModule({
   imports: [CommonModule, RouterModule],
-  declarations: [NavbarComponent, AppHeaderComponent, SidePanelComponent, GraphPreviewComponent],
-  exports: [NavbarComponent, AppHeaderComponent, SidePanelComponent, GraphPreviewComponent,
+  declarations: [AppHeaderComponent, SidePanelComponent, GraphPreviewComponent],
+  exports: [AppHeaderComponent, SidePanelComponent, GraphPreviewComponent,
     CommonModule, FormsModule, RouterModule]
 })
 export class SharedModule {
