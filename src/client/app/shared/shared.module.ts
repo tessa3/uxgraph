@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { NavbarComponent } from './navbar/index';
 import { SidePanelComponent } from './side-panel/index';
 import { AppHeaderComponent } from './app-header/index';
 import { CardComponent } from './card/index';
@@ -16,8 +15,8 @@ import { CardListService } from './card-list/index';
 
 @NgModule({
   imports: [CommonModule, RouterModule],
-  declarations: [NavbarComponent, AppHeaderComponent, SidePanelComponent, CardComponent],
-  exports: [NavbarComponent, AppHeaderComponent, SidePanelComponent, CardComponent,
+  declarations: [AppHeaderComponent, SidePanelComponent, CardComponent],
+  exports: [AppHeaderComponent, SidePanelComponent, CardComponent,
     CommonModule, FormsModule, RouterModule]
 })
 export class SharedModule {
