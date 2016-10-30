@@ -1,12 +1,12 @@
 <ul>
   <li>
     <new-app-card-header>Start a new app</new-app-card-header>
-    <a [routerLink]="['/graph', '']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+    <a [routerLink]="['/id', '']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
       <ux-card></ux-card>
     </a>
   </li>
   <li *ngFor="let card of cards">
-    <a [routerLink]="['/graph', card.name]" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+    <a [routerLink]="['/id', card.name]" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
       <ux-card [name]="card.name"></ux-card>
     </a>
   </li>
