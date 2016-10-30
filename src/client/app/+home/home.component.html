@@ -1,7 +1,18 @@
 <ul>
+  <!-- This li element is the first card in the grid/list that allows the user to create a new uxgraph -->
+  <li>
+    <new-app-card-header>Start a new app</new-app-card-header>
+    <a [routerLink]="['/id', '']"
+       [routerLinkActive]="['router-link-active']"
+       [routerLinkActiveOptions]="{exact:true}">
+      <uxg-card></uxg-card>
+    </a>
+  </li>
   <li *ngFor="let card of cards">
-    <a [routerLink]="['/graph', card.name]" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
-      <ux-card [name]="card.name"></ux-card>
+    <a [routerLink]="['/id', card.name]"
+       [routerLinkActive]="['router-link-active']"
+       [routerLinkActiveOptions]="{exact:true}">
+      <uxg-card [name]="card.name"></uxg-card>
     </a>
   </li>
 </ul>

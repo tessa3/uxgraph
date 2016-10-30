@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
  */
 @Component({
     moduleId: module.id,
-    selector: 'ux-card',
+    selector: 'uxg-card',
     templateUrl: 'card.component.html',
     styleUrls: ['card.component.css']
 })
@@ -15,7 +15,7 @@ export class CardComponent {
     lastEdited: string;
 
     constructor() {
-        this.name = 'random card';
-        this.lastEdited = 'Just now';
+        this.name = null;
+        this.lastEdited = null;
     }
 }

@@ -1,1 +1,2 @@
-<card-title>{{ name }}</card-title>
+<card-title *ngIf="name">{{ name }}</card-title>
+<card-plus-sign *ngIf="name === null">+</card-plus-sign>
