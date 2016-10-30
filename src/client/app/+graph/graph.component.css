@@ -1,5 +1,5 @@
 :host {
-  display: block;
+  display: flex;
   padding: 0 0 0 0;
 }
 
@@ -9,4 +9,11 @@ h2 {
   letter-spacing: 0.005em;
   margin-bottom: 0;
   margin-top: 0.83em;
+}
+
+graph-content {
+  display: inline-block;
+  width: 80%;
+  height: 800px;
+  background-color: yellow;
 }
