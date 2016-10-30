@@ -15,7 +15,7 @@ import {provideFakeRouter} from '../testing/router/router-testing-providers';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './+home/home.component';
-import { AboutComponent } from './+about/about.component';
+import { GraphComponent } from './+graph/graph.component';
 
 export function main() {
 
@@ -29,7 +29,7 @@ export function main() {
       // Support for testing component that uses Router
       let config: RouterConfig = [
         { path: '', component: HomeComponent },
-        { path: 'about', component: AboutComponent }
+        { path: 'id', component: GraphComponent }
       ];
 
       addProviders([
@@ -50,7 +50,7 @@ export function main() {
 
 @Component({
   selector: 'test-cmp',
-  template: '<sd-app></sd-app>',
+  template: '<uxg-app></uxg-app>',
   directives: [AppComponent]
 })
 
