@@ -5,7 +5,7 @@ describe('Graph', () => {
   });
 
   it('should have correct feature heading', () => {
-    expect(element(by.css('ux-graph h2')).getText()).toEqual('Features');
+    expect(element(by.css('uxg-graph h2')).getText()).toEqual('Features');
   });
 
 });

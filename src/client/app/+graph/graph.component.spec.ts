@@ -32,6 +32,6 @@ export function main() {
 @Component({
   selector: 'test-cmp',
   directives: [GraphComponent],
-  template: '<ux-graph></ux-graph>'
+  template: '<uxg-graph></uxg-graph>'
 })
 class TestComponent {}
