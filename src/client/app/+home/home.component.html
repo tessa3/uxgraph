@@ -1,12 +1,7 @@
-<p>
-  Howdy! Here's a list of awesome computer scientists. Do you know any others? Add to the list yourself.
-</p>
-
-<form (submit)="addName()">
-  <input [(ngModel)]="newName" name="newName" placeholder="Awesome Computer Scientist">
-  <button type="submit">Add</button>
-</form>
-
 <ul>
-  <li *ngFor="let name of names">{{name}}</li>
+  <li *ngFor="let card of cards">
+    <a [routerLink]="['/graph', card.name]" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+      <ux-card [name]="card.name"></ux-card>
+    </a>
+  </li>
 </ul>

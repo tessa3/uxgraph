@@ -1,44 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { NameListService } from '../shared/index';
+import { CardListService } from '../shared/index';
 
 /**
  * This class represents the lazy loaded HomeComponent.
  */
 @Component({
   moduleId: module.id,
-  selector: 'sd-home',
+  selector: 'ux-home',
   templateUrl: 'home.component.html',
   styleUrls: ['home.component.css'],
 })
 
 export class HomeComponent implements OnInit {
 
-  newName: string = '';
+  newCard: string = '';
   errorMessage: string;
-  names: any[] = [];
+  cards: any[] = [];
 
   /**
    * Creates an instance of the HomeComponent with the injected
-   * NameListService.
+   * CardListService.
    *
-   * @param {NameListService} nameListService - The injected NameListService.
+   * @param {CardListService} cardListService - The injected CardListService.
    */
-  constructor(public nameListService: NameListService) {}
+  constructor(public cardListService: CardListService) {}
 
   /**
    * Get the names OnInit
    */
   ngOnInit() {
-    this.getNames();
+    this.getCards();
   }
 
   /**
    * Handle the nameListService observable
    */
-  getNames() {
-    this.nameListService.get()
+  getCards() {
+    this.cardListService.get()
                      .subscribe(
-                       names => this.names = names,
+                       cards => this.cards = cards,
                        error =>  this.errorMessage = <any>error
                        );
   }
@@ -49,8 +49,8 @@ export class HomeComponent implements OnInit {
    */
   addName(): boolean {
     // TODO: implement nameListService.post
-    this.names.push(this.newName);
-    this.newName = '';
+    this.cards.push(this.newCard);
+    this.newCard = '';
     return false;
   }
 
