@@ -1,9 +1,6 @@
-import { Component, Input, ElementRef, OnInit } from '@angular/core';
-import { CanvasService } from '../canvas/canvas.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { CanvasService, ViewportCoord } from '../canvas/canvas.service';
 import './card';
-
-// Forward declaring Snap.svg. Temporary.
-declare var Snap: any;
 
 /**
  * This class represents the Card component.
@@ -19,48 +16,20 @@ export class CardComponent implements OnInit {
   @Input() card: Card = null;
   // The current scale factor of the card shape.
   scale: number = 1;
-  // The attributes passed to Snap for drawing the card shape.
-  drawingAttrs = { fill: '#fd6', stroke: '#000', strokeWidth: 1 };
-  // The Snap element for rendering the card.
-  snapElement: any = null;
-  // A reference to the Snap object wrapping this component's dom element.
-  snapWrap: any = null;
+  // The current display position in the viewport's coordinate space.
+  position: ViewportCoord = {x:0, y:0};
 
-  // TODO(eyuelt): remove ElementRef once Snap is removed
-  constructor(domElemRef: ElementRef, public canvasService: CanvasService) {
-    this.snapWrap = Snap(domElemRef.nativeElement);
+  constructor(public canvasService: CanvasService) {
   }
 
   ngOnInit() {
-    this.initSnapElement();
-    this.performTransformations();
+    this.position = this.canvasService.canvasCoordToViewportCoord(this.card);
     this.canvasService.addListener(this.update.bind(this));
   }
 
-  // Create and init the Snap.svg element that is used for rendering the card.
-  initSnapElement() {
-    // Set the initial (x,y) to the origin to avoid having to account for the
-    // initial (x,y) when doing transforms.
-    this.snapElement = this.snapWrap.circle(0, 0, this.card.radius);
-    this.snapElement.attr(this.drawingAttrs);
-
-    // Don't scale the border when zooming.
-    let att = document.createAttribute('vector-effect');
-    att.value = 'non-scaling-stroke';
-    this.snapElement.node.setAttributeNode(att);
-  }
-
+  // Called by the CanvasService when a zoom or pan occurs
   update() {
     this.scale = this.canvasService.zoomScale;
-    this.performTransformations();
+    this.position = this.canvasService.canvasCoordToViewportCoord(this.card);
   };
-
-  // Translate and scale the rendered card as required.
-  performTransformations() {
-    const {x, y} = this.canvasService.canvasCoordToViewportCoord({x:this.card.x, y:this.card.y});
-    const translateStr = `translate(${x},${y})`;
-    const scaleStr = `scale(${this.scale})`;
-    const transformStr = `${translateStr} ${scaleStr}`;
-    this.snapElement.transform(transformStr);
-  }
 }
