@@ -127,6 +127,11 @@
     "zone.js": "^0.6.12"
   },
   "stylelint": {
-    "extends": "stylelint-config-standard"
+    "extends": "stylelint-config-standard",
+    "rules" : {
+      "selector-pseudo-class-no-unknown": [
+        true, { "ignorePseudoClasses": [ "host" ] }
+      ]
+    }
   }
 }
