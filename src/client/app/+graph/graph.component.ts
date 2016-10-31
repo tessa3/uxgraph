@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CanvasComponent } from '../shared/index';
 
 /**
  * This class represents the lazy loaded GraphComponent.
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
   moduleId: module.id,
   selector: 'uxg-graph',
   templateUrl: 'graph.component.html',
-  styleUrls: ['graph.component.css']
+  styleUrls: ['graph.component.css'],
+  directives: [CanvasComponent]
 })
 export class GraphComponent { }

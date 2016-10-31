@@ -35,8 +35,9 @@ export class CanvasService {
   zoomScale: number = 1;
   // The offset from the original viewport position.
   centerOffset: CanvasCoord = {x:0, y:0};
+  // TODO(eyuelt): get this programmatically
   // The size of the viewport. Must match the sizes specified in html and css.
-  viewportSize = {w:400, h:400};
+  viewportSize = {w:800, h:800};
   // TODO(eyuelt): I think I can use RXJS' Subject for this?
   // The list of functions to call when zoom or pan occurs. This is used to
   // essentially watch this class' properties.
