@@ -7,6 +7,11 @@ div {
   padding: 0;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 /* Box-sizing border-box */
 * {
   box-sizing: border-box;
@@ -29,7 +34,7 @@ p {
 }
 
 ul {
-  margin: 10px 0 0 0;
+  margin: 10px 0 0;
   padding: 0 0 0 20px;
 }
 

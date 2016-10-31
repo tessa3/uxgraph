@@ -7,10 +7,10 @@ import {
 } from '@angular/core/testing';
 import { getDOM } from '@angular/platform-browser/src/dom/dom_adapter';
 
-import { AboutComponent } from './about.component';
+import { GraphComponent } from './graph.component';
 
 export function main() {
-  describe('About component', () => {
+  describe('Graph component', () => {
     // Disable old forms
     let providerArr: any[];
 
@@ -21,9 +21,9 @@ export function main() {
         tcb.overrideProviders(TestComponent, providerArr)
           .createAsync(TestComponent)
           .then((rootTC: any) => {
-            let aboutDOMEl = rootTC.debugElement.children[0].nativeElement;
+            let graphDOMEl = rootTC.debugElement.children[0].nativeElement;
 
-	    expect(getDOM().querySelectorAll(aboutDOMEl, 'h2')[0].textContent).toEqual('Features');
+	    expect(getDOM().querySelectorAll(graphDOMEl, 'h2')[0].textContent).toEqual('Features');
           });
         })));
     });
@@ -31,7 +31,7 @@ export function main() {
 
 @Component({
   selector: 'test-cmp',
-  directives: [AboutComponent],
-  template: '<sd-about></sd-about>'
+  directives: [GraphComponent],
+  template: '<uxg-graph></uxg-graph>'
 })
 class TestComponent {}

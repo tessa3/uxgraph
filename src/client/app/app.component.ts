@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
-import { Config, NavbarComponent, ToolbarComponent, CanvasComponent } from './shared/index';
+import { Config, CanvasComponent } from './shared/index';
 
 /**
  * This class represents the main application component. Within the @Routes annotation is the configuration of the
- * applications routes, configuring the paths for the lazy loaded components (HomeComponent, AboutComponent).
+ * applications routes, configuring the paths for the lazy loaded components (HomeComponent, GraphComponent).
  */
 @Component({
   moduleId: module.id,
-  selector: 'sd-app',
+  selector: 'uxg-app',
   templateUrl: 'app.component.html',
-  directives: [ROUTER_DIRECTIVES, NavbarComponent, ToolbarComponent, CanvasComponent]
+  directives: [ROUTER_DIRECTIVES, CanvasComponent]
 })
 
 export class AppComponent {
