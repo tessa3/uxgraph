@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CardListService } from '../shared/index';
+import { GraphPreviewListService } from '../shared/index';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -13,34 +13,34 @@ import { CardListService } from '../shared/index';
 
 export class HomeComponent implements OnInit {
 
-  newCard: string = '';
+  newGraphPreview: string = '';
   errorMessage: string;
-  cards: any[] = [];
+  graphPreviews: any[] = [];
 
   /**
    * Creates an instance of the HomeComponent with the injected
-   * CardListService.
+   * GraphPreviewListService.
    *
-   * @param {CardListService} cardListService - The injected CardListService.
+   * @param {GraphPreviewListService} GraphPreviewListService - The injected GraphPreviewListService.
    */
-  constructor(public cardListService: CardListService) {}
+  constructor(public graphPreviewListService: GraphPreviewListService) {}
 
   /**
    * Get the names OnInit
    */
   ngOnInit() {
-    this.getCards();
+    this.getGraphPreviews();
   }
 
   /**
    * Handle the nameListService observable
    */
-  getCards() {
-    this.cardListService.get()
+  getGraphPreviews() {
+    this.graphPreviewListService.get()
                      .subscribe(
-                       cards => this.cards = cards,
-                       error =>  this.errorMessage = <any>error
-                     );
+                       graphPreviews => this.graphPreviews = graphPreviews,
+                       error => this.errorMessage = <any>error
+                       );
   }
 
   /**
@@ -49,8 +49,8 @@ export class HomeComponent implements OnInit {
    */
   addName(): boolean {
     // TODO: implement nameListService.post
-    this.cards.push(this.newCard);
-    this.newCard = '';
+    this.graphPreviews.push(this.newGraphPreview);
+    this.newGraphPreview = '';
     return false;
   }
 

@@ -5,13 +5,13 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 /**
- * This class provides the CardList service with methods to read names and add names.
+ * This class provides the GraphPreviewList service with methods to read names and add names.
  */
 @Injectable()
-export class CardListService {
+export class GraphPreviewListService {
 
     /**
-     * Creates a new CardListService with the injected Http.
+     * Creates a new GraphPreviewListService with the injected Http.
      * @param {Http} http - The injected Http.
      * @constructor
      */

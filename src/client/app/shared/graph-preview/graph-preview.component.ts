@@ -1,16 +1,16 @@
 import { Component, Input } from '@angular/core';
 
 /**
- * This class represents the Card component.
+ * This class represents the GraphPreview component.
  */
 @Component({
     moduleId: module.id,
-    selector: 'uxg-card',
-    templateUrl: 'card.component.html',
-    styleUrls: ['card.component.css']
+    selector: 'uxg-graph-preview',
+    templateUrl: 'graph-preview.component.html',
+    styleUrls: ['graph-preview.component.css']
 })
 
-export class CardComponent {
+export class GraphPreviewComponent {
     @Input() name: string;
     lastEdited: string;
 
