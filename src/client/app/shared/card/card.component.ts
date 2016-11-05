@@ -7,7 +7,7 @@ import './card';
  */
 @Component({
   moduleId: module.id,
-  selector: '[card]',
+  selector: '[uxg-card]',
   templateUrl: 'card.component.html',
   styleUrls: ['card.component.css']
 })
@@ -19,7 +19,7 @@ export class CardComponent implements OnInit {
   // The current display position in the viewport's coordinate space.
   position: ViewportCoord = {x:0, y:0};
 
-  constructor(public canvasService: CanvasService) {
+  constructor(private canvasService: CanvasService) {
   }
 
   ngOnInit() {

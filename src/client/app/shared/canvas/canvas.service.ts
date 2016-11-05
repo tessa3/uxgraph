@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import '../../shared/card/card';
 
-// TODO(eyuelt): where should this be defined?
+// TODO(eyuelt): move this to the data model layer
 export interface Point {
-  x:number;
-  y:number;
+  x: number;
+  y: number;
 }
 
 // NOTE: These type aliases are not type-checked. They are just for readability.

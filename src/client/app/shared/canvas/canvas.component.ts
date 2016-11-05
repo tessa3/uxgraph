@@ -19,16 +19,13 @@ export class CanvasComponent {
   // The last point seen during the pan that is currently in progress.
   lastPanPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
 
-  constructor(public canvasService: CanvasService) {
+  constructor(private canvasService: CanvasService) {
   }
 
   // TODO(eyuelt): should this use HostListener or the template event binding?
   onMousewheel(event: WheelEvent) {
     const zoomScale = 1 + (event.deltaY * -0.01);
-    const zoomPnt = {
-      x: event.offsetX,
-      y: event.offsetY
-    };
+    const zoomPnt = {x: event.offsetX, y: event.offsetY};
     this.canvasService.zoom(zoomPnt, zoomScale);
     event.stopPropagation();
     event.preventDefault();
@@ -36,22 +33,13 @@ export class CanvasComponent {
 
   onMousedown(event: MouseEvent) {
     this.panning = true;
-    this.lastPanPnt = {
-      x: event.offsetX,
-      y: event.offsetY
-    };
+    this.lastPanPnt = {x: event.offsetX, y: event.offsetY};
   }
 
   onMousemove(event: MouseEvent) {
     if (this.panning) {
-      const newPanPnt = {
-        x: event.offsetX,
-        y: event.offsetY
-      };
-      const panVector = {
-        x: this.lastPanPnt.x - newPanPnt.x,
-        y: this.lastPanPnt.y - newPanPnt.y
-      };
+      const newPanPnt = {x: event.offsetX, y: event.offsetY};
+      const panVector = {x: this.lastPanPnt.x - newPanPnt.x, y: this.lastPanPnt.y - newPanPnt.y};
       this.canvasService.pan(panVector);
       this.lastPanPnt = newPanPnt;
     }
