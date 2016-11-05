@@ -1,7 +1,7 @@
 :host {
   display: block;
   background-color: #f0f0f0;
-  height: 100%;
+  height: calc(100% - 48px);
   margin-top: 0;
   padding: 30px 40px;
 }
