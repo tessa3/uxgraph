@@ -5,3 +5,5 @@ export * from './name-list/index';
 export * from './graph-preview-list/index';
 export * from './side-panel/index';
 export * from './config/env.config';
+export * from './card/index';
+export * from './canvas/index';
