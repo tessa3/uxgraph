@@ -1,8 +1,6 @@
 :host {
-  height: 800px;
-  width: 20%;
-  display: inline-block;
-
+  height: 100%;
+  flex: 0 0 325px;
 }
 
 #side-panel-content {
