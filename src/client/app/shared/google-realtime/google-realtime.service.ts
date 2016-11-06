@@ -102,26 +102,22 @@ export class GoogleRealtimeService {
     gapi.drive.realtime.databinding.bindString(collaborativeString, <HTMLInputElement>textArea2);
   }
 
+  createFile(name: string): Observable<string> {
+    return this.oauthToken.map(oauthToken => {
+      let postBody = {
+        name: name,
+        mimeType: UXGRAPH_MIME_TYPE
+      };
 
-  // createFile(name: string): Observable<string> {
-  //   return this.accessToken.map(accessToken => {
-  //     let postBody = {
-  //       name: name,
-  //       mimeType: UXGRAPH_MIME_TYPE
-  //     };
-  //
-  //     return this.post(accessToken, GOOGLE_APIS_UPLOAD_FILES_URL, postBody)
-  //         .map((response: Response) => {
-  //           console.log(response.json());
-  //           return response.json();
-  //         });
-  //   }).switch();
-  // }
-  //
-  // static loadRealtimeDocument(driveFile: DriveFile, callback) {
-  //   gapi.drive.realtime.load(driveFile.id, callback);
-  // }
-  //
+      return this.post(oauthToken.access_token, GOOGLE_APIS_UPLOAD_FILES_URL,
+          postBody)
+          .map((response: Response) => {
+            console.log(response.json());
+            return response.json();
+          });
+    }).switch();
+  }
+
   private get(accessToken: string,
               requestUrl: string,
               urlParams: URLSearchParams): Observable<Response> {
