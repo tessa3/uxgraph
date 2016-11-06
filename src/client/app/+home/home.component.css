@@ -1,9 +1,15 @@
 :host {
-  display: block;
+  display: flex;
   background-color: #f0f0f0;
   height: calc(100% - 48px);
   margin-top: 0;
   padding: 30px 40px;
+}
+
+.auth-button {
+  align-self: center;
+  margin: 0 auto;
+  background-color: #607d8b;
 }
 
 ul {

@@ -1,5 +1,4 @@
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
-import {GraphPreviewListService} from '../shared/index';
+import {Component, OnInit, ChangeDetectorRef} from "@angular/core";
 import {
     GoogleRealtimeService,
     DriveFile
@@ -17,6 +16,7 @@ import {
 
 export class HomeComponent implements OnInit {
 
+  userLoggedIn: boolean = false;
   graphPreviews: DriveFile[] = [];
 
   /**
@@ -34,6 +34,12 @@ export class HomeComponent implements OnInit {
    * Get the names OnInit
    */
   ngOnInit() {
+    this.googleRealtimeService.oauthToken.subscribe((oauthToken) => {
+      if (!!oauthToken) {
+        this.userLoggedIn = true;
+      }
+    });
+
     this.googleRealtimeService.listFiles()
         .subscribe((driveFiles: DriveFile[]) => {
           this.graphPreviews = driveFiles;
