@@ -17,30 +17,30 @@ import {
 
 export class HomeComponent implements OnInit {
 
-  newGraphPreview: string = '';
-  errorMessage: string;
   graphPreviews: DriveFile[] = [];
 
   /**
    * Creates an instance of the HomeComponent with the injected
    * GraphPreviewListService.
    *
-   * @param {GraphPreviewListService} GraphPreviewListService - The injected GraphPreviewListService.
+   * @param googleRealtimeService
+   * @param changeDetector
    */
-  constructor(public graphPreviewListService: GraphPreviewListService,
-              private googleRealtimeService: GoogleRealtimeService,
-              private changeDetector: ChangeDetectorRef) {}
+  constructor(private googleRealtimeService: GoogleRealtimeService,
+              private changeDetector: ChangeDetectorRef) {
+  }
 
   /**
    * Get the names OnInit
    */
   ngOnInit() {
-    this.googleRealtimeService.listFiles().subscribe((driveFiles: DriveFile[]) => {
-      this.graphPreviews = driveFiles;
+    this.googleRealtimeService.listFiles()
+        .subscribe((driveFiles: DriveFile[]) => {
+          this.graphPreviews = driveFiles;
 
-      // TODO(girum): Why do I need to call the change detector here?
-      this.changeDetector.detectChanges();
-    });
+          // TODO(girum): Why do I need to call the change detector here?
+          this.changeDetector.detectChanges();
+        });
   }
 
   authorize() {

@@ -42,6 +42,7 @@ export class GoogleRealtimeService {
   // googleAuth: AsyncSubject<GoogleAuth> = new AsyncSubject();
   oauthToken: AsyncSubject<GoogleApiOAuth2TokenObject> = new AsyncSubject();
 
+
   constructor(private http: Http) {
     gapi.load('auth:client,drive-realtime,drive-share', () => {
       this.authorize(false);
@@ -79,16 +80,18 @@ export class GoogleRealtimeService {
   }
 
 
-  loadRealtimeDocument(driveFile: DriveFile) {
-    gapi.drive.realtime.load(driveFile.id, (document) => {
-      let collaborativeString = document.getModel().getRoot().get('demo_string');
-      this.wireTextBoxes(collaborativeString);
-    }, (model) => {
-      let string = model.createString();
-      string.setText('Welcome to the Quickstart App!');
-      model.getRoot().set('demo_string', string);
-    }, (error) => {
-      console.error('Error loading Realtime API: ', error);
+  loadRealtimeDocument(driveFileId: string) {
+    this.oauthToken.subscribe((oauthToken) => {
+      gapi.drive.realtime.load(driveFileId, (document) => {
+        let collaborativeString = document.getModel().getRoot().get('demo_string');
+        this.wireTextBoxes(collaborativeString);
+      }, (model) => {
+        let string = model.createString();
+        string.setText('Welcome to uxgraph!');
+        model.getRoot().set('demo_string', string);
+      }, (error) => {
+        console.error('Error loading Realtime API: ', error);
+      });
     });
   }
 
