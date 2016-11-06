@@ -1,2 +1,9 @@
-<svg:circle cx="0" cy="0" attr.r="{{card.radius}}" fill="#fff" stroke="#000" attr.transform="translate({{position.x}},{{position.y}}) scale({{scale}})" vector-effect="non-scaling-stroke">
+<svg:circle vector-effect="non-scaling-stroke"
+            fill="#fff"
+            stroke="#000"
+            cx="0"
+            cy="0"
+            attr.r="{{card.radius}}"
+            attr.transform="translate({{position.x}},{{position.y}}) scale({{scale}})"
+            (mousedown)="this.onMousedown($event)">
 </svg:circle>
