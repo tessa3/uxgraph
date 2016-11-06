@@ -1,3 +1,4 @@
+<!-- TODO(girum): Style me! (hop on Sketch and spec this out) -->
 <button id="auth_button" (click)="authorize()">Authorize</button>
 
 <ul>
@@ -10,6 +11,8 @@
       <uxg-graph-preview></uxg-graph-preview>
     </a>
   </li>
+
+  <!-- TODO(girum): Add a "loading" indicator when this list is loading. -->
   <li *ngFor="let graphPreview of graphPreviews">
     <a [routerLink]="['/graph', graphPreview.id]"
        [routerLinkActive]="['router-link-active']"

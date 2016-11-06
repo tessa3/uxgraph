@@ -39,9 +39,9 @@ class GoogleDriveQueryEncoder extends QueryEncoder {
 @Injectable()
 export class GoogleRealtimeService {
 
-  // googleAuth: AsyncSubject<GoogleAuth> = new AsyncSubject();
-  oauthToken: AsyncSubject<GoogleApiOAuth2TokenObject> = new AsyncSubject();
-
+  // TODO(girum): This should be a BehaviorSubject instead to handle reconnects.
+  oauthToken: AsyncSubject<GoogleApiOAuth2TokenObject> =
+      new AsyncSubject<GoogleApiOAuth2TokenObject>();
 
   constructor(private http: Http) {
     gapi.load('auth:client,drive-realtime,drive-share', () => {
