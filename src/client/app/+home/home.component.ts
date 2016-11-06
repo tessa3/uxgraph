@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { GraphPreviewListService } from '../shared/index';
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import {GraphPreviewListService} from '../shared/index';
+import {
+    GoogleRealtimeService,
+    DriveFile
+} from "../shared/google-realtime/google-realtime.service";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -15,7 +19,7 @@ export class HomeComponent implements OnInit {
 
   newGraphPreview: string = '';
   errorMessage: string;
-  graphPreviews: any[] = [];
+  graphPreviews: DriveFile[] = [];
 
   /**
    * Creates an instance of the HomeComponent with the injected
@@ -23,35 +27,24 @@ export class HomeComponent implements OnInit {
    *
    * @param {GraphPreviewListService} GraphPreviewListService - The injected GraphPreviewListService.
    */
-  constructor(public graphPreviewListService: GraphPreviewListService) {}
+  constructor(public graphPreviewListService: GraphPreviewListService,
+              private googleRealtimeService: GoogleRealtimeService,
+              private changeDetector: ChangeDetectorRef) {}
 
   /**
    * Get the names OnInit
    */
   ngOnInit() {
-    this.getGraphPreviews();
+    this.googleRealtimeService.listFiles().subscribe((driveFiles: DriveFile[]) => {
+      this.graphPreviews = driveFiles;
+
+      // TODO(girum): Why do I need to call the change detector here?
+      this.changeDetector.detectChanges();
+    });
   }
 
-  /**
-   * Handle the nameListService observable
-   */
-  getGraphPreviews() {
-    this.graphPreviewListService.get()
-                     .subscribe(
-                       graphPreviews => this.graphPreviews = graphPreviews,
-                       error => this.errorMessage = <any>error
-                       );
-  }
-
-  /**
-   * Pushes a new name onto the names array
-   * @return {boolean} false to prevent default form submit behavior to refresh the page.
-   */
-  addName(): boolean {
-    // TODO: implement nameListService.post
-    this.graphPreviews.push(this.newGraphPreview);
-    this.newGraphPreview = '';
-    return false;
+  authorize() {
+    this.googleRealtimeService.authorize(true);
   }
 
 }
