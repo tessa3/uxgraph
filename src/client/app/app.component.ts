@@ -10,6 +10,7 @@ import { Config } from './shared/index';
   moduleId: module.id,
   selector: 'uxg-app',
   templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css'],
   directives: [ROUTER_DIRECTIVES]
 })
 

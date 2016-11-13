@@ -9,5 +9,4 @@ import { Component } from '@angular/core';
     templateUrl: 'app-header.component.html',
     styleUrls: ['app-header.component.css']
 })
-
 export class AppHeaderComponent {}

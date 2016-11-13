@@ -1,17 +1,5 @@
 :host {
-  height: 100%;
-  flex: 0 0 325px;
-}
-
-#side-panel-content {
+  width: 300px;
   background-color: #e0e0e0;
-  height: 100%;
-  padding: 15px;
-  font-size: 16px;
-  font-family: "Roboto";
-}
-
-#side-panel-content-header {
-  font-weight: 500;
-  margin-bottom: 30px;
+  padding: 16px;
 }
