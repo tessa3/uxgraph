@@ -3,6 +3,7 @@ import {
     GoogleRealtimeService,
     DriveFile
 } from "../shared/google-realtime/google-realtime.service";
+import {Router} from "@angular/router";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -27,7 +28,8 @@ export class HomeComponent implements OnInit {
    * @param changeDetector
    */
   constructor(private googleRealtimeService: GoogleRealtimeService,
-              private changeDetector: ChangeDetectorRef) {
+              private changeDetector: ChangeDetectorRef,
+              private router: Router) {
   }
 
   /**
@@ -51,6 +53,14 @@ export class HomeComponent implements OnInit {
 
   authorize() {
     this.googleRealtimeService.authorize(true);
+  }
+
+  createNewGraph() {
+    this.googleRealtimeService.createFile('Untitled uxgraph')
+        .subscribe((newGraph: DriveFile) => {
+          console.log('Created new graph: ', newGraph);
+          this.router.navigateByUrl('/graph/' + newGraph.id);
+        });
   }
 
 }

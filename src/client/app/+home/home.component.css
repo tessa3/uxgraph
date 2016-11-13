@@ -3,6 +3,7 @@
   flex-direction: column;
   background-color: #f0f0f0;
   height: 100%;
+  overflow-y: scroll;
 }
 
 home-content {
@@ -38,4 +39,8 @@ new-app-graph-preview-header {
   margin-top: -28px;
   font-size: 15px;
   margin-bottom: 10px;
+}
+
+new-graph-button {
+  cursor: pointer;
 }

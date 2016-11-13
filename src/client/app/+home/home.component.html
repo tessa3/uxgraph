@@ -12,11 +12,9 @@
     <li>
       <new-app-graph-preview-header>Start a new app
       </new-app-graph-preview-header>
-      <a [routerLink]="['/graph', '']"
-         [routerLinkActive]="['router-link-active']"
-         [routerLinkActiveOptions]="{exact:true}">
+      <new-graph-button (click)="createNewGraph()">
         <uxg-graph-preview></uxg-graph-preview>
-      </a>
+      </new-graph-button>
     </li>
 
     <!-- TODO(girum): Add a "loading" indicator when this list is loading. -->

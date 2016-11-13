@@ -102,7 +102,7 @@ export class GoogleRealtimeService {
     gapi.drive.realtime.databinding.bindString(collaborativeString, <HTMLInputElement>textArea2);
   }
 
-  createFile(name: string): Observable<string> {
+  createFile(name: string): Observable<DriveFile> {
     return this.oauthToken.map(oauthToken => {
       let postBody = {
         name: name,
