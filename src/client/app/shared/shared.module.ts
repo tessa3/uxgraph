@@ -9,6 +9,7 @@ import {GraphPreviewComponent} from './graph-preview/index';
 import {NameListService} from './name-list/index';
 import {GraphPreviewListService} from './graph-preview-list/index';
 import {GoogleRealtimeService} from "./google-realtime/google-realtime.service";
+import {HomeHeaderComponent} from "./home-header/home-header.component";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -19,13 +20,15 @@ import {GoogleRealtimeService} from "./google-realtime/google-realtime.service";
   declarations: [
     GraphHeaderComponent,
     GraphPreviewComponent,
+    HomeHeaderComponent,
     SidePanelComponent
   ],
   exports: [
-    GraphHeaderComponent,
     CommonModule,
     FormsModule,
+    GraphHeaderComponent,
     GraphPreviewComponent,
+    HomeHeaderComponent,
     RouterModule,
     SidePanelComponent
   ]

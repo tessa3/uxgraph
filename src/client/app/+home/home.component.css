@@ -1,9 +1,14 @@
 :host {
   display: flex;
+  flex-direction: column;
   background-color: #f0f0f0;
   height: 100%;
-  margin-top: 0;
-  padding: 30px 40px;
+}
+
+home-content {
+  height: 100%;
+  display: flex;
+  padding: 40px;
 }
 
 .auth-button {
