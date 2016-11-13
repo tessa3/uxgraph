@@ -14,7 +14,7 @@ export function main() {
 
     describe('Authorization', () => {
       it('should authorize with a popup', () => {
-
+        expect(googleRealtimeService).not.toBeNull();
       });
 
       it('should authorize without a popup', () => {

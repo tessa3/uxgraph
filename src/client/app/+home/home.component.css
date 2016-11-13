@@ -33,7 +33,7 @@ li {
   text-align: left;
 }
 
-new-app-graph-preview-header {
+new-graph-header {
   display: flex;
   margin-top: -28px;
   font-size: 15px;
