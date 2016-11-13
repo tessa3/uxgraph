@@ -4,7 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 
 import {SidePanelComponent} from './side-panel/index';
-import {AppHeaderComponent} from './app-header/index';
+import {GraphHeaderComponent} from './graph-header/index';
 import {GraphPreviewComponent} from './graph-preview/index';
 import {NameListService} from './name-list/index';
 import {GraphPreviewListService} from './graph-preview-list/index';
@@ -17,12 +17,12 @@ import {GoogleRealtimeService} from "./google-realtime/google-realtime.service";
 @NgModule({
   imports: [CommonModule, RouterModule],
   declarations: [
-    AppHeaderComponent,
+    GraphHeaderComponent,
     GraphPreviewComponent,
     SidePanelComponent
   ],
   exports: [
-    AppHeaderComponent,
+    GraphHeaderComponent,
     CommonModule,
     FormsModule,
     GraphPreviewComponent,
