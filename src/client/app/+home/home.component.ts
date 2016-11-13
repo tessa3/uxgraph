@@ -58,7 +58,6 @@ export class HomeComponent implements OnInit {
   createNewGraph() {
     this.googleRealtimeService.createFile('Untitled uxgraph')
         .subscribe((newGraph: DriveFile) => {
-          console.log('Created new graph: ', newGraph);
           this.router.navigateByUrl('/graph/' + newGraph.id);
         });
   }

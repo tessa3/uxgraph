@@ -75,7 +75,6 @@ export class GoogleRealtimeService {
       ],
       immediate: !usePopup
     }, (response) => {
-      console.log('Authorized: ', response);
       this.oauthToken.next(response);
       this.oauthToken.complete();
     });
@@ -96,7 +95,6 @@ export class GoogleRealtimeService {
 
       return this.get(oauthToken.access_token, GOOGLE_APIS_FILES_URL, params)
           .map((response: Response) => {
-            console.log(response.json().files);
             return response.json().files;
           });
     }).switch();
@@ -141,7 +139,6 @@ export class GoogleRealtimeService {
       return this.post(oauthToken.access_token, GOOGLE_APIS_FILES_URL,
           postBody)
           .map((response: Response) => {
-            console.log(response.json());
             return response.json();
           });
     }).switch();
