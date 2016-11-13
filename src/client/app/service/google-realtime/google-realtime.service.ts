@@ -1,18 +1,19 @@
 import {Injectable} from '@angular/core';
 import {
     Http, URLSearchParams, Response,
-    RequestOptions, Headers
+    RequestOptions, Headers, QueryEncoder
 } from '@angular/http';
 import {AsyncSubject, Observable} from 'rxjs';
 import CollaborativeString = gapi.drive.realtime.CollaborativeString;
-import {GoogleDriveQueryEncoder} from './google-drive-query-encoder';
 
 
-const CLIENT_ID = '458941249796-jfvnbelhroiit38vhe5d69av0jjnoi7b.apps.googleusercontent.com';
+const CLIENT_ID =
+    '458941249796-jfvnbelhroiit38vhe5d69av0jjnoi7b.apps.googleusercontent.com';
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
 
 const GOOGLE_APIS_FILES_URL = 'https://www.googleapis.com/drive/v3/files';
-const GOOGLE_APIS_UPLOAD_FILES_URL = 'https://www.googleapis.com/drive/v3/files';
+const GOOGLE_APIS_UPLOAD_FILES_URL =
+    'https://www.googleapis.com/drive/v3/files';
 const GOOGLE_DRIVE_FIELDS_TO_QUERY = 'nextPageToken, files(id, name)';
 
 const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
@@ -71,7 +72,8 @@ export class GoogleRealtimeService {
   loadRealtimeDocument(driveFileId: string) {
     this.oauthToken.subscribe(() => {
       gapi.drive.realtime.load(driveFileId, (document) => {
-        let collaborativeString = document.getModel().getRoot().get('demo_string');
+        let collaborativeString =
+            document.getModel().getRoot().get('demo_string');
         GoogleRealtimeService.wireTextBoxes(collaborativeString);
       }, (model) => {
         let string = model.createString();
@@ -135,7 +137,19 @@ export class GoogleRealtimeService {
   private static wireTextBoxes(collaborativeString: CollaborativeString) {
     let textArea1 = document.getElementById('text_area_1');
     let textArea2 = document.getElementById('text_area_2');
-    gapi.drive.realtime.databinding.bindString(collaborativeString, <HTMLInputElement>textArea1);
-    gapi.drive.realtime.databinding.bindString(collaborativeString, <HTMLInputElement>textArea2);
+    gapi.drive.realtime.databinding
+        .bindString(collaborativeString, <HTMLInputElement>textArea1);
+    gapi.drive.realtime.databinding
+        .bindString(collaborativeString, <HTMLInputElement>textArea2);
+  }
+}
+
+export class GoogleDriveQueryEncoder extends QueryEncoder {
+  encodeKey(key: string) {
+    return encodeURIComponent(key);
+  }
+
+  encodeValue(value: string) {
+    return encodeURIComponent(value);
   }
 }
