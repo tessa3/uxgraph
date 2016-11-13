@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { CanvasService, ViewportCoord } from '../canvas/canvas.service';
+import { CanvasService, ViewportCoord, Point } from '../canvas/canvas.service';
 import './card';
 
 /**
