@@ -9,4 +9,8 @@ import { Component } from '@angular/core';
     templateUrl: 'graph-header.component.html',
     styleUrls: ['graph-header.component.css']
 })
-export class GraphHeaderComponent {}
+export class GraphHeaderComponent {
+
+
+
+}
