@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CanvasComponent} from '../shared/index';
-import {ActivatedRoute, Params} from "@angular/router";
-import {GoogleRealtimeService} from "../shared/google-realtime/google-realtime.service";
+import {ActivatedRoute, Params} from '@angular/router';
+import {GoogleRealtimeService} from '../shared/google-realtime/google-realtime.service';
 
 /**
  * This class represents the lazy loaded GraphComponent.

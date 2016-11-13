@@ -1,7 +1,7 @@
 :host {
-  height: 64px;
-  background-color: #607D8B;
   display: flex;
+  height: 56px;
+  background-color: #607D8B;
   align-items: center;
 }
 

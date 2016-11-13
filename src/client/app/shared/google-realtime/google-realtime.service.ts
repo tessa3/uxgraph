@@ -1,13 +1,11 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 import {
-    Http, QueryEncoder, URLSearchParams, Response,
+    Http, URLSearchParams, Response,
     RequestOptions, Headers
-} from "@angular/http";
-import GoogleUser = gapi.auth2.GoogleUser;
-import GoogleAuth = gapi.auth2.GoogleAuth;
-import AuthResponse = gapi.auth2.AuthResponse;
-import {AsyncSubject, Observable} from "rxjs";
+} from '@angular/http';
+import {AsyncSubject, Observable} from 'rxjs';
 import CollaborativeString = gapi.drive.realtime.CollaborativeString;
+import {GoogleDriveQueryEncoder} from '../strings/google-drive-query-encoder';
 
 
 const CLIENT_ID = '458941249796-jfvnbelhroiit38vhe5d69av0jjnoi7b.apps.googleusercontent.com';
@@ -26,15 +24,6 @@ export interface DriveFile {
   kind: string;
 }
 
-class GoogleDriveQueryEncoder extends QueryEncoder {
-  encodeKey(key: string) {
-    return encodeURIComponent(key);
-  }
-
-  encodeValue(value: string) {
-    return encodeURIComponent(value);
-  }
-}
 
 @Injectable()
 export class GoogleRealtimeService {
@@ -61,7 +50,7 @@ export class GoogleRealtimeService {
       console.log('Authorized: ', response);
       this.oauthToken.next(response);
       this.oauthToken.complete();
-    })
+    });
   }
 
   listFiles(): Observable<DriveFile[]> {
@@ -79,12 +68,11 @@ export class GoogleRealtimeService {
     }).switch();
   }
 
-
   loadRealtimeDocument(driveFileId: string) {
-    this.oauthToken.subscribe((oauthToken) => {
+    this.oauthToken.subscribe(() => {
       gapi.drive.realtime.load(driveFileId, (document) => {
         let collaborativeString = document.getModel().getRoot().get('demo_string');
-        this.wireTextBoxes(collaborativeString);
+        GoogleRealtimeService.wireTextBoxes(collaborativeString);
       }, (model) => {
         let string = model.createString();
         string.setText('Welcome to uxgraph!');
@@ -93,13 +81,6 @@ export class GoogleRealtimeService {
         console.error('Error loading Realtime API: ', error);
       });
     });
-  }
-
-  private wireTextBoxes(collaborativeString: CollaborativeString) {
-    let textArea1 = document.getElementById('text_area_1');
-    let textArea2 = document.getElementById('text_area_2');
-    gapi.drive.realtime.databinding.bindString(collaborativeString, <HTMLInputElement>textArea1);
-    gapi.drive.realtime.databinding.bindString(collaborativeString, <HTMLInputElement>textArea2);
   }
 
   createFile(name: string): Observable<DriveFile> {
@@ -149,7 +130,12 @@ export class GoogleRealtimeService {
 
   private static addDefaultUrlParams(params: URLSearchParams): void {
     params.set('key', API_KEY);
-
   }
 
+  private static wireTextBoxes(collaborativeString: CollaborativeString) {
+    let textArea1 = document.getElementById('text_area_1');
+    let textArea2 = document.getElementById('text_area_2');
+    gapi.drive.realtime.databinding.bindString(collaborativeString, <HTMLInputElement>textArea1);
+    gapi.drive.realtime.databinding.bindString(collaborativeString, <HTMLInputElement>textArea2);
+  }
 }

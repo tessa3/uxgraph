@@ -1,9 +1,9 @@
-import {Component, OnInit, ChangeDetectorRef} from "@angular/core";
+import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {
     GoogleRealtimeService,
     DriveFile
-} from "../shared/google-realtime/google-realtime.service";
-import {Router} from "@angular/router";
+} from '../shared/google-realtime/google-realtime.service';
+import {Router} from '@angular/router';
 
 /**
  * This class represents the lazy loaded HomeComponent.
