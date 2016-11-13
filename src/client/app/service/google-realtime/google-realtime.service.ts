@@ -5,7 +5,7 @@ import {
 } from '@angular/http';
 import {AsyncSubject, Observable} from 'rxjs';
 import CollaborativeString = gapi.drive.realtime.CollaborativeString;
-import {GoogleDriveQueryEncoder} from '../strings/google-drive-query-encoder';
+import {GoogleDriveQueryEncoder} from './google-drive-query-encoder';
 
 
 const CLIENT_ID = '458941249796-jfvnbelhroiit38vhe5d69av0jjnoi7b.apps.googleusercontent.com';

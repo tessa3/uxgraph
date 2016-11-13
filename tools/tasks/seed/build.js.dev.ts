@@ -12,8 +12,8 @@ const plugins = <any>gulpLoadPlugins();
 let typedBuildCounter = TYPED_COMPILE_INTERVAL; // Always start with the typed build.
 
 /**
- * Executes the build process, transpiling the TypeScript files (except the spec and e2e-spec files) for the development
- * environment.
+ * Executes the build process, transpiling the TypeScript files
+ * (except the spec and e2e-spec files) for the development environment.
  */
 export = () => {
   let tsProject: any;
@@ -31,7 +31,8 @@ export = () => {
   let result: any;
   let isFullCompile = true;
 
-  // Only do a typed build every X builds, otherwise do a typeless build to speed things up
+  // Only do a typed build every X builds, otherwise do a typeless build to
+  // speed things up.
   if (typedBuildCounter < TYPED_COMPILE_INTERVAL) {
     isFullCompile = false;
     tsProject = makeTsProject({isolatedModules: true});

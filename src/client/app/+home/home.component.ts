@@ -2,7 +2,7 @@ import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import {
     GoogleRealtimeService,
     DriveFile
-} from '../shared/google-realtime/google-realtime.service';
+} from '../service/google-realtime/google-realtime.service';
 import {Router} from '@angular/router';
 
 /**

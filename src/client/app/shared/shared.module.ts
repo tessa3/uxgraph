@@ -6,9 +6,9 @@ import {RouterModule} from '@angular/router';
 import {SidePanelComponent} from './side-panel/index';
 import {GraphHeaderComponent} from './graph-header/index';
 import {GraphPreviewComponent} from './graph-preview/index';
-import {NameListService} from './name-list/index';
+import {NameListService} from '../service/name-list/index';
 import {GraphPreviewListService} from './graph-preview-list/index';
-import {GoogleRealtimeService} from './google-realtime/google-realtime.service';
+import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.service';
 import {HomeHeaderComponent} from './home-header/home-header.component';
 
 /**
