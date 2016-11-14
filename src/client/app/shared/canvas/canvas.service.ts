@@ -71,8 +71,10 @@ export class CanvasService {
   zoom(zoomPnt: ViewportCoord, incZoomScale: number) {
     const toZoom = this.zoomScale * incZoomScale;
     if (toZoom > this.kMinZoomScale && toZoom < this.kMaxZoomScale) {
-      this.originOffset.x += zoomPnt.x * (1 - (1 / incZoomScale)) / this.zoomScale;
-      this.originOffset.y += zoomPnt.y * (1 - (1 / incZoomScale)) / this.zoomScale;
+      this.originOffset.x +=
+        zoomPnt.x * (1 - (1 / incZoomScale)) / this.zoomScale;
+      this.originOffset.y +=
+        zoomPnt.y * (1 - (1 / incZoomScale)) / this.zoomScale;
       this.zoomScale = toZoom;
       this.notifyListeners();
     }

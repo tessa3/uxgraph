@@ -42,7 +42,10 @@ export class CardComponent implements OnInit {
     event.preventDefault();
     this.dragging = true;
     const canvasBounds = this.canvasService.getCanvasBounds();
-    this.lastDragPnt = { x: event.clientX - canvasBounds.left, y: event.clientY - canvasBounds.top };
+    this.lastDragPnt = {
+      x: event.clientX - canvasBounds.left,
+      y: event.clientY - canvasBounds.top
+    };
   }
 
   // Put mousemove on document to allow dragging outside of canvas
@@ -52,10 +55,14 @@ export class CardComponent implements OnInit {
       event.stopPropagation();
       event.preventDefault();
       const canvasBounds = this.canvasService.getCanvasBounds();
-      const newDragPnt = { x: event.clientX - canvasBounds.left, y: event.clientY - canvasBounds.top };
+      const newDragPnt = {
+        x: event.clientX - canvasBounds.left,
+        y: event.clientY - canvasBounds.top
+      };
       this.position.x += newDragPnt.x - this.lastDragPnt.x;
       this.position.y += newDragPnt.y - this.lastDragPnt.y;
-      const newCardPosition = this.canvasService.viewportCoordToCanvasCoord(this.position);
+      const newCardPosition =
+        this.canvasService.viewportCoordToCanvasCoord(this.position);
       this.card.x = newCardPosition.x;
       this.card.y = newCardPosition.y;
       this.lastDragPnt = newDragPnt;

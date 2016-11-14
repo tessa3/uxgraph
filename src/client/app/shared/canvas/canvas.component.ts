@@ -21,9 +21,11 @@ export class CanvasComponent {
   // Returns the bounding box of the canvas.
   getBounds: {():ClientRect} = null;
 
-  // Note: ElementRef should be treated as read-only to avoid XSS vulnerabilites.
+  // Note: ElementRef should be treated as read-only to avoid XSS vulnerabilites
   constructor(elementRef: ElementRef, private canvasService: CanvasService) {
-    this.getBounds = () => { return elementRef.nativeElement.getBoundingClientRect(); };
+    this.getBounds = () => {
+      return elementRef.nativeElement.getBoundingClientRect();
+    };
     this.canvasService.setCanvasBoundsGetter(this.getBounds);
   }
 
@@ -32,7 +34,10 @@ export class CanvasComponent {
     event.stopPropagation();
     event.preventDefault();
     const zoomScale = 1 + (event.deltaY * -0.01);
-    const zoomPnt = {x: event.clientX - this.getBounds().left, y: event.clientY - this.getBounds().top};
+    const zoomPnt = {
+      x: event.clientX - this.getBounds().left,
+      y: event.clientY - this.getBounds().top
+    };
     this.canvasService.zoom(zoomPnt, zoomScale);
   }
 
@@ -40,7 +45,10 @@ export class CanvasComponent {
     event.stopPropagation();
     event.preventDefault();
     this.panning = true;
-    this.lastPanPnt = {x: event.clientX - this.getBounds().left, y: event.clientY - this.getBounds().top};
+    this.lastPanPnt = {
+      x: event.clientX - this.getBounds().left,
+      y: event.clientY - this.getBounds().top
+    };
   }
 
   // Put mousemove on document to allow panning outside of canvas
@@ -49,9 +57,15 @@ export class CanvasComponent {
     if (this.panning) {
       event.stopPropagation();
       event.preventDefault();
-      const newPanPnt = {x: event.clientX - this.getBounds().left, y: event.clientY - this.getBounds().top};
+      const newPanPnt = {
+        x: event.clientX - this.getBounds().left,
+        y: event.clientY - this.getBounds().top
+      };
       // Panning is in the opposite direction of the drag gesture.
-      const panVector = {x: this.lastPanPnt.x - newPanPnt.x, y: this.lastPanPnt.y - newPanPnt.y};
+      const panVector = {
+        x: this.lastPanPnt.x - newPanPnt.x,
+        y: this.lastPanPnt.y - newPanPnt.y
+      };
       this.canvasService.pan(panVector);
       this.lastPanPnt = newPanPnt;
     }
