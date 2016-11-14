@@ -39,6 +39,8 @@ export class CanvasService {
   // The list of functions to call when zoom or pan occurs. This is used to
   // essentially watch this class' properties.
   listeners: {():void}[] = [];
+  // Returns the bounding box of the canvas.
+  getCanvasBounds: {():ClientRect} = null;
 
   constructor() {
     // TODO(eyuelt): fetch this card data from wherever it's stored
@@ -81,6 +83,11 @@ export class CanvasService {
     this.originOffset.x += delta.x / this.zoomScale;
     this.originOffset.y += delta.y / this.zoomScale;
     this.notifyListeners();
+  }
+
+  // Set the function that returns the canvas' bounding box.
+  setCanvasBoundsGetter(fn: {():ClientRect}) {
+    this.getCanvasBounds = fn;
   }
 
   addListener(listener: {():void}) { this.listeners.push(listener); }
