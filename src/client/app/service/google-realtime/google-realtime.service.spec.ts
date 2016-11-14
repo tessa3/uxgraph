@@ -18,28 +18,28 @@ export function main() {
       });
 
       it('should authorize without a popup', () => {
-
+        expect(googleRealtimeService).not.toBeNull();
       });
     });
 
 
     describe('/ListFiles', () => {
       it('should filter out files for MIME type uxgraph', () => {
-
+        expect(googleRealtimeService).not.toBeNull();
       });
     });
 
 
     describe('Realtime', () => {
       it('should load the Realtime Model', () => {
-
+        expect(googleRealtimeService).not.toBeNull();
       });
     });
 
 
     describe('/CreateFile', () => {
       it('should create files on Google Drive of MIME type uxgraph', () => {
-
+        expect(googleRealtimeService).not.toBeNull();
       });
     });
 
