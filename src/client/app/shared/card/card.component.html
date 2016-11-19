@@ -1,12 +1,21 @@
-<svg:rect vector-effect="non-scaling-stroke"
-          fill="#fff"
-          stroke="#000"
-          x="0"
-          y="0"
-          attr.rx="{{cornerRadius}}"
-          attr.ry="{{cornerRadius}}"
-          attr.width="{{size.width}}"
-          attr.height="{{size.height}}"
-          attr.transform="translate({{position.x}},{{position.y}}) scale({{scale}})"
-          (mousedown)="this.onMousedown($event)">
-</svg:rect>
+<svg:g x="0"
+       y="0"
+       attr.transform="translate({{position.x}},{{position.y}}) scale({{scale}})"
+       (mousedown)="this.onMousedown($event)">
+  <rect vector-effect="non-scaling-stroke"
+        fill="#fff"
+        stroke="#000"
+        x="0"
+        y="0"
+        attr.rx="{{cornerRadius}}"
+        attr.ry="{{cornerRadius}}"
+        attr.width="{{size.width}}"
+        attr.height="{{size.height}}">
+  </rect>
+  <text text-anchor="middle"
+        alignment-baseline="middle"
+        attr.x="{{size.width/2}}"
+        attr.y="{{size.height/2}}">
+    {{card.text}}
+  </text>
+</svg:g>

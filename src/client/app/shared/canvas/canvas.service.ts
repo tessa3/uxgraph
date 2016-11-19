@@ -48,10 +48,10 @@ export class CanvasService {
 
   constructor() {
     // TODO(eyuelt): fetch this card data from wherever it's stored
-    this.cards.push(new Card(0, 0));
-    this.cards.push(new Card(60, 60));
-    this.cards.push(new Card(100, 100));
-    this.cards.push(new Card(200, 200));
+    this.cards.push(new Card(0, 0, 'A'));
+    this.cards.push(new Card(60, 60, 'B'));
+    this.cards.push(new Card(100, 100, 'C'));
+    this.cards.push(new Card(200, 200, 'D'));
   }
 
   // Convert a point in the viewport coordinate space to a point in the canvas
