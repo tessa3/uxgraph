@@ -10,4 +10,4 @@ import { Component } from '@angular/core';
   styleUrls: ['fab.component.css']
 })
 
-export class FABComponent {}
+export class FabComponent {}
