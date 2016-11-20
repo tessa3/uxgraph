@@ -2,11 +2,25 @@
        y="0"
        attr.transform="translate({{position.x}},{{position.y}}) scale({{scale}})"
        (mousedown)="this.onMousedown($event)">
+  <defs>
+    <filter id="drop-shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" />
+      <feOffset dx="1" dy="1" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.4"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
   <rect vector-effect="non-scaling-stroke"
         fill="#fff"
-        stroke="#000"
+        stroke="#ccc"
         x="0"
         y="0"
+        style="filter:url(#drop-shadow)"
         attr.rx="{{cornerRadius}}"
         attr.ry="{{cornerRadius}}"
         attr.width="{{size.width}}"
