@@ -1,12 +1,41 @@
 :host {
-  width: 300px;
+  max-width: 260px;
+  min-width: 260px;
+  width: 260px;
   background-color: #e0e0e0;
   height: 100%;
   padding: 15px;
   font-size: 16px;
+  color: #222;
+
+  -webkit-box-shadow: 1px 0px 12px -1px #777;
+  -moz-box-shadow: 1px 0px 12px -1px #777;
+  box-shadow: 1px 0px 12px -1px #777;
+  z-index: 9;
 }
 
 #side-panel-content-header {
   font-weight: 500;
   margin-bottom: 30px;
+}
+
+p {
+  font-size: 14px;
+  line-height: 17px;
+}
+
+/* I know these are temporary but I felt like styling them anyway. */
+textarea {
+  width: 100%;
+  height: 75px;
+  border-radius: 3px;
+  border-width: inherit;
+  resize: none;
+  margin-top: 3px;
+  padding: 5px;
+  font-size: 12px;
+  font-family: sans-serif;
+}
+textarea:focus {
+  outline: none;
 }
