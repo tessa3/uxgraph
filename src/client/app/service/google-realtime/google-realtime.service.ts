@@ -3,7 +3,8 @@ import {
     Http, URLSearchParams, Response,
     RequestOptions, Headers, QueryEncoder
 } from '@angular/http';
-import {AsyncSubject, Observable} from 'rxjs';
+import {AsyncSubject} from 'rxjs/AsyncSubject';
+import {Observable} from 'rxjs/Observable';
 import CollaborativeString = gapi.drive.realtime.CollaborativeString;
 
 
