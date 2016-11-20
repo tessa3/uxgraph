@@ -21,7 +21,7 @@ export class GraphComponent implements OnInit {
               private route: ActivatedRoute) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.route.params.forEach((params: Params) => {
       this.graphId = params['graphId'];
       this.googleRealtimeService.loadRealtimeDocument(this.graphId);

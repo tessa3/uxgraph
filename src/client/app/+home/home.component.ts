@@ -1,9 +1,10 @@
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, OnDestroy} from '@angular/core';
 import {
-    GoogleRealtimeService,
-    DriveFile
+  GoogleRealtimeService,
+  DriveFile
 } from '../service/google-realtime/google-realtime.service';
 import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -15,10 +16,14 @@ import {Router} from '@angular/router';
   styleUrls: ['home.component.css'],
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   userLoggedIn: boolean = false;
   graphPreviews: DriveFile[] = [];
+
+  private oauthSub: Subscription;
+  private listFilesSub: Subscription;
+  private createGraphSub: Subscription;
 
   /**
    * Creates an instance of the HomeComponent with the injected
@@ -26,6 +31,7 @@ export class HomeComponent implements OnInit {
    *
    * @param googleRealtimeService
    * @param changeDetector
+   * @param router
    */
   constructor(private googleRealtimeService: GoogleRealtimeService,
               private changeDetector: ChangeDetectorRef,
@@ -36,13 +42,14 @@ export class HomeComponent implements OnInit {
    * Get the names OnInit
    */
   ngOnInit() {
-    this.googleRealtimeService.oauthToken.subscribe((oauthToken) => {
-      if (!!oauthToken) {
-        this.userLoggedIn = true;
-      }
-    });
+    this.oauthSub = this.googleRealtimeService.oauthToken
+        .subscribe((oauthToken) => {
+          if (!!oauthToken) {
+            this.userLoggedIn = true;
+          }
+        });
 
-    this.googleRealtimeService.listFiles()
+    this.listFilesSub = this.googleRealtimeService.listFiles()
         .subscribe((driveFiles: DriveFile[]) => {
           this.graphPreviews = driveFiles;
 
@@ -56,10 +63,17 @@ export class HomeComponent implements OnInit {
   }
 
   createNewGraph() {
-    this.googleRealtimeService.createFile('Untitled uxgraph')
+    this.createGraphSub = this.googleRealtimeService
+        .createFile('Untitled uxgraph')
         .subscribe((newGraph: DriveFile) => {
           this.router.navigateByUrl('/graph/' + newGraph.id);
         });
+  }
+
+  ngOnDestroy() {
+    this.oauthSub.unsubscribe();
+    this.listFilesSub.unsubscribe();
+    this.createGraphSub.unsubscribe();
   }
 
 }

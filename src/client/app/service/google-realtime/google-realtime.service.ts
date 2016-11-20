@@ -198,7 +198,7 @@ export class GoogleRealtimeService {
    * Takes some URL params and adds some more, default URL params that should
    * go up with every request.
    */
-  private static addDefaultUrlParams(params: URLSearchParams): void {
+  private static addDefaultUrlParams(params: URLSearchParams) {
     params.set('key', API_KEY);
   }
 
