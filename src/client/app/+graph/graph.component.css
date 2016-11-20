@@ -17,6 +17,12 @@ graph-body {
   height: 100%;
 }
 
+graph-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 canvas-wrapper {
   width: 100%;
 }
