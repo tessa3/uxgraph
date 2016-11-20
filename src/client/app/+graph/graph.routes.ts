@@ -3,7 +3,7 @@ import { GraphComponent } from './index';
 
 export const GraphRoutes: Route[] = [
   {
-    path: 'id/:graphId',
+    path: 'graph/:graphId',
     component: GraphComponent
   }
 ];

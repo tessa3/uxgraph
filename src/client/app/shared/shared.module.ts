@@ -1,13 +1,14 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import {NgModule, ModuleWithProviders} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
 
+import {GraphHeaderComponent} from './graph-header/index';
+import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.service';
+import {HomeHeaderComponent} from './home-header/home-header.component';
 import { SidePanelComponent } from './side-panel/index';
-import { AppHeaderComponent } from './app-header/index';
 import { FabComponent } from './fab/index';
 import { GraphPreviewComponent } from './graph-preview/index';
-import { NameListService } from './name-list/index';
 import { GraphPreviewListService } from './graph-preview-list/index';
 
 /**
@@ -16,15 +17,32 @@ import { GraphPreviewListService } from './graph-preview-list/index';
 
 @NgModule({
   imports: [CommonModule, RouterModule],
-  declarations: [AppHeaderComponent, SidePanelComponent, GraphPreviewComponent, FabComponent],
-  exports: [AppHeaderComponent, SidePanelComponent, GraphPreviewComponent, FabComponent,
-    CommonModule, FormsModule, RouterModule]
+  declarations: [
+    GraphHeaderComponent,
+    GraphPreviewComponent,
+    HomeHeaderComponent,
+    SidePanelComponent,
+    FabComponent
+  ],
+  exports: [
+    CommonModule,
+    FormsModule,
+    GraphHeaderComponent,
+    GraphPreviewComponent,
+    HomeHeaderComponent,
+    RouterModule,
+    SidePanelComponent,
+    FabComponent
+  ]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [NameListService, GraphPreviewListService]
+      providers: [
+        GoogleRealtimeService,
+        GraphPreviewListService,
+      ]
     };
   }
 }

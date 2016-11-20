@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { CanvasComponent } from '../shared/index';
+import {Component, OnInit} from '@angular/core';
+import {CanvasComponent} from '../shared/index';
+import {ActivatedRoute, Params} from '@angular/router';
+import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.service';
 
 /**
  * This class represents the lazy loaded GraphComponent.
@@ -11,4 +13,19 @@ import { CanvasComponent } from '../shared/index';
   styleUrls: ['graph.component.css'],
   directives: [CanvasComponent]
 })
-export class GraphComponent { }
+export class GraphComponent implements OnInit {
+
+  graphId: string;
+
+  constructor(private googleRealtimeService: GoogleRealtimeService,
+              private route: ActivatedRoute) {
+  }
+
+  ngOnInit() {
+    this.route.params.forEach((params: Params) => {
+      this.graphId = params['graphId'];
+      this.googleRealtimeService.loadRealtimeDocument(this.graphId);
+    });
+  }
+
+}

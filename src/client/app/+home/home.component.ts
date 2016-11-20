@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { GraphPreviewListService } from '../shared/index';
+import {Component, OnInit, ChangeDetectorRef, OnDestroy} from '@angular/core';
+import {
+  GoogleRealtimeService,
+  DriveFile
+} from '../service/google-realtime/google-realtime.service';
+import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -11,47 +16,66 @@ import { GraphPreviewListService } from '../shared/index';
   styleUrls: ['home.component.css'],
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
-  newGraphPreview: string = '';
-  errorMessage: string;
-  graphPreviews: any[] = [];
+  userLoggedIn: boolean = false;
+  graphPreviews: DriveFile[] = [];
+
+  private oauthSub: Subscription;
+  private listFilesSub: Subscription;
+  private createGraphSub: Subscription;
 
   /**
    * Creates an instance of the HomeComponent with the injected
    * GraphPreviewListService.
    *
-   * @param {GraphPreviewListService} GraphPreviewListService - The injected GraphPreviewListService.
+   * @param googleRealtimeService
+   * @param changeDetector
+   * @param router
    */
-  constructor(public graphPreviewListService: GraphPreviewListService) {}
+  constructor(private googleRealtimeService: GoogleRealtimeService,
+              private changeDetector: ChangeDetectorRef,
+              private router: Router) {
+  }
 
   /**
    * Get the names OnInit
    */
   ngOnInit() {
-    this.getGraphPreviews();
+    this.oauthSub = this.googleRealtimeService.oauthToken
+        .subscribe((oauthToken) => {
+          if (!!oauthToken) {
+            this.userLoggedIn = true;
+          }
+        });
+
+    this.listFilesSub = this.googleRealtimeService.listFiles()
+        .subscribe((driveFiles: DriveFile[]) => {
+          this.graphPreviews = driveFiles;
+
+          // TODO(girum): Why do I need to call the change detector here?
+          this.changeDetector.detectChanges();
+        });
   }
 
-  /**
-   * Handle the nameListService observable
-   */
-  getGraphPreviews() {
-    this.graphPreviewListService.get()
-                     .subscribe(
-                       graphPreviews => this.graphPreviews = graphPreviews,
-                       error => this.errorMessage = <any>error
-                       );
+  authorize() {
+    this.googleRealtimeService.authorize(true);
   }
 
-  /**
-   * Pushes a new name onto the names array
-   * @return {boolean} false to prevent default form submit behavior to refresh the page.
-   */
-  addName(): boolean {
-    // TODO: implement nameListService.post
-    this.graphPreviews.push(this.newGraphPreview);
-    this.newGraphPreview = '';
-    return false;
+  createNewGraph() {
+    this.createGraphSub = this.googleRealtimeService
+        .createFile('Untitled uxgraph')
+        .subscribe((newGraph: DriveFile) => {
+          this.router.navigateByUrl('/graph/' + newGraph.id);
+        });
+  }
+
+  ngOnDestroy() {
+    this.oauthSub.unsubscribe();
+    this.listFilesSub.unsubscribe();
+    if (this.createGraphSub) {
+      this.createGraphSub.unsubscribe();
+    }
   }
 
 }

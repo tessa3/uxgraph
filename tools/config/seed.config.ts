@@ -396,8 +396,8 @@ export class SeedConfig {
    * @type {Array}
    */
   BROWSER_LIST = [
-    'ie >= 10',
-    'ie_mob >= 10',
+    // 'ie >= 10',  // TODO(girum): Do we care about supporting IE10?
+    // 'ie_mob >= 10',
     'ff >= 30',
     'chrome >= 34',
     'safari >= 7',
