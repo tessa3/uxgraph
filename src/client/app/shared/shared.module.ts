@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { SidePanelComponent } from './side-panel/index';
 import { AppHeaderComponent } from './app-header/index';
 import { FabComponent } from './fab/index';
+import { FeedbackIconComponent } from './feedback-icon/index';
 import { GraphPreviewComponent } from './graph-preview/index';
 import { NameListService } from './name-list/index';
 import { GraphPreviewListService } from './graph-preview-list/index';
@@ -16,8 +17,8 @@ import { GraphPreviewListService } from './graph-preview-list/index';
 
 @NgModule({
   imports: [CommonModule, RouterModule],
-  declarations: [AppHeaderComponent, SidePanelComponent, GraphPreviewComponent, FabComponent],
-  exports: [AppHeaderComponent, SidePanelComponent, GraphPreviewComponent, FabComponent,
+  declarations: [AppHeaderComponent, SidePanelComponent, GraphPreviewComponent, FabComponent, FeedbackIconComponent],
+  exports: [AppHeaderComponent, SidePanelComponent, GraphPreviewComponent, FabComponent, FeedbackIconComponent,
     CommonModule, FormsModule, RouterModule]
 })
 export class SharedModule {

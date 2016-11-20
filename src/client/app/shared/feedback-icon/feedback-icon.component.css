@@ -1,0 +1,11 @@
+:host {
+  position: absolute;
+  left: calc(100% - 45px);
+  top: calc(100% - 40px);
+
+  width: 25px;
+  height: 25px;
+
+  background: url('../../../assets/feedback_icon.png') no-repeat;
+  background-size: 25px;
+}
