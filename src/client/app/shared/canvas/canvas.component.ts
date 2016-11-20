@@ -33,7 +33,7 @@ export class CanvasComponent {
   onMousewheel(event: WheelEvent) {
     event.stopPropagation();
     event.preventDefault();
-    const zoomScale = 1 + (event.deltaY * -0.01);
+    const zoomScale = 1 + (event.deltaY * -0.002);
     const zoomPnt = {
       x: event.clientX - this.getBounds().left,
       y: event.clientY - this.getBounds().top
