@@ -73,7 +73,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.oauthSub.unsubscribe();
     this.listFilesSub.unsubscribe();
-    this.createGraphSub.unsubscribe();
+    if (this.createGraphSub) {
+      this.createGraphSub.unsubscribe();
+    }
   }
 
 }
