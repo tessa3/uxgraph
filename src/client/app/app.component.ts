@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Config } from './shared/index';
 
 /**
@@ -10,8 +9,8 @@ import { Config } from './shared/index';
   moduleId: module.id,
   selector: 'uxg-app',
   templateUrl: 'app.component.html',
-  styleUrls: ['app.component.css'],
-  directives: [ROUTER_DIRECTIVES]
+  styleUrls: ['app.component.css']
+  // directives: [ROUTER_DIRECTIVES]
 })
 
 export class AppComponent {
