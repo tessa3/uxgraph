@@ -6,6 +6,7 @@ import {
 import {AsyncSubject} from 'rxjs/AsyncSubject';
 import {Observable} from 'rxjs/Observable';
 import CollaborativeString = gapi.drive.realtime.CollaborativeString;
+import 'rxjs/add/operator/switch';
 
 
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
