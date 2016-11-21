@@ -26,10 +26,18 @@
         attr.width="{{size.width}}"
         attr.height="{{size.height}}">
   </rect>
-  <text text-anchor="middle"
-        alignment-baseline="middle"
-        attr.x="{{size.width/2}}"
-        attr.y="{{size.height/2}}">
-    {{card.text}}
-  </text>
+  <foreignObject x="0"
+                 y="0"
+                 attr.width="{{size.width}}"
+                 attr.height="{{size.height}}">
+    <xhtml:div class="textarea-container"
+               [style.width] = "size.width + 'px'"
+               [style.height] = "size.height + 'px'">
+      <xhtml:textarea xmlns="http://www.w3.org/1999/xhtml"
+                      [style.width] = "size.width + 'px'"
+                      [style.max-height] = "size.height + 'px'"
+                      [style.border-radius] = "cornerRadius + 'px'"
+                      autosize>{{card.text}}</xhtml:textarea>
+    </xhtml:div>
+  </foreignObject>
 </svg:g>

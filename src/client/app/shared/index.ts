@@ -7,3 +7,4 @@ export * from './side-panel/index';
 export * from './config/env.config';
 export * from './card/index';
 export * from './canvas/index';
+export * from './textarea-autosize/index';

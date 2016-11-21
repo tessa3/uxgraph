@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
 import './card';
+import { TextareaAutosizeDirective } from '../textarea-autosize/textarea-autosize.directive';
 
 /**
  * This class represents the Card component.
@@ -9,7 +10,8 @@ import './card';
   moduleId: module.id,
   selector: '[uxg-card]',
   templateUrl: 'card.component.html',
-  styleUrls: ['card.component.css']
+  styleUrls: ['card.component.css'],
+  directives: [TextareaAutosizeDirective]
 })
 export class CardComponent implements OnInit {
   // The card data to render on the canvas.
@@ -43,7 +45,7 @@ export class CardComponent implements OnInit {
 
   onMousedown(event: MouseEvent) {
     event.stopPropagation();
-    event.preventDefault();
+    //event.preventDefault(); //TODO(eyuelt): figure out when to preventDefault
     this.dragging = true;
     const canvasBounds = this.canvasService.getCanvasBounds();
     this.lastDragPnt = {
@@ -78,7 +80,7 @@ export class CardComponent implements OnInit {
   onMouseup(event: MouseEvent) {
     if (this.dragging) {
       event.stopPropagation();
-      event.preventDefault();
+      //event.preventDefault(); //TODO(eyuelt): figure out when to preventDefault
       this.dragging = false;
       this.lastDragPnt = null;
     }
