@@ -6,7 +6,7 @@
   display: flex;
 }
 
-.horizontal-line {
+.vertical-line {
   background-color: #90a4ae;
   width: 1px;
   height: 100%;
