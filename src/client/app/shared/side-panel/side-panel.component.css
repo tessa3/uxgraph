@@ -8,10 +8,10 @@
   font-size: 16px;
   color: #222;
 
-  -webkit-box-shadow: 1px 0px 12px -1px #777;
-  -moz-box-shadow: 1px 0px 12px -1px #777;
-  box-shadow: 1px 0px 12px -1px #777;
-  z-index: 9;
+  -webkit-box-shadow: 1px 0 4px -1px #777;
+  -moz-box-shadow: 1px 0 4px -1px #777;
+  box-shadow: 1px 0 4px -1px #777;
+  z-index: 1;
 }
 
 #side-panel-content-header {

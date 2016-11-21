@@ -1,6 +1,5 @@
-import { Component, HostListener, ElementRef } from '@angular/core';
-import { CardComponent } from '../../shared/index';
-import { CanvasService, Point } from './canvas.service';
+import {Component, HostListener, ElementRef} from '@angular/core';
+import {CanvasService, Point} from './canvas.service';
 
 /**
  * This class represents the Canvas component.
@@ -10,7 +9,6 @@ import { CanvasService, Point } from './canvas.service';
   selector: 'uxg-canvas',
   templateUrl: 'canvas.component.html',
   styleUrls: ['canvas.component.css'],
-  directives: [CardComponent],
   providers: [CanvasService]
 })
 export class CanvasComponent {

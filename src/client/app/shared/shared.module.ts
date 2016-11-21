@@ -6,10 +6,11 @@ import {RouterModule} from '@angular/router';
 import {GraphHeaderComponent} from './graph-header/index';
 import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.service';
 import {HomeHeaderComponent} from './home-header/home-header.component';
-import { SidePanelComponent } from './side-panel/index';
-import { FabComponent } from './fab/index';
-import { GraphPreviewComponent } from './graph-preview/index';
-import { GraphPreviewListService } from './graph-preview-list/index';
+import {SidePanelComponent} from './side-panel/index';
+import {FabComponent} from './fab/index';
+import {GraphPreviewComponent} from './graph-preview/index';
+import {GraphPreviewListService} from './graph-preview-list/index';
+import {CardComponent} from './card/card.component';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -18,6 +19,7 @@ import { GraphPreviewListService } from './graph-preview-list/index';
 @NgModule({
   imports: [CommonModule, RouterModule],
   declarations: [
+    CardComponent,
     GraphHeaderComponent,
     GraphPreviewComponent,
     HomeHeaderComponent,

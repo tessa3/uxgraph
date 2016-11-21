@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {CanvasComponent} from '../shared/index';
 import {ActivatedRoute, Params} from '@angular/router';
 import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.service';
 
@@ -10,8 +9,7 @@ import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.
   moduleId: module.id,
   selector: 'uxg-graph',
   templateUrl: 'graph.component.html',
-  styleUrls: ['graph.component.css'],
-  directives: [CanvasComponent]
+  styleUrls: ['graph.component.css']
 })
 export class GraphComponent implements OnInit {
 

@@ -112,23 +112,23 @@
     "yargs": "^4.8.0"
   },
   "dependencies": {
-    "@angular/common": "2.0.0-rc.5",
-    "@angular/compiler": "2.0.0-rc.5",
-    "@angular/core": "2.0.0-rc.5",
-    "@angular/forms": "0.3.0",
-    "@angular/http": "2.0.0-rc.5",
-    "@angular/platform-browser": "2.0.0-rc.5",
-    "@angular/platform-browser-dynamic": "2.0.0-rc.5",
-    "@angular/router": "3.0.0-rc.1",
-    "es6-module-loader": "^0.17.8",
+    "@angular/common": "2.2.1",
+    "@angular/compiler": "2.2.1",
+    "@angular/core": "2.2.1",
+    "@angular/forms": "2.2.1",
+    "@angular/http": "2.2.1",
+    "@angular/platform-browser": "2.2.1",
+    "@angular/platform-browser-dynamic": "2.2.1",
+    "@angular/router": "3.2.1",
     "core-js": "^2.4.0",
-    "rxjs": "5.0.0-beta.6",
+    "es6-module-loader": "^0.17.8",
+    "rxjs": "5.0.0-beta.12",
     "systemjs": "0.19.27",
     "zone.js": "^0.6.12"
   },
   "stylelint": {
     "extends": "stylelint-config-standard",
-    "rules" : {
+    "rules": {
       "selector-pseudo-class-no-unknown": null,
       "selector-type-no-unknown": null
     }
