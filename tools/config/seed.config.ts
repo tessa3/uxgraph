@@ -319,6 +319,7 @@ export class SeedConfig {
       '@angular/core': `node_modules/@angular/core/bundles/core.umd.js`,
       '@angular/forms': `node_modules/@angular/forms/bundles/forms.umd.js`,
       '@angular/http': `node_modules/@angular/http/bundles/http.umd.js`,
+      '@angular/material': 'node_modules/@angular/material/material.umd.js',
       '@angular/platform-browser': `node_modules/@angular/platform-browser/bundles/platform-browser.umd.js`,
       '@angular/platform-browser-dynamic': `node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js`,
       '@angular/router': 'node_modules/@angular/router/bundles/router.umd.js',

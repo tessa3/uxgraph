@@ -27,7 +27,8 @@ System.config({
   defaultJSExtensions: true,
   map: {
     'rxjs': 'node_modules/rxjs',
-    '@angular': 'node_modules/@angular'
+    '@angular': 'node_modules/@angular',
+    '@angular/material': 'npm:@angular/material/material.umd.js'
   },
   packages: {
     '@angular/common': {
