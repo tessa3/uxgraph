@@ -21,6 +21,8 @@ module.exports = function(config) {
       // Polyfills.
       'node_modules/core-js/client/shim.min.js',
 
+      'node_modules/traceur/bin/traceur.js',
+
       // System.js for module loading
       'node_modules/systemjs/dist/system.src.js',
 
