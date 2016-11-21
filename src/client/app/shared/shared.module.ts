@@ -17,7 +17,11 @@ import {CardComponent} from './card/card.component';
  */
 
 @NgModule({
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule
+  ],
   declarations: [
     CardComponent,
     GraphHeaderComponent,
