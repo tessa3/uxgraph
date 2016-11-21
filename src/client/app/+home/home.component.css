@@ -6,7 +6,7 @@
   overflow-y: scroll;
 }
 
-home-content {
+.home-content {
   height: 100%;
   display: flex;
   padding: 40px;
@@ -33,13 +33,13 @@ li {
   text-align: left;
 }
 
-new-graph-header {
+.new-graph-header {
   display: flex;
   margin-top: -28px;
   font-size: 15px;
   margin-bottom: 10px;
 }
 
-new-graph-button {
+.new-graph-button {
   cursor: pointer;
 }
