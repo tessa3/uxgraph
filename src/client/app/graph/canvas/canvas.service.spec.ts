@@ -1,5 +1,5 @@
 import { ReflectiveInjector } from '@angular/core';
-import { CanvasService } from '../canvas/canvas.service';
+import { CanvasService } from './canvas.service';
 
 export function main() {
   describe('Canvas service', () => {
