@@ -2,15 +2,9 @@ import {NgModule, ModuleWithProviders} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
-
-import {GraphHeaderComponent} from './graph-header/index';
 import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.service';
-import {HomeHeaderComponent} from './home-header/home-header.component';
-import {SidePanelComponent} from './side-panel/index';
 import {FabComponent} from './fab/index';
-import {GraphPreviewComponent} from './graph-preview/index';
-import {GraphPreviewListService} from './graph-preview-list/index';
-import {CardComponent} from './card/card.component';
+import {GraphPreviewListService} from '../home/graph-preview-list/index';
 import {TextareaAutosizeDirective} from './textarea-autosize/index';
 
 /**
@@ -18,24 +12,19 @@ import {TextareaAutosizeDirective} from './textarea-autosize/index';
  */
 
 @NgModule({
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule
+  ],
   declarations: [
-    CardComponent,
-    GraphHeaderComponent,
-    GraphPreviewComponent,
-    HomeHeaderComponent,
-    SidePanelComponent,
     FabComponent,
     TextareaAutosizeDirective
   ],
   exports: [
     CommonModule,
     FormsModule,
-    GraphHeaderComponent,
-    GraphPreviewComponent,
-    HomeHeaderComponent,
     RouterModule,
-    SidePanelComponent,
     FabComponent,
     TextareaAutosizeDirective
   ]

@@ -1,7 +1,10 @@
-import { Component, Input, OnInit, HostListener } from '@angular/core';
+import {
+  Component, Input, OnInit, HostListener,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
-import './card';
 import { TextareaAutosizeDirective } from '../textarea-autosize/textarea-autosize.directive';
+import './card';
 
 /**
  * This class represents the Card component.
@@ -29,7 +32,8 @@ export class CardComponent implements OnInit {
   // The last point seen during the drag that is currently in progress.
   lastDragPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
 
-  constructor(private canvasService: CanvasService) {
+  constructor(private canvasService: CanvasService,
+              private changeDetector: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -41,6 +45,10 @@ export class CardComponent implements OnInit {
   update() {
     this.scale = this.canvasService.zoomScale;
     this.position = this.canvasService.canvasCoordToViewportCoord(this.card);
+
+    // TODO(girum): Updating libraries caused our SVG panning to break without
+    // calling the CD manually. Fix this!
+    this.changeDetector.detectChanges();
   }
 
   onMousedown(event: MouseEvent) {
