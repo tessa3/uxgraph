@@ -1,0 +1,12 @@
+<svg width="24px" height="24px" viewBox="439 58 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41 (35326) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="ic_zoom_in_black_24px" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(439.000000, 58.000000)">
+        <g id="Group">
+            <path d="M15.5,14 L14.71,14 L14.43,13.73 C15.41,12.59 16,11.11 16,9.5 C16,5.91 13.09,3 9.5,3 C5.91,3 3,5.91 3,9.5 C3,13.09 5.91,16 9.5,16 C11.11,16 12.59,15.41 13.73,14.43 L14,14.71 L14,15.5 L19,20.49 L20.49,19 L15.5,14 L15.5,14 Z M9.5,14 C7.01,14 5,11.99 5,9.5 C5,7.01 7.01,5 9.5,5 C11.99,5 14,7.01 14,9.5 C14,11.99 11.99,14 9.5,14 L9.5,14 Z" id="Shape" fill="#607D8B"></path>
+            <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+            <polygon id="Shape" fill="#607D8B" points="12 10 10 10 10 12 9 12 9 10 7 10 7 9 9 9 9 7 10 7 10 9 12 9"></polygon>
+        </g>
+    </g>
+</svg>
