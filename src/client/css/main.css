@@ -52,7 +52,7 @@ input {
 }
 
 button {
-  background-color: #106cc8;
+  background-color: transparent;
   border-style: none;
   color: rgba(255, 255, 255, 0.87);
   cursor: pointer;
@@ -64,5 +64,5 @@ button {
 }
 
 button:hover {
-  background-color: #28739e;
+  /*background-color: #28739e;*/
 }
