@@ -2,13 +2,13 @@
 // because I couldn't get importing external dependencies working with all of
 // this angular2-seed crap.
 
-import {Directive, ElementRef, HostListener} from '@angular/core';
+import {AfterContentChecked, Directive, ElementRef, HostListener} from '@angular/core';
 
 @Directive({
-  selector: 'textarea[autosize]'
+  selector: '[autosize]'
 })
-export class TextareaAutosizeDirective {
-  constructor(public element: ElementRef){
+export class TextareaAutosizeDirective implements AfterContentChecked {
+  constructor(public element: ElementRef) {
   }
 
   @HostListener('input', ['$event.target'])

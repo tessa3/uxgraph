@@ -3,7 +3,6 @@ import {
   ChangeDetectorRef
 } from '@angular/core';
 import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
-import { TextareaAutosizeDirective } from '../textarea-autosize/textarea-autosize.directive';
 import './card';
 
 /**
@@ -13,8 +12,7 @@ import './card';
   moduleId: module.id,
   selector: '[uxg-card]',
   templateUrl: 'card.component.html',
-  styleUrls: ['card.component.css'],
-  directives: [TextareaAutosizeDirective]
+  styleUrls: ['card.component.css']
 })
 export class CardComponent implements OnInit {
   // The card data to render on the canvas.
