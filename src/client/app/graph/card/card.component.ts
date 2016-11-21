@@ -2,7 +2,7 @@ import {
   Component, Input, OnInit, HostListener,
   ChangeDetectorRef
 } from '@angular/core';
-import { CanvasService, ViewportCoord, Point } from '../canvas/canvas.service';
+import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
 import './card';
 
 /**
@@ -21,6 +21,10 @@ export class CardComponent implements OnInit {
   scale: number = 1;
   // The current display position in the viewport's coordinate space.
   position: ViewportCoord = {x:0, y:0};
+  // The size of the card in the canvas' coordinate space.
+  size: Size = {width:60, height:80};
+  // The radius of the rounded corners in the canvas' coordinate space.
+  cornerRadius: number = 5;
   // Whether or not dragging is in progress.
   dragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
@@ -47,7 +51,7 @@ export class CardComponent implements OnInit {
 
   onMousedown(event: MouseEvent) {
     event.stopPropagation();
-    event.preventDefault();
+    //event.preventDefault(); //TODO(eyuelt): figure out when to preventDefault
     this.dragging = true;
     const canvasBounds = this.canvasService.getCanvasBounds();
     this.lastDragPnt = {
@@ -86,7 +90,7 @@ export class CardComponent implements OnInit {
   onMouseup(event: MouseEvent) {
     if (this.dragging) {
       event.stopPropagation();
-      event.preventDefault();
+      //event.preventDefault(); //TODO(eyuelt): figure out when to preventDefault
       this.dragging = false;
       this.lastDragPnt = null;
     }

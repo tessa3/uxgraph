@@ -1,9 +1,43 @@
-<svg:circle vector-effect="non-scaling-stroke"
-            fill="#fff"
-            stroke="#000"
-            cx="0"
-            cy="0"
-            attr.r="{{card.radius}}"
-            attr.transform="translate({{position.x}},{{position.y}}) scale({{scale}})"
-            (mousedown)="this.onMousedown($event)">
-</svg:circle>
+<svg:g x="0"
+       y="0"
+       attr.transform="translate({{position.x}},{{position.y}}) scale({{scale}})"
+       (mousedown)="this.onMousedown($event)">
+  <defs>
+    <filter id="drop-shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" />
+      <feOffset dx="1" dy="1" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.4"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect vector-effect="non-scaling-stroke"
+        fill="#fff"
+        stroke="#ccc"
+        x="0"
+        y="0"
+        style="filter:url(#drop-shadow)"
+        attr.rx="{{cornerRadius}}"
+        attr.ry="{{cornerRadius}}"
+        attr.width="{{size.width}}"
+        attr.height="{{size.height}}">
+  </rect>
+  <foreignObject x="0"
+                 y="0"
+                 attr.width="{{size.width}}"
+                 attr.height="{{size.height}}">
+    <xhtml:div class="textarea-container"
+               [style.width] = "size.width + 'px'"
+               [style.height] = "size.height + 'px'">
+      <xhtml:textarea xmlns="http://www.w3.org/1999/xhtml"
+                      [style.width] = "size.width + 'px'"
+                      [style.max-height] = "size.height + 'px'"
+                      [style.border-radius] = "cornerRadius + 'px'"
+                      autosize>{{card.text}}</xhtml:textarea>
+    </xhtml:div>
+  </foreignObject>
+</svg:g>

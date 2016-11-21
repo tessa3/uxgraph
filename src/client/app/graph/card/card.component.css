@@ -1,3 +1,17 @@
-circle {
+rect {
   stroke-width: 1;
+}
+
+.textarea-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+textarea {
+  background-color: transparent;
+  border: none;
+  resize: none;
+  outline: none;
+  text-align: center;
 }

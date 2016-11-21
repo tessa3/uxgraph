@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import '../card/card';
 
-// TODO(eyuelt): move this to the data model layer
+// TODO(eyuelt): move these to the data model layer
 export interface Point {
   x: number;
   y: number;
+}
+export interface Size {
+  width: number;
+  height: number;
 }
 
 // NOTE: These type aliases are not type-checked. They are just for readability.
@@ -44,10 +48,10 @@ export class CanvasService {
 
   constructor() {
     // TODO(eyuelt): fetch this card data from wherever it's stored
-    this.cards.push(new Card(0, 0, 20));
-    this.cards.push(new Card(60, 60, 20));
-    this.cards.push(new Card(100, 100, 20));
-    this.cards.push(new Card(200, 200, 20));
+    this.cards.push(new Card(0, 0, 'This is a card'));
+    this.cards.push(new Card(60, 60, 'Another card'));
+    this.cards.push(new Card(100, 100, 'Another'));
+    this.cards.push(new Card(200, 200, 'You get the point'));
   }
 
   // Convert a point in the viewport coordinate space to a point in the canvas

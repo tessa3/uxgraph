@@ -5,6 +5,7 @@ import {RouterModule} from '@angular/router';
 import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.service';
 import {FabComponent} from './fab/index';
 import {GraphPreviewListService} from '../home/graph-preview-list/index';
+import {TextareaAutosizeDirective} from './textarea-autosize/index';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -17,13 +18,15 @@ import {GraphPreviewListService} from '../home/graph-preview-list/index';
     FormsModule
   ],
   declarations: [
-    FabComponent
+    FabComponent,
+    TextareaAutosizeDirective
   ],
   exports: [
     CommonModule,
     FormsModule,
     RouterModule,
-    FabComponent
+    FabComponent,
+    TextareaAutosizeDirective
   ]
 })
 export class SharedModule {
