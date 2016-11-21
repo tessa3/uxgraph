@@ -74,6 +74,10 @@ export class CardComponent implements OnInit {
       this.card.x = newCardPosition.x;
       this.card.y = newCardPosition.y;
       this.lastDragPnt = newDragPnt;
+
+      // TODO(girum): Updating libraries caused our SVG panning to break without
+      // calling the CD manually. Fix this!
+      this.changeDetector.detectChanges();
     }
   }
 
