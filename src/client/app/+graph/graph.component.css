@@ -1,8 +1,7 @@
 :host {
-  height: calc(100% - 48px);
   display: flex;
-  flex-direction: row;
-  padding: 0;
+  flex-direction: column;
+  height: 100%;
 }
 
 h2 {
@@ -13,6 +12,17 @@ h2 {
   margin-top: 0.83em;
 }
 
-graph-content {
-  flex-grow: 1;
+.graph-body {
+  display: flex;
+  height: 100%;
+}
+
+.graph-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas-wrapper {
+  width: 100%;
 }

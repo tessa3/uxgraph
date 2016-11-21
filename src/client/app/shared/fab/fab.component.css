@@ -1,0 +1,74 @@
+:host {
+  position: absolute;
+  top: calc(100% - 75px);
+  left: 233px;
+  text-align: center;
+
+  width: 55px;
+  height: 55px;
+
+  background-color: #607d8b;
+
+  border-radius: 55px;
+  -moz-border-radius: 55px;
+  -webkit-border-radius: 55px;
+
+  box-shadow:         1px 6px 13px -1px #777;
+  -moz-box-shadow:    1px 6px 13px -1px #777;
+  -webkit-box-shadow: 1px 6px 13px -1px #777;
+
+  z-index: 10;
+}
+:host:hover {
+  box-shadow:         1px 6px 24px 1px #777;
+  -moz-box-shadow:    1px 6px 24px 1px #777;
+  -webkit-box-shadow: 1px 6px 24px 1px #777;
+}
+
+#plus-container {
+  width: 55px;
+  height: 55px;
+  padding-top: 19px;
+  border-radius: 55px;
+}
+
+/* Styles for the FAB '+' */
+#fab-u-plus {
+  position: relative;
+  font-size: 26px;
+  font-weight: 300;
+  font-family: sans-serif;
+  /*top: 11px;*/
+
+  margin-top: -23px;
+  display: inline-block;
+
+  color: white;
+
+  /* Make '+' un-selectable */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#fab-u-plus:hover {
+  cursor: default;
+}
+
+/* Got this rotate effect from https://github.com/IanLunn/Hover */
+.hvr-rotate {
+  vertical-align: super;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px transparent;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+}
+.hvr-rotate:hover, .hvr-rotate:focus, .hvr-rotate:active {
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}

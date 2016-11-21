@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  height: 56px;
+  background-color: #607d8b;
+  align-items: center;
+
+  -webkit-box-shadow: 0px 1px 8px 1px #777;
+  -moz-box-shadow: 0px 1px 8px 1px #777;
+  box-shadow: 0px 1px 8px 1px #777;
+  z-index: 10;
+}
+
+.logo {
+  color: white;
+  margin-left: 16px;
+  font-size: 20px;
+}

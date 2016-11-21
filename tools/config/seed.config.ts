@@ -321,7 +321,7 @@ export class SeedConfig {
       '@angular/http': `node_modules/@angular/http/bundles/http.umd.js`,
       '@angular/platform-browser': `node_modules/@angular/platform-browser/bundles/platform-browser.umd.js`,
       '@angular/platform-browser-dynamic': `node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js`,
-      '@angular/router': `node_modules/@angular/router/index.js`,
+      '@angular/router': 'node_modules/@angular/router/bundles/router.umd.js',
       'rxjs/*': `node_modules/rxjs/*`,
       'app/*': `/app/*`,
       '*': `node_modules/*`
@@ -396,8 +396,8 @@ export class SeedConfig {
    * @type {Array}
    */
   BROWSER_LIST = [
-    'ie >= 10',
-    'ie_mob >= 10',
+    // 'ie >= 10',  // TODO(girum): Do we care about supporting IE10?
+    // 'ie_mob >= 10',
     'ff >= 30',
     'chrome >= 34',
     'safari >= 7',
