@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import '../../shared/card/card';
+import '../card/card';
 
 // TODO(eyuelt): move this to the data model layer
 export interface Point {
