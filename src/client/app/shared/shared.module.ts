@@ -11,7 +11,11 @@ import {GraphPreviewListService} from '../home/graph-preview-list/index';
  */
 
 @NgModule({
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule
+  ],
   declarations: [
     FabComponent
   ],

@@ -21,11 +21,14 @@
   font-weight: 100;
 }
 
-h1 {
+.graph-header-title {
   background-color: transparent;
+  color: white;
   font-size: 20px;
   font-weight: 300;
   letter-spacing: 0.1px;
   flex: 1;
   padding-left: 15px;
+  border: transparent;
+  margin-top: 6px;
 }
