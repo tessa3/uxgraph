@@ -50,7 +50,6 @@ export class CardComponent implements OnInit {
   }
 
   onMousedown(event: MouseEvent) {
-    event.stopPropagation();
     this.dragging = true;
     const canvasBounds = this.canvasService.getCanvasBounds();
     this.lastDragPnt = {
@@ -63,7 +62,6 @@ export class CardComponent implements OnInit {
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
     if (this.dragging) {
-      event.stopPropagation();
       event.preventDefault();
       const canvasBounds = this.canvasService.getCanvasBounds();
       const newDragPnt = {
@@ -88,7 +86,6 @@ export class CardComponent implements OnInit {
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     if (this.dragging) {
-      event.stopPropagation();
       this.dragging = false;
       this.lastDragPnt = null;
     }

@@ -17,12 +17,19 @@ export class CanvasComponent {
   // The last point seen during the pan that is currently in progress.
   lastPanPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
   // Returns the bounding box of the canvas.
-  getBounds: {():ClientRect} = null;
+  getBounds: (() => ClientRect) = null;
+  // Returns whether the target of the given event is the canvas.
+  eventTargetIsCanvas: ((event:Event) => boolean) = null;
 
   // Note: ElementRef should be treated as read-only to avoid XSS vulnerabilites
   constructor(elementRef: ElementRef, private canvasService: CanvasService) {
     this.getBounds = () => {
       return elementRef.nativeElement.getBoundingClientRect();
+    };
+    this.eventTargetIsCanvas = (event) => {
+      // target is either uxg-canvas container or svg child
+      return event.target === elementRef.nativeElement ||
+        event.target === elementRef.nativeElement.firstChild;
     };
     this.canvasService.setCanvasBoundsGetter(this.getBounds);
   }
@@ -39,11 +46,13 @@ export class CanvasComponent {
   }
 
   onMousedown(event: MouseEvent) {
-    this.panning = true;
-    this.lastPanPnt = {
-      x: event.clientX - this.getBounds().left,
-      y: event.clientY - this.getBounds().top
-    };
+    if (this.eventTargetIsCanvas(event)) {
+      this.panning = true;
+      this.lastPanPnt = {
+        x: event.clientX - this.getBounds().left,
+        y: event.clientY - this.getBounds().top
+      };
+    }
   }
 
   // Put mousemove on document to allow panning outside of canvas
