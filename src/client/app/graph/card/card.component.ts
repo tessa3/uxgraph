@@ -51,7 +51,6 @@ export class CardComponent implements OnInit {
 
   onMousedown(event: MouseEvent) {
     event.stopPropagation();
-    //event.preventDefault(); //TODO(eyuelt): figure out when to preventDefault
     this.dragging = true;
     const canvasBounds = this.canvasService.getCanvasBounds();
     this.lastDragPnt = {
@@ -90,7 +89,6 @@ export class CardComponent implements OnInit {
   onMouseup(event: MouseEvent) {
     if (this.dragging) {
       event.stopPropagation();
-      //event.preventDefault(); //TODO(eyuelt): figure out when to preventDefault
       this.dragging = false;
       this.lastDragPnt = null;
     }

@@ -29,7 +29,6 @@ export class CanvasComponent {
 
   // TODO(eyuelt): should this use HostListener or the template event binding?
   onMousewheel(event: WheelEvent) {
-    event.stopPropagation();
     event.preventDefault();
     const zoomScale = 1 + (event.deltaY * -0.002);
     const zoomPnt = {
@@ -40,8 +39,6 @@ export class CanvasComponent {
   }
 
   onMousedown(event: MouseEvent) {
-    event.stopPropagation();
-    event.preventDefault();
     this.panning = true;
     this.lastPanPnt = {
       x: event.clientX - this.getBounds().left,
@@ -53,7 +50,6 @@ export class CanvasComponent {
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
     if (this.panning) {
-      event.stopPropagation();
       event.preventDefault();
       const newPanPnt = {
         x: event.clientX - this.getBounds().left,
@@ -73,8 +69,6 @@ export class CanvasComponent {
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     if (this.panning) {
-      event.stopPropagation();
-      event.preventDefault();
       this.panning = false;
       this.lastPanPnt = null;
     }
