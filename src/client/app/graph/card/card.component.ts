@@ -49,13 +49,21 @@ export class CardComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
+  // TODO: move this into a utils file
+  // Returns whether the given mouse event was initiated by the primary button
+  eventIsFromPrimaryButton(event: MouseEvent): boolean {
+    return event.which === 1;
+  }
+
   onMousedown(event: MouseEvent) {
-    this.dragging = true;
-    const canvasBounds = this.canvasService.getCanvasBounds();
-    this.lastDragPnt = {
-      x: event.clientX - canvasBounds.left,
-      y: event.clientY - canvasBounds.top
-    };
+    if (this.eventIsFromPrimaryButton(event)) {
+      this.dragging = true;
+      const canvasBounds = this.canvasService.getCanvasBounds();
+      this.lastDragPnt = {
+        x: event.clientX - canvasBounds.left,
+        y: event.clientY - canvasBounds.top
+      };
+    }
   }
 
   // Put mousemove on document to allow dragging outside of canvas

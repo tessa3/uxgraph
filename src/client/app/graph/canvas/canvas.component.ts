@@ -45,8 +45,15 @@ export class CanvasComponent {
     this.canvasService.zoom(zoomPnt, zoomScale);
   }
 
+  // TODO: move this into a utils file
+  // Returns whether the given mouse event was initiated by the primary button
+  eventIsFromPrimaryButton(event: MouseEvent): boolean {
+    return event.which === 1;
+  }
+
   onMousedown(event: MouseEvent) {
-    if (this.eventTargetIsCanvas(event)) {
+    if (this.eventIsFromPrimaryButton(event) &&
+        this.eventTargetIsCanvas(event)) {
       this.panning = true;
       this.lastPanPnt = {
         x: event.clientX - this.getBounds().left,
