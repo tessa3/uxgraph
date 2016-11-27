@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
 import './card';
+import {Utils} from '../../service/utils/utils';
 
 /**
  * This class represents the Card component.
@@ -49,14 +50,8 @@ export class CardComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
-  // TODO: move this into a utils file
-  // Returns whether the given mouse event was initiated by the primary button
-  eventIsFromPrimaryButton(event: MouseEvent): boolean {
-    return event.which === 1;
-  }
-
   onMousedown(event: MouseEvent) {
-    if (this.eventIsFromPrimaryButton(event)) {
+    if (Utils.eventIsFromPrimaryButton(event)) {
       this.dragging = true;
       const canvasBounds = this.canvasService.getCanvasBounds();
       this.lastDragPnt = {
