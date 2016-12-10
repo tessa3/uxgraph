@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {
     Http, URLSearchParams, Response,
     RequestOptions, Headers, QueryEncoder
@@ -53,11 +53,13 @@ export class GoogleRealtimeService {
   oauthToken: AsyncSubject<GoogleApiOAuth2TokenObject> =
       new AsyncSubject<GoogleApiOAuth2TokenObject>();
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private zone: NgZone) {
     // Immediately load additional JavaScript code to interact with gapi
     // (gapi = "Google API" for JS).
     gapi.load('auth:client,drive-realtime,drive-share', () => {
-      this.authorize(false);
+      this.zone.run(() => {
+        this.authorize(false);
+      });
     });
   }
 
@@ -77,8 +79,10 @@ export class GoogleRealtimeService {
       ],
       immediate: !usePopup
     }, (response) => {
-      this.oauthToken.next(response);
-      this.oauthToken.complete();
+      this.zone.run(() => {
+        this.oauthToken.next(response);
+        this.oauthToken.complete();
+      });
     });
   }
 
@@ -90,15 +94,17 @@ export class GoogleRealtimeService {
    */
   listFiles(): Observable<DriveFile[]> {
     return this.oauthToken.map(oauthToken => {
-      let params = new URLSearchParams('', new GoogleDriveQueryEncoder());
-      params.set('pageSize', '' + PAGE_SIZE);
-      params.set('fields', GOOGLE_DRIVE_FIELDS_TO_QUERY);
-      params.set('q', 'mimeType = "' + UXGRAPH_MIME_TYPE + '"');
+      return this.zone.run(() => {
+        let params = new URLSearchParams('', new GoogleDriveQueryEncoder());
+        params.set('pageSize', '' + PAGE_SIZE);
+        params.set('fields', GOOGLE_DRIVE_FIELDS_TO_QUERY);
+        params.set('q', 'mimeType = "' + UXGRAPH_MIME_TYPE + '"');
 
-      return this.get(oauthToken.access_token, GOOGLE_APIS_FILES_URL, params)
-          .map((response: Response) => {
-            return response.json().files;
-          });
+        return this.get(oauthToken.access_token, GOOGLE_APIS_FILES_URL, params)
+            .map((response: Response) => {
+              return response.json().files;
+            });
+      });
     }).switch();
   }
 
@@ -112,16 +118,18 @@ export class GoogleRealtimeService {
    */
   loadRealtimeDocument(driveFileId: string) {
     this.oauthToken.subscribe(() => {
-      gapi.drive.realtime.load(driveFileId, (document) => {
-        let collaborativeString =
-            document.getModel().getRoot().get('demo_string');
-        GoogleRealtimeService.wireTextBoxes(collaborativeString);
-      }, (model) => {
-        let string = model.createString();
-        string.setText('Welcome to uxgraph!');
-        model.getRoot().set('demo_string', string);
-      }, (error) => {
-        console.error('Error loading Realtime API: ', error);
+      this.zone.run(() => {
+        gapi.drive.realtime.load(driveFileId, (document) => {
+          let collaborativeString =
+              document.getModel().getRoot().get('demo_string');
+          GoogleRealtimeService.wireTextBoxes(collaborativeString);
+        }, (model) => {
+          let string = model.createString();
+          string.setText('Welcome to uxgraph!');
+          model.getRoot().set('demo_string', string);
+        }, (error) => {
+          console.error('Error loading Realtime API: ', error);
+        });
       });
     });
   }

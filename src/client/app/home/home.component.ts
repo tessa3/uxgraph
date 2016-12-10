@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, NgZone} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {
   GoogleRealtimeService,
   DriveFile
@@ -30,11 +30,9 @@ export class HomeComponent implements OnInit, OnDestroy {
    * GraphPreviewListService.
    *
    * @param googleRealtimeService
-   * @param zone
    * @param router
    */
   constructor(private googleRealtimeService: GoogleRealtimeService,
-              private zone: NgZone,
               private router: Router) {
   }
 
@@ -44,18 +42,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.oauthSub = this.googleRealtimeService.oauthToken
         .subscribe((oauthToken) => {
-          this.zone.run(() => {
-            if (!!oauthToken) {
-              this.userLoggedIn = true;
-            }
-          });
+          if (!!oauthToken) {
+            this.userLoggedIn = true;
+          }
         });
 
     this.listFilesSub = this.googleRealtimeService.listFiles()
         .subscribe((driveFiles: DriveFile[]) => {
-          this.zone.run(() => {
-            this.graphPreviews = driveFiles;
-          });
+          this.graphPreviews = driveFiles;
         });
   }
 
