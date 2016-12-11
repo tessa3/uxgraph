@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {
     Http, URLSearchParams, Response,
     RequestOptions, Headers, QueryEncoder
@@ -53,11 +53,13 @@ export class GoogleRealtimeService {
   oauthToken: AsyncSubject<GoogleApiOAuth2TokenObject> =
       new AsyncSubject<GoogleApiOAuth2TokenObject>();
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private zone: NgZone) {
     // Immediately load additional JavaScript code to interact with gapi
     // (gapi = "Google API" for JS).
     gapi.load('auth:client,drive-realtime,drive-share', () => {
-      this.authorize(false);
+      this.zone.run(() => {
+        this.authorize(false);
+      });
     });
   }
 
@@ -77,8 +79,10 @@ export class GoogleRealtimeService {
       ],
       immediate: !usePopup
     }, (response) => {
-      this.oauthToken.next(response);
-      this.oauthToken.complete();
+      this.zone.run(() => {
+        this.oauthToken.next(response);
+        this.oauthToken.complete();
+      });
     });
   }
 

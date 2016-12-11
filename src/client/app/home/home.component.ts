@@ -1,4 +1,4 @@
-import {Component, OnInit, ChangeDetectorRef, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {
   GoogleRealtimeService,
   DriveFile
@@ -30,11 +30,9 @@ export class HomeComponent implements OnInit, OnDestroy {
    * GraphPreviewListService.
    *
    * @param googleRealtimeService
-   * @param changeDetector
    * @param router
    */
   constructor(private googleRealtimeService: GoogleRealtimeService,
-              private changeDetector: ChangeDetectorRef,
               private router: Router) {
   }
 
@@ -52,9 +50,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.listFilesSub = this.googleRealtimeService.listFiles()
         .subscribe((driveFiles: DriveFile[]) => {
           this.graphPreviews = driveFiles;
-
-          // TODO(girum): Why do I need to call the change detector here?
-          this.changeDetector.detectChanges();
         });
   }
 
