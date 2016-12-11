@@ -1,6 +1,6 @@
 import {Component, HostListener, ElementRef} from '@angular/core';
 import {CanvasService, Point} from './canvas.service';
-import {Utils} from '../../service/utils/utils';
+import {Events} from '../../utils/events';
 
 /**
  * This class represents the Canvas component.
@@ -48,7 +48,7 @@ export class CanvasComponent {
 
   onMousedown(event: MouseEvent) {
     if (this.eventTargetIsCanvas(event) &&
-        Utils.eventIsFromPrimaryButton(event)) {
+        Events.eventIsFromPrimaryButton(event)) {
       this.panning = true;
       this.lastPanPnt = {
         x: event.clientX - this.getBounds().left,

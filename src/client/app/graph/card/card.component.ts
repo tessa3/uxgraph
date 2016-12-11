@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
 import './card';
-import {Utils} from '../../service/utils/utils';
+import {Events} from '../../utils/events';
 
 /**
  * This class represents the Card component.
@@ -45,7 +45,7 @@ export class CardComponent implements OnInit {
   }
 
   onMousedown(event: MouseEvent) {
-    if (Utils.eventIsFromPrimaryButton(event)) {
+    if (Events.eventIsFromPrimaryButton(event)) {
       this.dragging = true;
       const canvasBounds = this.canvasService.getCanvasBounds();
       this.lastDragPnt = {
