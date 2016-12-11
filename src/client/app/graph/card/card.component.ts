@@ -18,13 +18,13 @@ export class CardComponent implements OnInit {
   // The card data to render on the canvas.
   @Input() card: Card = null;
   // The current scale factor of the card shape.
-  private scale: number = 1;
+  scale: number = 1;
   // The current display position in the viewport's coordinate space.
-  private position: ViewportCoord = {x:0, y:0};
+  position: ViewportCoord = {x:0, y:0};
   // The size of the card in the canvas' coordinate space.
-  private size: Size = {width:60, height:80};
+  size: Size = {width:60, height:80};
   // The radius of the rounded corners in the canvas' coordinate space.
-  private cornerRadius: number = 5;
+  cornerRadius: number = 5;
   // Whether or not dragging is in progress.
   private dragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
