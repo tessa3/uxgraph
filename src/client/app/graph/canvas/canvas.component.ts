@@ -14,13 +14,13 @@ import {Utils} from '../../service/utils/utils';
 })
 export class CanvasComponent {
   // Whether or not panning is in progress.
-  panning: boolean = false;
+  private panning: boolean = false;
   // The last point seen during the pan that is currently in progress.
-  lastPanPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
+  private lastPanPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
   // Returns the bounding box of the canvas.
-  getBounds: (() => ClientRect) = null;
+  private getBounds: (() => ClientRect) = null;
   // Returns whether the target of the given event is the canvas.
-  eventTargetIsCanvas: ((event:Event) => boolean) = null;
+  private eventTargetIsCanvas: ((event:Event) => boolean) = null;
 
   // Note: ElementRef should be treated as read-only to avoid XSS vulnerabilites
   constructor(elementRef: ElementRef, private canvasService: CanvasService) {

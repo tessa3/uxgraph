@@ -18,17 +18,17 @@ export class CardComponent implements OnInit {
   // The card data to render on the canvas.
   @Input() card: Card = null;
   // The current scale factor of the card shape.
-  scale: number = 1;
+  private scale: number = 1;
   // The current display position in the viewport's coordinate space.
-  position: ViewportCoord = {x:0, y:0};
+  private position: ViewportCoord = {x:0, y:0};
   // The size of the card in the canvas' coordinate space.
-  size: Size = {width:60, height:80};
+  private size: Size = {width:60, height:80};
   // The radius of the rounded corners in the canvas' coordinate space.
-  cornerRadius: number = 5;
+  private cornerRadius: number = 5;
   // Whether or not dragging is in progress.
-  dragging: boolean = false;
+  private dragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
-  lastDragPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
+  private lastDragPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
 
   constructor(private canvasService: CanvasService) {
   }
