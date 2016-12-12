@@ -3,6 +3,7 @@ import {
 } from '@angular/core';
 import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
 import './card';
+import {EventUtils} from '../../utils/event-utils';
 
 /**
  * This class represents the Card component.
@@ -25,9 +26,9 @@ export class CardComponent implements OnInit {
   // The radius of the rounded corners in the canvas' coordinate space.
   cornerRadius: number = 5;
   // Whether or not dragging is in progress.
-  dragging: boolean = false;
+  private dragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
-  lastDragPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
+  private lastDragPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
 
   constructor(private canvasService: CanvasService) {
   }
@@ -44,21 +45,20 @@ export class CardComponent implements OnInit {
   }
 
   onMousedown(event: MouseEvent) {
-    event.stopPropagation();
-    //event.preventDefault(); //TODO(eyuelt): figure out when to preventDefault
-    this.dragging = true;
-    const canvasBounds = this.canvasService.getCanvasBounds();
-    this.lastDragPnt = {
-      x: event.clientX - canvasBounds.left,
-      y: event.clientY - canvasBounds.top
-    };
+    if (EventUtils.eventIsFromPrimaryButton(event)) {
+      this.dragging = true;
+      const canvasBounds = this.canvasService.getCanvasBounds();
+      this.lastDragPnt = {
+        x: event.clientX - canvasBounds.left,
+        y: event.clientY - canvasBounds.top
+      };
+    }
   }
 
   // Put mousemove on document to allow dragging outside of canvas
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
     if (this.dragging) {
-      event.stopPropagation();
       event.preventDefault();
       const canvasBounds = this.canvasService.getCanvasBounds();
       const newDragPnt = {
@@ -79,8 +79,6 @@ export class CardComponent implements OnInit {
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     if (this.dragging) {
-      event.stopPropagation();
-      //event.preventDefault(); //TODO(eyuelt): figure out when to preventDefault
       this.dragging = false;
       this.lastDragPnt = null;
     }
