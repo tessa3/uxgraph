@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {GoogleRealtimeService} from '../../service/google-realtime.service';
 import {DriveFile} from '../../model/drive-file';
+import {Observable} from 'rxjs';
+import {Collaborator} from '../../model/collaborator';
 
 /**
  * This class represents the App Header component.
@@ -25,12 +27,15 @@ export class GraphHeaderComponent implements OnInit {
     kind: 'UNKNOWN'
   };
 
+  collaborators: Observable<Collaborator[]>;
+
   constructor(private googleRealtimeService: GoogleRealtimeService) {
     // We can't do anything in the constructor yet because the [graphId]
     // @Input from the template hasn't been bound.
     //
     // Angular will call our "ngOnInit()" method after that @Input has been
     // bound.
+    this.collaborators = googleRealtimeService.collaborators;
   }
 
   ngOnInit(): void {

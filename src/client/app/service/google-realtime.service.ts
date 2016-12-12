@@ -9,9 +9,7 @@ import CollaborativeString = gapi.drive.realtime.CollaborativeString;
 import 'rxjs/add/operator/switch';
 import {DriveFile} from '../model/drive-file';
 import {BehaviorSubject} from 'rxjs';
-import Collaborator = gapi.drive.realtime.Collaborator;
-import {CollaboratorEvent} from '../model/collaborator-events';
-import ObjectChangedEvent = gapi.drive.realtime.ObjectChangedEvent;
+import {Collaborator} from '../model/collaborator';
 
 
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
