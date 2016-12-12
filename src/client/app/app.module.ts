@@ -6,11 +6,11 @@ import {RouterModule} from '@angular/router';
 import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {routes} from './app.routes';
-
 import {GraphModule} from './graph/graph.module';
 import {HomeModule} from './home/home.module';
 import {SharedModule} from './shared/shared.module';
 import {cardsReducer} from './reducer/cards.reducer';
+import {CARDS} from './reducer/reducer-constants';
 
 @NgModule({
   imports: [
@@ -21,7 +21,7 @@ import {cardsReducer} from './reducer/cards.reducer';
     HomeModule,
     SharedModule.forRoot(),
     StoreModule.provideStore({
-      'cards': cardsReducer
+      [CARDS]: cardsReducer
     })
   ],
   declarations: [
