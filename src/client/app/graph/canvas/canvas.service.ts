@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import '../card/card';
+import {ADD_CARDS} from '../../reducer/cards.reducer';
+import {Observable} from 'rxjs';
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
@@ -18,6 +21,7 @@ export type ViewportCoord = Point;
 // A point in the coordinate system of the canvas.
 export type CanvasCoord = Point;
 
+
 /*
  * The CanvasService maintains the data of the cards to show on the canvas,
  * handles zooming and panning on the canvas.
@@ -34,7 +38,7 @@ export class CanvasService {
   kMinZoomScale: number = 0.1;
   kMaxZoomScale: number = 10.0;
   // The models of the cards to show on the canvas.
-  cards: Card[] = [];
+  cards: Observable<Card[]>;
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
   // The offset of the viewport from its original position.
@@ -46,12 +50,18 @@ export class CanvasService {
   // Returns the bounding box of the canvas.
   getCanvasBounds: {():ClientRect} = null;
 
-  constructor() {
-    // TODO(eyuelt): fetch this card data from wherever it's stored
-    this.cards.push(new Card(0, 0, 'This is a card'));
-    this.cards.push(new Card(60, 60, 'Another card'));
-    this.cards.push(new Card(100, 100, 'Another'));
-    this.cards.push(new Card(200, 200, 'You get the point'));
+  constructor(private store: Store<any>) {
+    // Subscribe "this.cards" to whatever's in the Store.
+    this.cards = store.select<Card[]>('cards');
+
+    // Add a bunch of cards to the Store.
+    // Should automatically update "this.cards".
+    store.dispatch({ type: ADD_CARDS, payload: [
+      new Card(0, 0, 'You get a card!'),
+      new Card(60, 60, '... and you get a card!'),
+      new Card(100, 100, '... and you get a card!'),
+      new Card(200, 200, '... and you get a card!')
+    ] });
   }
 
   // Convert a point in the viewport coordinate space to a point in the canvas

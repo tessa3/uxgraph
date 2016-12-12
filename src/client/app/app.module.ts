@@ -1,4 +1,5 @@
 import {NgModule} from '@angular/core';
+import {StoreModule} from '@ngrx/store';
 import {BrowserModule} from '@angular/platform-browser';
 import {APP_BASE_HREF} from '@angular/common';
 import {RouterModule} from '@angular/router';
@@ -9,6 +10,7 @@ import {routes} from './app.routes';
 import {GraphModule} from './graph/graph.module';
 import {HomeModule} from './home/home.module';
 import {SharedModule} from './shared/shared.module';
+import {cardsReducer} from './reducer/cards.reducer';
 
 @NgModule({
   imports: [
@@ -17,7 +19,10 @@ import {SharedModule} from './shared/shared.module';
     RouterModule.forRoot(routes),
     GraphModule,
     HomeModule,
-    SharedModule.forRoot()
+    SharedModule.forRoot(),
+    StoreModule.provideStore({
+      'cards': cardsReducer
+    })
   ],
   declarations: [
     AppComponent
