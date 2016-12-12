@@ -35,20 +35,21 @@ export type CanvasCoord = Point;
  */
 @Injectable()
 export class CanvasService {
-  kMinZoomScale: number = 0.1;
-  kMaxZoomScale: number = 10.0;
   // The models of the cards to show on the canvas.
   cards: Observable<Card[]>;
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
+  // Returns the bounding box of the canvas.
+  getCanvasBounds: {():ClientRect} = null;
   // The offset of the viewport from its original position.
   originOffset: CanvasCoord = {x:0, y:0};
   // TODO(eyuelt): I think I can use RXJS' Subject for this?
   // The list of functions to call when zoom or pan occurs. This is used to
   // essentially watch this class' properties.
-  listeners: {():void}[] = [];
-  // Returns the bounding box of the canvas.
-  getCanvasBounds: {():ClientRect} = null;
+  private listeners: {():void}[] = [];
+  // The min and max zoom scales.
+  private kMinZoomScale: number = 0.1;
+  private kMaxZoomScale: number = 10.0;
 
   constructor(private store: Store<any>) {
     // Subscribe "this.cards" to whatever's in the Store.

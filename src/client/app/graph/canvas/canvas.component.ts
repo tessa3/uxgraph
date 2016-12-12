@@ -1,5 +1,6 @@
 import {Component, HostListener, ElementRef} from '@angular/core';
 import {CanvasService, Point} from './canvas.service';
+import {EventUtils} from '../../utils/event-utils';
 
 /**
  * This class represents the Canvas component.
@@ -13,23 +14,35 @@ import {CanvasService, Point} from './canvas.service';
 })
 export class CanvasComponent {
   // Whether or not panning is in progress.
-  panning: boolean = false;
+  private panning: boolean = false;
   // The last point seen during the pan that is currently in progress.
-  lastPanPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
+  private lastPanPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
+
+  /*
+   * Note: The following two methods are properties because they are defined at
+   * runtime in the constructor because they need access to ElementRef. This
+   * allows us to use ElementRef without exposing it to the rest of the class.
+   */
   // Returns the bounding box of the canvas.
-  getBounds: {():ClientRect} = null;
+  private getBounds: (() => ClientRect) = null;
+  // Returns whether the target of the given event is the canvas.
+  private eventTargetIsCanvas: ((event:Event) => boolean) = null;
 
   // Note: ElementRef should be treated as read-only to avoid XSS vulnerabilites
   constructor(elementRef: ElementRef, private canvasService: CanvasService) {
     this.getBounds = () => {
       return elementRef.nativeElement.getBoundingClientRect();
     };
+    this.eventTargetIsCanvas = (event) => {
+      // target is either uxg-canvas container or svg child
+      return event.target === elementRef.nativeElement ||
+        event.target === elementRef.nativeElement.firstChild;
+    };
     this.canvasService.setCanvasBoundsGetter(this.getBounds);
   }
 
   // TODO(eyuelt): should this use HostListener or the template event binding?
   onMousewheel(event: WheelEvent) {
-    event.stopPropagation();
     event.preventDefault();
     const zoomScale = 1 + (event.deltaY * -0.002);
     const zoomPnt = {
@@ -40,20 +53,20 @@ export class CanvasComponent {
   }
 
   onMousedown(event: MouseEvent) {
-    event.stopPropagation();
-    event.preventDefault();
-    this.panning = true;
-    this.lastPanPnt = {
-      x: event.clientX - this.getBounds().left,
-      y: event.clientY - this.getBounds().top
-    };
+    if (this.eventTargetIsCanvas(event) &&
+        EventUtils.eventIsFromPrimaryButton(event)) {
+      this.panning = true;
+      this.lastPanPnt = {
+        x: event.clientX - this.getBounds().left,
+        y: event.clientY - this.getBounds().top
+      };
+    }
   }
 
   // Put mousemove on document to allow panning outside of canvas
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
     if (this.panning) {
-      event.stopPropagation();
       event.preventDefault();
       const newPanPnt = {
         x: event.clientX - this.getBounds().left,
@@ -73,8 +86,6 @@ export class CanvasComponent {
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     if (this.panning) {
-      event.stopPropagation();
-      event.preventDefault();
       this.panning = false;
       this.lastPanPnt = null;
     }
