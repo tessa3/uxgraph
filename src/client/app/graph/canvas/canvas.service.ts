@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import '../card/card';
+import '../arrow/arrow';
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
@@ -33,6 +34,8 @@ export type CanvasCoord = Point;
 export class CanvasService {
   // The models of the cards to show on the canvas.
   cards: Card[] = [];
+  // The models of the arrows to show on the canvas.
+  arrows: Arrow[] = [];
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
   // Returns the bounding box of the canvas.
@@ -53,6 +56,8 @@ export class CanvasService {
     this.cards.push(new Card(60, 60, 'Another card'));
     this.cards.push(new Card(100, 100, 'Another'));
     this.cards.push(new Card(200, 200, 'You get the point'));
+    this.arrows.push(new Arrow(2, 3));
+setInterval(() => { this.notifyListeners(); } , 16); //TODO: remove this
   }
 
   // Convert a point in the viewport coordinate space to a point in the canvas
