@@ -7,6 +7,7 @@ import {CanvasComponent} from './canvas/canvas.component';
 import {CardComponent} from './card/card.component';
 import {SidePanelComponent} from './side-panel/side-panel.component';
 import {GraphHeaderComponent} from './graph-header/graph-header.component';
+import {UserIconComponent} from './user-icon/user-icon.component';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import {GraphHeaderComponent} from './graph-header/graph-header.component';
     CardComponent,
     CanvasComponent,
     GraphComponent,
+    UserIconComponent,
     GraphHeaderComponent,
     SidePanelComponent,
     SecondaryToolbarComponent

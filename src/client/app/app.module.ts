@@ -9,8 +9,7 @@ import {routes} from './app.routes';
 import {GraphModule} from './graph/graph.module';
 import {HomeModule} from './home/home.module';
 import {SharedModule} from './shared/shared.module';
-import {cardsReducer} from './reducer/cards.reducer';
-import {CARDS} from './reducer/reducer-constants';
+import {cardsReducer, CARDS} from './reducer/cards.reducer';
 
 @NgModule({
   imports: [
