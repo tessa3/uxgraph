@@ -1,4 +1,4 @@
 /**
  * This barrel file provides the export for the shared Utils.
  */
-export * from './events';
+export * from './event-utils';

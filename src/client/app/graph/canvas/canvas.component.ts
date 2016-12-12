@@ -1,6 +1,6 @@
 import {Component, HostListener, ElementRef} from '@angular/core';
 import {CanvasService, Point} from './canvas.service';
-import {Events} from '../../utils/events';
+import {EventUtils} from '../../utils/event-utils';
 
 /**
  * This class represents the Canvas component.
@@ -17,6 +17,12 @@ export class CanvasComponent {
   private panning: boolean = false;
   // The last point seen during the pan that is currently in progress.
   private lastPanPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
+
+  /*
+   * Note: The following two methods are properties because they are defined at
+   * runtime in the constructor because they need access to ElementRef. This
+   * allows us to use ElementRef without exposing it to the rest of the class.
+   */
   // Returns the bounding box of the canvas.
   private getBounds: (() => ClientRect) = null;
   // Returns whether the target of the given event is the canvas.
@@ -48,7 +54,7 @@ export class CanvasComponent {
 
   onMousedown(event: MouseEvent) {
     if (this.eventTargetIsCanvas(event) &&
-        Events.eventIsFromPrimaryButton(event)) {
+        EventUtils.eventIsFromPrimaryButton(event)) {
       this.panning = true;
       this.lastPanPnt = {
         x: event.clientX - this.getBounds().left,
