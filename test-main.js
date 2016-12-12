@@ -27,7 +27,8 @@ System.config({
   defaultJSExtensions: true,
   map: {
     'rxjs': 'node_modules/rxjs',
-    '@angular': 'node_modules/@angular'
+    '@angular': 'node_modules/@angular',
+    '@ngrx': 'node_modules/@ngrx'
   },
   packages: {
     '@angular/common': {
@@ -75,6 +76,14 @@ System.config({
       defaultExtension: 'js'
     },
     '@angular/router': {
+      main: 'index.js',
+      defaultExtension: 'js'
+    },
+    '@ngrx/core': {
+      main: 'index.js',
+      defaultExtension: 'js'
+    },
+    '@ngrx/store': {
       main: 'index.js',
       defaultExtension: 'js'
     },

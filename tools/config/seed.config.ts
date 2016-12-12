@@ -310,6 +310,7 @@ export class SeedConfig {
     packageConfigPaths: [
       `/node_modules/*/package.json`,
       `/node_modules/**/package.json`,
+      `/node_modules/@ngrx/*/package.json`,
       `/node_modules/@angular/*/package.json`
     ],
     paths: {
@@ -322,6 +323,8 @@ export class SeedConfig {
       '@angular/platform-browser': `node_modules/@angular/platform-browser/bundles/platform-browser.umd.js`,
       '@angular/platform-browser-dynamic': `node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js`,
       '@angular/router': 'node_modules/@angular/router/bundles/router.umd.js',
+      '@ngrx/core': 'node_modules/@ngrx/core/bundles/core.umd.js',
+      '@ngrx/store': 'node_modules/@ngrx/store/bundles/store.umd.js',
       'rxjs/*': `node_modules/rxjs/*`,
       'app/*': `/app/*`,
       '*': `node_modules/*`
@@ -346,6 +349,7 @@ export class SeedConfig {
     defaultJSExtensions: true,
     packageConfigPaths: [
       join(this.PROJECT_ROOT, 'node_modules', '*', 'package.json'),
+      join(this.PROJECT_ROOT, 'node_modules', '@ngrx', '*', 'package.json'),
       join(this.PROJECT_ROOT, 'node_modules', '@angular', '*', 'package.json')
     ],
     paths: {
