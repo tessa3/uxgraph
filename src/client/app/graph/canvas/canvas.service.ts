@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
+import {Injectable} from '@angular/core';
+import {Store} from '@ngrx/store';
 import '../card/card';
 import {ADD_CARDS} from '../../reducer/cards.reducer';
 import {Observable} from 'rxjs';
+import {CARDS} from '../../reducer/reducer-constants';
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
@@ -52,7 +53,7 @@ export class CanvasService {
 
   constructor(private store: Store<any>) {
     // Subscribe "this.cards" to whatever's in the Store.
-    this.cards = store.select<Card[]>('cards');
+    this.cards = store.select<Card[]>(CARDS);
 
     // Add a bunch of cards to the Store.
     // Should automatically update "this.cards".
