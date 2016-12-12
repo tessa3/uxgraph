@@ -1,8 +1,8 @@
 import { ActionReducer, Action } from '@ngrx/store';
 
 
-
-export const ADD_CARDS = 'ADD_CARDS';
+export const CARDS = 'cards';
+export const ADD_CARDS = 'add cards';
 
 
 export interface CardsAction extends Action {

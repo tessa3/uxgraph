@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import '../card/card';
-import {ADD_CARDS} from '../../reducer/cards.reducer';
 import {Observable} from 'rxjs';
-import {CARDS} from '../../reducer/reducer-constants';
+import {CARDS, ADD_CARDS} from '../../reducer/cards.reducer';
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
