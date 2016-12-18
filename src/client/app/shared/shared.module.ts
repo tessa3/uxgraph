@@ -2,7 +2,7 @@ import {NgModule, ModuleWithProviders} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
-import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.service';
+import {GoogleRealtimeService} from '../service/google-realtime.service';
 import {FabComponent} from './fab/index';
 import {GraphPreviewListService} from '../home/graph-preview-list/index';
 import {TextareaAutosizeDirective} from './textarea-autosize/index';

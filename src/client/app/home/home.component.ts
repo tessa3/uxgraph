@@ -2,7 +2,7 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {
   GoogleRealtimeService,
   DriveFile
-} from '../service/google-realtime/google-realtime.service';
+} from '../service/google-realtime.service';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 

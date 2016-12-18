@@ -106,6 +106,33 @@ export class GoogleRealtimeService {
     }).switch();
   }
 
+  getFile(fileId: string): Observable<DriveFile> {
+    return this.oauthToken.map(oauthToken => {
+      let params = new URLSearchParams('', new GoogleDriveQueryEncoder());
+      const fileUrl = GOOGLE_APIS_FILES_URL + '/' + fileId;
+
+      return this.get(oauthToken.access_token, fileUrl, params)
+          .map((response: Response) => {
+            return response.json();
+          });
+    }).switch();
+  }
+
+  updateFile(driveFile: DriveFile): Observable<DriveFile> {
+    return this.oauthToken.map(oauthToken => {
+      let patchBody = {
+        name: driveFile.name
+      };
+
+      const fileUrl = GOOGLE_APIS_FILES_URL + '/' + driveFile.id;
+
+      return this.patch(oauthToken.access_token, fileUrl, patchBody)
+          .map((response: Response) => {
+            return response.json();
+          });
+    }).switch();
+  }
+
   /**
    * Loads the Realtime-version of a Google Drive file by Id.
    * Again, this code will automatically run anytime this.oauthToken changes
@@ -174,11 +201,27 @@ export class GoogleRealtimeService {
    * This method automatically puts in a few HTTP headers and query params.
    */
   private post(accessToken: string,
-               requestUrl: string, body: Object): Observable<Response> {
+               requestUrl: string,
+               body: Object): Observable<Response> {
     let urlParams = new URLSearchParams();
     GoogleRealtimeService.addDefaultUrlParams(urlParams);
 
     return this.http.post(requestUrl, body, new RequestOptions({
+      headers: GoogleRealtimeService.getDefaultHeaders(accessToken),
+      search: urlParams
+    }));
+  }
+
+  /**
+   * Similar to {@code post()} above, but for PATCH requests.
+   */
+  private patch(accessToken: string,
+                requestUrl: string,
+                body: Object): Observable<Response> {
+    let urlParams = new URLSearchParams();
+    GoogleRealtimeService.addDefaultUrlParams(urlParams);
+
+    return this.http.patch(requestUrl, body, new RequestOptions({
       headers: GoogleRealtimeService.getDefaultHeaders(accessToken),
       search: urlParams
     }));

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.service';
+import {GoogleRealtimeService} from '../service/google-realtime.service';
 
 /**
  * This class represents the lazy loaded GraphComponent.
