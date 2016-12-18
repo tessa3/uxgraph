@@ -7,4 +7,8 @@
 
 <!-- TODO(girum): This app header should be wired up to the Google Drive
                   file that's currently open, and be rename-able. -->
-<input class="graph-header-title" [(ngModel)]="graphName" />
+<input #appTitle
+       class="graph-header-title"
+       [(ngModel)]="currentGraph.name"
+       (keyup.enter)="appTitle.blur()"
+       (blur)="updateGraphTitle(appTitle.value)" />

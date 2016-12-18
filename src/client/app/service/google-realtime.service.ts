@@ -90,6 +90,8 @@ export class GoogleRealtimeService {
    * Schedules an HTTP request to Google Drive's /listFiles API endpoint, once
    * RxJS tells us that we have an OAuthToken to use.
    *
+   * This method gets us the {@link DriveFile} data for several Drive IDs.
+   *
    * Filters for our custom "uxgraph" MIME type.
    */
   listFiles(): Observable<DriveFile[]> {
@@ -102,6 +104,45 @@ export class GoogleRealtimeService {
       return this.get(oauthToken.access_token, GOOGLE_APIS_FILES_URL, params)
           .map((response: Response) => {
             return response.json().files;
+          });
+    }).switch();
+  }
+
+  /**
+   * Schedules an HTTP request to Google Drive's /files API endpoint, once
+   * RxJS tells us that we have an OAuth token to use.
+   *
+   * This method gets us the {@link DriveFile} data for a single Drive ID.
+   */
+  getFile(fileId: string): Observable<DriveFile> {
+    return this.oauthToken.map(oauthToken => {
+      let params = new URLSearchParams('', new GoogleDriveQueryEncoder());
+      const fileUrl = GOOGLE_APIS_FILES_URL + '/' + fileId;
+
+      return this.get(oauthToken.access_token, fileUrl, params)
+          .map((response: Response) => {
+            return response.json();
+          });
+    }).switch();
+  }
+
+  /**
+   * Schedules an HTTP PATCH request to Google Drive's /files API endpoint,
+   * once RxJS tells us that we have an OAuth token to use.
+   *
+   * Takes an entire {@link DriveFile} object and updates any fields it sees.
+   */
+  updateFile(driveFile: DriveFile): Observable<DriveFile> {
+    return this.oauthToken.map(oauthToken => {
+      let patchBody = {
+        name: driveFile.name
+      };
+
+      const fileUrl = GOOGLE_APIS_FILES_URL + '/' + driveFile.id;
+
+      return this.patch(oauthToken.access_token, fileUrl, patchBody)
+          .map((response: Response) => {
+            return response.json();
           });
     }).switch();
   }
@@ -174,11 +215,27 @@ export class GoogleRealtimeService {
    * This method automatically puts in a few HTTP headers and query params.
    */
   private post(accessToken: string,
-               requestUrl: string, body: Object): Observable<Response> {
+               requestUrl: string,
+               body: Object): Observable<Response> {
     let urlParams = new URLSearchParams();
     GoogleRealtimeService.addDefaultUrlParams(urlParams);
 
     return this.http.post(requestUrl, body, new RequestOptions({
+      headers: GoogleRealtimeService.getDefaultHeaders(accessToken),
+      search: urlParams
+    }));
+  }
+
+  /**
+   * Similar to {@code post()} above, but for PATCH requests.
+   */
+  private patch(accessToken: string,
+                requestUrl: string,
+                body: Object): Observable<Response> {
+    let urlParams = new URLSearchParams();
+    GoogleRealtimeService.addDefaultUrlParams(urlParams);
+
+    return this.http.patch(requestUrl, body, new RequestOptions({
       headers: GoogleRealtimeService.getDefaultHeaders(accessToken),
       search: urlParams
     }));
