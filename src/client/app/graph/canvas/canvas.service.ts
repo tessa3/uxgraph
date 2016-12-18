@@ -1,9 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Store} from '@ngrx/store';
 import '../card/card';
-import {ADD_CARDS} from '../../reducer/cards.reducer';
-import {Observable} from 'rxjs';
-import {CARDS} from '../../reducer/reducer-constants';
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
@@ -37,33 +33,28 @@ export type CanvasCoord = Point;
 @Injectable()
 export class CanvasService {
   // The models of the cards to show on the canvas.
-  cards: Observable<Card[]>;
+  cards: Card[];
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
   // Returns the bounding box of the canvas.
-  getCanvasBounds: {():ClientRect} = null;
+  getCanvasBounds: {(): ClientRect} = null;
   // The offset of the viewport from its original position.
-  originOffset: CanvasCoord = {x:0, y:0};
+  originOffset: CanvasCoord = {x: 0, y: 0};
   // TODO(eyuelt): I think I can use RXJS' Subject for this?
   // The list of functions to call when zoom or pan occurs. This is used to
   // essentially watch this class' properties.
-  private listeners: {():void}[] = [];
+  private listeners: {(): void}[] = [];
   // The min and max zoom scales.
   private kMinZoomScale: number = 0.1;
   private kMaxZoomScale: number = 10.0;
 
-  constructor(private store: Store<any>) {
-    // Subscribe "this.cards" to whatever's in the Store.
-    this.cards = store.select<Card[]>(CARDS);
-
-    // Add a bunch of cards to the Store.
-    // Should automatically update "this.cards".
-    store.dispatch({ type: ADD_CARDS, payload: [
+  constructor() {
+    this.cards = [
       new Card(0, 0, 'You get a card!'),
       new Card(60, 60, '... and you get a card!'),
       new Card(100, 100, '... and you get a card!'),
       new Card(200, 200, '... and you get a card!')
-    ] });
+    ];
   }
 
   // Convert a point in the viewport coordinate space to a point in the canvas
@@ -88,9 +79,9 @@ export class CanvasService {
     const toZoom = this.zoomScale * incZoomScale;
     if (toZoom > this.kMinZoomScale && toZoom < this.kMaxZoomScale) {
       this.originOffset.x +=
-        zoomPnt.x * (1 - (1 / incZoomScale)) / this.zoomScale;
+          zoomPnt.x * (1 - (1 / incZoomScale)) / this.zoomScale;
       this.originOffset.y +=
-        zoomPnt.y * (1 - (1 / incZoomScale)) / this.zoomScale;
+          zoomPnt.y * (1 - (1 / incZoomScale)) / this.zoomScale;
       this.zoomScale = toZoom;
       this.notifyListeners();
     }
@@ -104,10 +95,17 @@ export class CanvasService {
   }
 
   // Set the function that returns the canvas' bounding box.
-  setCanvasBoundsGetter(fn: {():ClientRect}) {
+  setCanvasBoundsGetter(fn: {(): ClientRect}) {
     this.getCanvasBounds = fn;
   }
 
-  addListener(listener: {():void}) { this.listeners.push(listener); }
-  notifyListeners() { this.listeners.forEach((listener) => { listener(); }); }
+  addListener(listener: {(): void}) {
+    this.listeners.push(listener);
+  }
+
+  notifyListeners() {
+    this.listeners.forEach((listener) => {
+      listener();
+    });
+  }
 }
