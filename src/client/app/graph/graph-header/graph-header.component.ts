@@ -16,16 +16,23 @@ import {
 export class GraphHeaderComponent implements OnInit {
 
   @Input() graphId: string;
+
   currentGraph: DriveFile = {
+    // Give a temporary name to this graph while we load the real name...
     name: 'Loading...',
 
-    // Put temporary values into every other property.
+    // ... and put temporary values into every other property of this graph.
     id: 'UNKNOWN',
     mimeType: 'UNKNOWN',
     kind: 'UNKNOWN'
   };
 
   constructor(private googleRealtimeService: GoogleRealtimeService) {
+    // We can't do anything in the constructor yet because the [graphId]
+    // @Input from the template hasn't been bound.
+    //
+    // Angular will call our "ngOnInit()" method after that @Input has been
+    // bound.
   }
 
   ngOnInit(): void {
@@ -41,13 +48,16 @@ export class GraphHeaderComponent implements OnInit {
   }
 
   updateGraphTitle(newGraphName: string): void {
+    // Eagerly assume that the PATCH request that we're about to send out
+    // will work correctly.
     this.currentGraph.name = newGraphName;
 
-    console.log('Will update graph name...');
-
+    // Once the PATCH request goes through, update the rest of the
+    // "this.currentGraph" object to reflect the truth that the Google Drive API
+    // just returned to us.
     this.googleRealtimeService.updateFile(this.currentGraph)
         .subscribe((driveFile: DriveFile) => {
-          console.log('Did update graph name: ', driveFile);
+          this.currentGraph = driveFile;
         });
   }
 

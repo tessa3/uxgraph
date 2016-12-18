@@ -90,6 +90,8 @@ export class GoogleRealtimeService {
    * Schedules an HTTP request to Google Drive's /listFiles API endpoint, once
    * RxJS tells us that we have an OAuthToken to use.
    *
+   * This method gets us the {@link DriveFile} data for several Drive IDs.
+   *
    * Filters for our custom "uxgraph" MIME type.
    */
   listFiles(): Observable<DriveFile[]> {
@@ -106,6 +108,12 @@ export class GoogleRealtimeService {
     }).switch();
   }
 
+  /**
+   * Schedules an HTTP request to Google Drive's /files API endpoint, once
+   * RxJS tells us that we have an OAuth token to use.
+   *
+   * This method gets us the {@link DriveFile} data for a single Drive ID.
+   */
   getFile(fileId: string): Observable<DriveFile> {
     return this.oauthToken.map(oauthToken => {
       let params = new URLSearchParams('', new GoogleDriveQueryEncoder());
@@ -118,6 +126,12 @@ export class GoogleRealtimeService {
     }).switch();
   }
 
+  /**
+   * Schedules an HTTP PATCH request to Google Drive's /files API endpoint,
+   * once RxJS tells us that we have an OAuth token to use.
+   *
+   * Takes an entire {@link DriveFile} object and updates any fields it sees.
+   */
   updateFile(driveFile: DriveFile): Observable<DriveFile> {
     return this.oauthToken.map(oauthToken => {
       let patchBody = {
