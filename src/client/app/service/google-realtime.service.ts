@@ -1,4 +1,4 @@
-import {Injectable, NgZone} from '@angular/core';
+import {Injectable, NgZone, ApplicationRef} from '@angular/core';
 import {
   Http,
   URLSearchParams,
@@ -13,8 +13,9 @@ import 'rxjs/add/operator/switch';
 import {DriveFile} from '../model/drive-file';
 import {BehaviorSubject} from 'rxjs';
 import {Collaborator} from '../model/collaborator';
-import CollaborativeString = gapi.drive.realtime.CollaborativeString;
 import {Router} from '@angular/router';
+import CollaborativeString = gapi.drive.realtime.CollaborativeString;
+import Document = gapi.drive.realtime.Document;
 
 
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
@@ -27,11 +28,16 @@ const PAGE_SIZE = 10;
 
 const COLLABORATOR_JOINED = 'collaborator_joined';
 const COLLABORATOR_LEFT = 'collaborator_left';
+export const OBJECT_CHANGED = 'object_changed';
 
 const FORBIDDEN = 'forbidden';
 
 const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 
+
+export const Card = function () {
+  // Do nothing.
+};
 
 /**
  * A service to authenticate and interact with Google's Realtime API.
@@ -52,14 +58,26 @@ export class GoogleRealtimeService {
   collaborators: BehaviorSubject<Collaborator[]> =
       new BehaviorSubject<Collaborator[]>([]);
 
+  currentDocument: BehaviorSubject<Document> =
+      new BehaviorSubject<Document>(null);
+
   constructor(private http: Http,
               private zone: NgZone,
+              private applicationRef: ApplicationRef,
               private router: Router) {
     // Immediately load additional JavaScript code to interact with gapi
     // (gapi = "Google API" for JS).
     gapi.load('auth:client,drive-realtime,drive-share', () => {
       this.zone.run(() => {
         this.authorize(false);
+
+        gapi.drive.realtime.custom.registerType(Card, 'Card');
+        Card.prototype.x = gapi.drive.realtime.custom.collaborativeField('x');
+        Card.prototype.y = gapi.drive.realtime.custom.collaborativeField('y');
+        Card.prototype.text =
+            gapi.drive.realtime.custom.collaborativeField('text');
+        Card.prototype.selected =
+            gapi.drive.realtime.custom.collaborativeField('selected');
       });
     });
   }
@@ -187,6 +205,15 @@ export class GoogleRealtimeService {
         });
         document.addEventListener(COLLABORATOR_LEFT, () => {
           this.collaborators.next(document.getCollaborators());
+        });
+
+        // Hold onto the current document in-memory.
+        this.currentDocument.next(document);
+
+        // Wire up the global change detector to run on every change.
+        this.applicationRef.tick();
+        document.getModel().getRoot().addEventListener(OBJECT_CHANGED, () => {
+          this.applicationRef.tick();
         });
 
         let collaborativeString =

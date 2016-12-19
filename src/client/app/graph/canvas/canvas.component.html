@@ -4,5 +4,7 @@
      xmlns:xlink="http://www.w3.org/1999/xlink"
      (mousedown)="this.onMousedown($event)"
      (mousewheel)="this.onMousewheel($event)">
-  <g uxg-card *ngFor="let card of this.canvasService.cards" [card]="card"></g>
+  <g uxg-card
+     *ngFor="let card of (this.canvasService.cards2 | toIterable)"
+     [card]="card"></g>
 </svg>

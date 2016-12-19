@@ -8,11 +8,13 @@ import {CardComponent} from './card/card.component';
 import {SidePanelComponent} from './side-panel/side-panel.component';
 import {GraphHeaderComponent} from './graph-header/graph-header.component';
 import {UserIconComponent} from './user-icon/user-icon.component';
+import {ToIterablePipe} from './canvas/to-iterable.pipe';
 
 
 @NgModule({
   imports: [CommonModule, SharedModule],
   declarations: [
+    ToIterablePipe,
     CardComponent,
     CanvasComponent,
     GraphComponent,
