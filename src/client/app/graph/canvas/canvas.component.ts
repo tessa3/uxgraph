@@ -90,4 +90,20 @@ export class CanvasComponent {
       this.lastPanPnt = null;
     }
   }
+
+  // TODO add comment
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+      if (this.canvasService.MULTI_SELECT_KEY_CODES.indexOf(event.code) > -1) {
+        this.canvasService.multiSelectMode = true;
+      }
+  }
+
+  // TODO add comment
+  @HostListener('document:keyup', ['$event'])
+  onKeyUp(event: KeyboardEvent) {
+    if (this.canvasService.MULTI_SELECT_KEY_CODES.indexOf(event.code) > -1) {
+      this.canvasService.multiSelectMode = false;
+    }
+  }
 }

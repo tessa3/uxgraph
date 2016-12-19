@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, HostListener} from '@angular/core';
 import '../card/card';
 
 // TODO(eyuelt): move these to the data model layer
@@ -40,6 +40,13 @@ export class CanvasService {
   getCanvasBounds: {(): ClientRect} = null;
   // The offset of the viewport from its original position.
   originOffset: CanvasCoord = {x: 0, y: 0};
+  // If true, multipe
+  multiSelectMode: boolean = false;
+  // These are the keyboard keys that enable multi-select
+  MULTI_SELECT_KEY_CODES: string[] = [
+    'MetaLeft',  // Left cmd button on Mac
+    'MetaRight'  // Right cmd button on Mac
+  ];
   // TODO(eyuelt): I think I can use RXJS' Subject for this?
   // The list of functions to call when zoom or pan occurs. This is used to
   // essentially watch this class' properties.
@@ -50,10 +57,10 @@ export class CanvasService {
 
   constructor() {
     this.cards = [
-      new Card(0, 0, 'You get a card!'),
-      new Card(60, 60, '... and you get a card!'),
-      new Card(100, 100, '... and you get a card!'),
-      new Card(200, 200, '... and you get a card!')
+      new Card(0, 0, 'You get a card!', false),
+      new Card(60, 60, '... and you get a card!', false),
+      new Card(100, 100, '... and you get a card!', false),
+      new Card(200, 200, '... and you get a card!', false)
     ];
   }
 
@@ -97,6 +104,12 @@ export class CanvasService {
   // Set the function that returns the canvas' bounding box.
   setCanvasBoundsGetter(fn: {(): ClientRect}) {
     this.getCanvasBounds = fn;
+  }
+
+  deselectCards() {
+    this.cards.forEach((card) => {
+      card.selected = false;
+    })
   }
 
   addListener(listener: {(): void}) {
