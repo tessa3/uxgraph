@@ -1,5 +1,10 @@
 import {Injectable} from '@angular/core';
 import '../card/card';
+import {
+  GoogleRealtimeService,
+  Card
+} from '../../service/google-realtime.service';
+import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
@@ -33,7 +38,10 @@ export type CanvasCoord = Point;
 @Injectable()
 export class CanvasService {
   // The models of the cards to show on the canvas.
-  cards: Card[];
+  // cards: Card[];
+
+  cards2: CollaborativeList<any>;
+
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
   // Returns the bounding box of the canvas.
@@ -55,13 +63,35 @@ export class CanvasService {
   private kMinZoomScale: number = 0.1;
   private kMaxZoomScale: number = 10.0;
 
-  constructor() {
-    this.cards = [
-      new Card(0, 0, 'You get a card!', false),
-      new Card(60, 60, '... and you get a card!', false),
-      new Card(100, 100, '... and you get a card!', false),
-      new Card(200, 200, '... and you get a card!', false)
-    ];
+  constructor(private googleRealtimeService: GoogleRealtimeService) {
+    this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
+      if (currentDocument === null) {
+        return;
+      }
+
+      let model = currentDocument.getModel();
+
+      // Lazily instantiate some collaborative cards.
+      if (model.getRoot().get('cards') === null) {
+        console.log('no "cards" object at root');
+        let card1 = model.create(Card);
+        card1.x = 30;
+        card1.y = 30;
+        card1.text = 'some text';
+        card1.selected = false;
+
+        let card2 = model.create(Card);
+        card2.x = 100;
+        card2.y = 100;
+        card2.text = 'more text';
+        card2.selected = false;
+
+        let collaborativeCards = model.createList([card1, card2]);
+        model.getRoot().set('cards', collaborativeCards);
+      }
+
+      this.cards2 = model.getRoot().get('cards');
+    });
   }
 
   // Convert a point in the viewport coordinate space to a point in the canvas
@@ -107,9 +137,9 @@ export class CanvasService {
   }
 
   deselectCards() {
-    this.cards.forEach((card) => {
-      card.selected = false;
-    });
+    // this.cards.forEach((card: any) => {
+    //   card.selected = false;
+    // });
   }
 
   addListener(listener: {(): void}) {
