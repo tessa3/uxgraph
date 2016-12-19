@@ -1,15 +1,20 @@
 import {Injectable, NgZone} from '@angular/core';
 import {
-  Http, URLSearchParams, Response,
-  RequestOptions, Headers, QueryEncoder
+  Http,
+  URLSearchParams,
+  Response,
+  RequestOptions,
+  Headers,
+  QueryEncoder
 } from '@angular/http';
 import {AsyncSubject} from 'rxjs/AsyncSubject';
 import {Observable} from 'rxjs/Observable';
-import CollaborativeString = gapi.drive.realtime.CollaborativeString;
 import 'rxjs/add/operator/switch';
 import {DriveFile} from '../model/drive-file';
 import {BehaviorSubject} from 'rxjs';
 import {Collaborator} from '../model/collaborator';
+import CollaborativeString = gapi.drive.realtime.CollaborativeString;
+import {Router} from '@angular/router';
 
 
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
@@ -22,6 +27,8 @@ const PAGE_SIZE = 10;
 
 const COLLABORATOR_JOINED = 'collaborator_joined';
 const COLLABORATOR_LEFT = 'collaborator_left';
+
+const FORBIDDEN = 'forbidden';
 
 const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 
@@ -45,7 +52,9 @@ export class GoogleRealtimeService {
   collaborators: BehaviorSubject<Collaborator[]> =
       new BehaviorSubject<Collaborator[]>([]);
 
-  constructor(private http: Http, private zone: NgZone) {
+  constructor(private http: Http,
+              private zone: NgZone,
+              private router: Router) {
     // Immediately load additional JavaScript code to interact with gapi
     // (gapi = "Google API" for JS).
     gapi.load('auth:client,drive-realtime,drive-share', () => {
@@ -72,8 +81,17 @@ export class GoogleRealtimeService {
       immediate: !usePopup
     }, (response) => {
       this.zone.run(() => {
-        this.oauthToken.next(response);
-        this.oauthToken.complete();
+        if (usePopup === false && !!response.error) {
+          // If auto-login failed, then auto-send the user back to the home
+          // screen to manually log back in.
+          this.router.navigateByUrl('/');
+        }
+
+        // If login worked fine, then save the OAuth token.
+        if (!response.error) {
+          this.oauthToken.next(response);
+          this.oauthToken.complete();
+        }
       });
     });
   }
@@ -116,6 +134,16 @@ export class GoogleRealtimeService {
             return response.json();
           });
     }).switch();
+  }
+
+
+  openShareDialog(fileId: string) {
+    return this.oauthToken.subscribe(oauthToken => {
+      let shareClient = new gapi.drive.share.ShareClient();
+      shareClient.setOAuthToken(oauthToken.access_token);
+      shareClient.setItemIds([fileId]);
+      shareClient.showSettingsDialog();
+    });
   }
 
   /**
@@ -169,6 +197,14 @@ export class GoogleRealtimeService {
         string.setText('Welcome to uxgraph!');
         model.getRoot().set('demo_string', string);
       }, (error) => {
+        // If the user doesn't have permission to view this uxgraph, just send
+        // him back to the home screen.
+        if (error.type === FORBIDDEN) {
+          // TODO(girum): We can do better than an alert() here...
+          alert('You do not have permission to view this uxgraph. ' +
+              'Redirecting to the home page...');
+          this.router.navigateByUrl('/');
+        }
         console.error('Error loading Realtime API: ', error);
       });
     });
