@@ -13,10 +13,19 @@ import {GoogleRealtimeService} from '../service/google-realtime.service';
 })
 export class GraphComponent implements OnInit {
 
+  // TODO(girum): Each activity should not maintain its own "userLoggedIn"
+  // state. This should get extracted out into its own singleton satte.
+  userLoggedIn: boolean = false;
   graphId: string;
 
   constructor(private googleRealtimeService: GoogleRealtimeService,
               private route: ActivatedRoute) {
+    this.googleRealtimeService.oauthToken
+        .subscribe((oauthToken) => {
+          if (!!oauthToken) {
+            this.userLoggedIn = true;
+          }
+        });
   }
 
   ngOnInit() {

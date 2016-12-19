@@ -64,5 +64,9 @@ export class GraphHeaderComponent implements OnInit {
         });
   }
 
+  openShareDialog(): void {
+    this.googleRealtimeService.openShareDialog(this.currentGraph.id);
+  }
+
 
 }
