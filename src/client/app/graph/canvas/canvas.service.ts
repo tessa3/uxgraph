@@ -1,4 +1,4 @@
-import {Injectable, HostListener} from '@angular/core';
+import {Injectable} from '@angular/core';
 import '../card/card';
 
 // TODO(eyuelt): move these to the data model layer
