@@ -26,9 +26,6 @@ const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
  *
  * This object is just metadata for the file. Data for the file is stored in
  * the Realtime Document.
- *
- * TODO(girum): Create an ngrx/store domain layer that automatically implements
- * Realtime Document manipulation.
  */
 export interface DriveFile {
   id: string;
@@ -265,8 +262,6 @@ export class GoogleRealtimeService {
 
   /**
    * Temporary, hacky code ripped straight from Google's Realtime API tutorial.
-   *
-   * TODO(girum): Delete me once we wire up Realtime to ngrx/store.
    */
   private static wireTextBoxes(collaborativeString: CollaborativeString) {
     let textArea1 = document.getElementById('text_area_1');

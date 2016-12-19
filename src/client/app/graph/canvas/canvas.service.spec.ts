@@ -1,8 +1,5 @@
-import {StoreModule} from '@ngrx/store';
 import {CanvasService} from './canvas.service';
 import {TestBed} from '@angular/core/testing';
-import {cardsReducer} from '../../reducer/cards.reducer';
-import {CARDS} from '../../reducer/reducer-constants';
 
 export function main() {
   describe('Canvas service', () => {
@@ -10,11 +7,6 @@ export function main() {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [
-          StoreModule.provideStore({
-            [CARDS]: cardsReducer
-          })
-        ],
         providers: [
           CanvasService
         ]
