@@ -1,38 +1,32 @@
 import {Injectable, NgZone} from '@angular/core';
 import {
-    Http, URLSearchParams, Response,
-    RequestOptions, Headers, QueryEncoder
+  Http, URLSearchParams, Response,
+  RequestOptions, Headers, QueryEncoder
 } from '@angular/http';
 import {AsyncSubject} from 'rxjs/AsyncSubject';
 import {Observable} from 'rxjs/Observable';
 import CollaborativeString = gapi.drive.realtime.CollaborativeString;
 import 'rxjs/add/operator/switch';
+import {DriveFile} from '../model/drive-file';
+import {BehaviorSubject} from 'rxjs';
+import Collaborator = gapi.drive.realtime.Collaborator;
+import {CollaboratorEvent} from '../model/collaborator-events';
+import ObjectChangedEvent = gapi.drive.realtime.ObjectChangedEvent;
 
 
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
 const CLIENT_ID =
     '458941249796-jfvnbelhroiit38vhe5d69av0jjnoi7b.apps.googleusercontent.com';
 
-
 const GOOGLE_APIS_FILES_URL = 'https://www.googleapis.com/drive/v3/files';
 const GOOGLE_DRIVE_FIELDS_TO_QUERY = 'nextPageToken, files(id, name)';
 const PAGE_SIZE = 10;
 
+const COLLABORATOR_JOINED = 'collaborator_joined';
+const COLLABORATOR_LEFT = 'collaborator_left';
+
 const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 
-
-/**
- * Represents a single Google Drive file.
- *
- * This object is just metadata for the file. Data for the file is stored in
- * the Realtime Document.
- */
-export interface DriveFile {
-  id: string;
-  name: string;
-  mimeType: string;
-  kind: string;
-}
 
 /**
  * A service to authenticate and interact with Google's Realtime API.
@@ -49,6 +43,9 @@ export class GoogleRealtimeService {
    */
   oauthToken: AsyncSubject<GoogleApiOAuth2TokenObject> =
       new AsyncSubject<GoogleApiOAuth2TokenObject>();
+
+  collaborators: BehaviorSubject<Collaborator[]> =
+      new BehaviorSubject<Collaborator[]>([]);
 
   constructor(private http: Http, private zone: NgZone) {
     // Immediately load additional JavaScript code to interact with gapi
@@ -155,6 +152,17 @@ export class GoogleRealtimeService {
   loadRealtimeDocument(driveFileId: string) {
     this.oauthToken.subscribe(() => {
       gapi.drive.realtime.load(driveFileId, (document) => {
+        // Read the current array of collaborators from the document.
+        this.collaborators.next(document.getCollaborators());
+
+        // Also sign up for changes in the collaborators list.
+        document.addEventListener(COLLABORATOR_JOINED, () => {
+          this.collaborators.next(document.getCollaborators());
+        });
+        document.addEventListener(COLLABORATOR_LEFT, () => {
+          this.collaborators.next(document.getCollaborators());
+        });
+
         let collaborativeString =
             document.getModel().getRoot().get('demo_string');
         GoogleRealtimeService.wireTextBoxes(collaborativeString);

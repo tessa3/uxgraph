@@ -1,8 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {
-  GoogleRealtimeService,
-  DriveFile
-} from '../../service/google-realtime.service';
+import {GoogleRealtimeService} from '../../service/google-realtime.service';
+import {DriveFile} from '../../model/drive-file';
 
 /**
  * This class represents the App Header component.
