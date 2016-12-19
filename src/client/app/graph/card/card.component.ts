@@ -52,6 +52,10 @@ export class CardComponent implements OnInit {
         x: event.clientX - canvasBounds.left,
         y: event.clientY - canvasBounds.top
       };
+      if (!this.canvasService.multiSelectMode) {
+        this.canvasService.deselectCards();
+      }
+      this.card.selected = !this.card.selected;
     }
   }
 
