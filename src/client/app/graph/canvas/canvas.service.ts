@@ -109,7 +109,7 @@ export class CanvasService {
   deselectCards() {
     this.cards.forEach((card) => {
       card.selected = false;
-    })
+    });
   }
 
   addListener(listener: {(): void}) {
