@@ -11,4 +11,14 @@
        class="graph-header-title"
        [(ngModel)]="currentGraph.name"
        (keyup.enter)="appTitle.blur()"
-       (blur)="updateGraphTitle(appTitle.value)" />
+       (blur)="updateGraphTitle(appTitle.value)"/>
+
+<div class="user-icons">
+  <user-icon *ngFor="let user of collaborators | async" [user]="user"></user-icon>
+</div>
+
+
+<button class="share-button"
+        (click)="openShareDialog()">
+  Share
+</button>

@@ -1,10 +1,8 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {
-  GoogleRealtimeService,
-  DriveFile
-} from '../service/google-realtime.service';
+import {GoogleRealtimeService} from '../service/google-realtime.service';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
+import {DriveFile} from '../model/drive-file';
 
 /**
  * This class represents the lazy loaded HomeComponent.

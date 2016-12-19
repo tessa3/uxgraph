@@ -32,3 +32,13 @@
   border: transparent;
   margin-top: 6px;
 }
+
+.user-icons {
+  display: flex;
+  margin: auto 8px;
+}
+
+.share-button {
+  margin-top: auto;
+  margin-bottom: auto;
+}

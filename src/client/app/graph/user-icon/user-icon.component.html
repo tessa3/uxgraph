@@ -1,0 +1,11 @@
+<div [title]="user.displayName">
+  <!-- User photo -->
+  <div class="user-image"
+       [style.background-image]="'url(' + user.photoUrl + ')'">
+  </div>
+
+  <!-- User color strip -->
+  <div class="user-color"
+       [style.background-color]="user.color">
+  </div>
+</div>

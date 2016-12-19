@@ -1,38 +1,37 @@
 import {Injectable, NgZone} from '@angular/core';
 import {
-    Http, URLSearchParams, Response,
-    RequestOptions, Headers, QueryEncoder
+  Http,
+  URLSearchParams,
+  Response,
+  RequestOptions,
+  Headers,
+  QueryEncoder
 } from '@angular/http';
 import {AsyncSubject} from 'rxjs/AsyncSubject';
 import {Observable} from 'rxjs/Observable';
-import CollaborativeString = gapi.drive.realtime.CollaborativeString;
 import 'rxjs/add/operator/switch';
+import {DriveFile} from '../model/drive-file';
+import {BehaviorSubject} from 'rxjs';
+import {Collaborator} from '../model/collaborator';
+import CollaborativeString = gapi.drive.realtime.CollaborativeString;
+import {Router} from '@angular/router';
 
 
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
 const CLIENT_ID =
     '458941249796-jfvnbelhroiit38vhe5d69av0jjnoi7b.apps.googleusercontent.com';
 
-
 const GOOGLE_APIS_FILES_URL = 'https://www.googleapis.com/drive/v3/files';
 const GOOGLE_DRIVE_FIELDS_TO_QUERY = 'nextPageToken, files(id, name)';
 const PAGE_SIZE = 10;
 
+const COLLABORATOR_JOINED = 'collaborator_joined';
+const COLLABORATOR_LEFT = 'collaborator_left';
+
+const FORBIDDEN = 'forbidden';
+
 const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 
-
-/**
- * Represents a single Google Drive file.
- *
- * This object is just metadata for the file. Data for the file is stored in
- * the Realtime Document.
- */
-export interface DriveFile {
-  id: string;
-  name: string;
-  mimeType: string;
-  kind: string;
-}
 
 /**
  * A service to authenticate and interact with Google's Realtime API.
@@ -50,7 +49,12 @@ export class GoogleRealtimeService {
   oauthToken: AsyncSubject<GoogleApiOAuth2TokenObject> =
       new AsyncSubject<GoogleApiOAuth2TokenObject>();
 
-  constructor(private http: Http, private zone: NgZone) {
+  collaborators: BehaviorSubject<Collaborator[]> =
+      new BehaviorSubject<Collaborator[]>([]);
+
+  constructor(private http: Http,
+              private zone: NgZone,
+              private router: Router) {
     // Immediately load additional JavaScript code to interact with gapi
     // (gapi = "Google API" for JS).
     gapi.load('auth:client,drive-realtime,drive-share', () => {
@@ -77,8 +81,17 @@ export class GoogleRealtimeService {
       immediate: !usePopup
     }, (response) => {
       this.zone.run(() => {
-        this.oauthToken.next(response);
-        this.oauthToken.complete();
+        if (usePopup === false && !!response.error) {
+          // If auto-login failed, then auto-send the user back to the home
+          // screen to manually log back in.
+          this.router.navigateByUrl('/');
+        }
+
+        // If login worked fine, then save the OAuth token.
+        if (!response.error) {
+          this.oauthToken.next(response);
+          this.oauthToken.complete();
+        }
       });
     });
   }
@@ -123,6 +136,16 @@ export class GoogleRealtimeService {
     }).switch();
   }
 
+
+  openShareDialog(fileId: string) {
+    return this.oauthToken.subscribe(oauthToken => {
+      let shareClient = new gapi.drive.share.ShareClient();
+      shareClient.setOAuthToken(oauthToken.access_token);
+      shareClient.setItemIds([fileId]);
+      shareClient.showSettingsDialog();
+    });
+  }
+
   /**
    * Schedules an HTTP PATCH request to Google Drive's /files API endpoint,
    * once RxJS tells us that we have an OAuth token to use.
@@ -155,6 +178,17 @@ export class GoogleRealtimeService {
   loadRealtimeDocument(driveFileId: string) {
     this.oauthToken.subscribe(() => {
       gapi.drive.realtime.load(driveFileId, (document) => {
+        // Read the current array of collaborators from the document.
+        this.collaborators.next(document.getCollaborators());
+
+        // Also sign up for changes in the collaborators list.
+        document.addEventListener(COLLABORATOR_JOINED, () => {
+          this.collaborators.next(document.getCollaborators());
+        });
+        document.addEventListener(COLLABORATOR_LEFT, () => {
+          this.collaborators.next(document.getCollaborators());
+        });
+
         let collaborativeString =
             document.getModel().getRoot().get('demo_string');
         GoogleRealtimeService.wireTextBoxes(collaborativeString);
@@ -163,6 +197,14 @@ export class GoogleRealtimeService {
         string.setText('Welcome to uxgraph!');
         model.getRoot().set('demo_string', string);
       }, (error) => {
+        // If the user doesn't have permission to view this uxgraph, just send
+        // him back to the home screen.
+        if (error.type === FORBIDDEN) {
+          // TODO(girum): We can do better than an alert() here...
+          alert('You do not have permission to view this uxgraph. ' +
+              'Redirecting to the home page...');
+          this.router.navigateByUrl('/');
+        }
         console.error('Error loading Realtime API: ', error);
       });
     });
