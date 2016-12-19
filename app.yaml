@@ -3,9 +3,6 @@ api_version: 1
 threadsafe: true
 
 handlers:
-- url: /
-  static_files: dist/prod/index.html
-  upload: dist/prod/index.html
 
 - url: /css
   static_dir: dist/prod/css
@@ -15,3 +12,7 @@ handlers:
 
 - url: /assets
   static_dir: dist/prod/assets
+
+- url: /.*
+  static_files: dist/prod/index.html
+  upload: dist/prod/index.html
