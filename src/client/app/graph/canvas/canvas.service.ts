@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import '../card/card';
 import {
   GoogleRealtimeService,
   Card
