@@ -11,10 +11,6 @@ export class ToIterablePipe implements PipeTransform {
       return undefined;
     }
 
-    // if (!(value instanceof CollaborativeList)) {
-    //   return undefined;
-    // }
-
     let collaborativeList = value as CollaborativeList<any>;
 
     value[Symbol.iterator] = function() {

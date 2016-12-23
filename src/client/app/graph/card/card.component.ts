@@ -2,7 +2,6 @@ import {
   Component, Input, OnInit, HostListener
 } from '@angular/core';
 import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
-import './card';
 import {EventUtils} from '../../utils/event-utils';
 import {
   GoogleRealtimeService,
