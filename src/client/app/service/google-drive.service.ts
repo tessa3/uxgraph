@@ -1,5 +1,5 @@
 import {Injectable, NgZone} from '@angular/core';
-import {AsyncSubject, Observable, BehaviorSubject} from 'rxjs';
+import {AsyncSubject, Observable} from 'rxjs';
 import {
   Http,
   URLSearchParams,
