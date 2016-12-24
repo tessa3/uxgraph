@@ -1,5 +1,6 @@
 import {CanvasService} from './canvas.service';
 import {TestBed} from '@angular/core/testing';
+import {FakeGoogleRealtimeService} from '../../../testing/fake/service/fake-google-realtime.service';
 import {GoogleRealtimeService} from '../../service/google-realtime.service';
 
 export function main() {
@@ -9,12 +10,14 @@ export function main() {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
-          GoogleRealtimeService,
+          {
+            provide: GoogleRealtimeService,
+            useClass: FakeGoogleRealtimeService
+          },
           CanvasService
         ]
       });
 
-      let googleRealtimeService = TestBed.get(GoogleRealtimeService);
       cs = TestBed.get(CanvasService);
     });
 

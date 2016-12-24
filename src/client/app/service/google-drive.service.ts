@@ -24,11 +24,11 @@ const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 
 @Injectable()
 export class GoogleDriveService {
+
   /**
    * The OAuth token that Google gives back for the current client.
-   * TODO(girum): This should be a BehaviorSubject instead to handle reconnects.
-   *
-   * @type {AsyncSubject<GoogleApiOAuth2TokenObject>}
+   * TODO(girum): This should be a BehaviorSubject instead to handle
+   * reconnects.
    */
   oauthToken: AsyncSubject<GoogleApiOAuth2TokenObject> =
       new AsyncSubject<GoogleApiOAuth2TokenObject>();

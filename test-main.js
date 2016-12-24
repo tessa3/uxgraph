@@ -58,6 +58,10 @@ System.config({
       main: 'index.js',
       defaultExtension: 'js'
     },
+    '@angular/http/testing': {
+      main: 'index.js',
+      defaultExtension: 'js'
+    },
     '@angular/platform-browser': {
       main: 'index.js',
       defaultExtension: 'js'

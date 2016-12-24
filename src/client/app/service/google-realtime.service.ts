@@ -26,11 +26,12 @@ export const Card = function () {
 @Injectable()
 export class GoogleRealtimeService {
 
+  currentDocument: BehaviorSubject<Document> =
+      new BehaviorSubject<Document>(null);
+
   collaborators: BehaviorSubject<Collaborator[]> =
       new BehaviorSubject<Collaborator[]>([]);
 
-  currentDocument: BehaviorSubject<Document> =
-      new BehaviorSubject<Document>(null);
 
   constructor(private googleDriveService: GoogleDriveService,
               private applicationRef: ApplicationRef,
@@ -70,9 +71,7 @@ export class GoogleRealtimeService {
           this.applicationRef.tick();
         });
       }, (model) => {
-        let string = model.createString();
-        string.setText('Welcome to uxgraph!');
-        model.getRoot().set('demo_string', string);
+        // Do nothing.
       }, (error) => {
         // If the user doesn't have permission to view this uxgraph, just send
         // him back to the home screen.
@@ -86,4 +85,6 @@ export class GoogleRealtimeService {
       });
     });
   }
+
+
 }
