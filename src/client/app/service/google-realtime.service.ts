@@ -33,20 +33,13 @@ export class GoogleRealtimeService {
   constructor(private googleDriveService: GoogleDriveService,
               private applicationRef: ApplicationRef,
               private router: Router) {
-    // Sign up to listen for when the Google Drive service finishes downloading
-    // the rest of the Gapi JS client code.
-    this.googleDriveService.gapiLoaded
-        .subscribe((isLoaded: boolean) => {
-          if (isLoaded) {
-
-            // Once Gapi has downloaded the rest of the client JS code
-            // we need to run our app, we're able to register our custom
-            // Google Realtime model classes.
-            //
-            // All custom Realtime model classes must be registered this way.
-            registerCardModel();
-          }
-        });
+    // // Sign up to listen for when the Google Drive service finishes downloading
+    // // the rest of the Gapi JS client code.
+    // this.googleDriveService.gapiLoaded
+    //     .subscribe((isLoaded: boolean) => {
+    //       if (isLoaded) {
+    //       }
+    //     });
   }
 
 

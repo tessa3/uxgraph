@@ -10,6 +10,7 @@ import {
 } from '@angular/http';
 import {Router} from '@angular/router';
 import {DriveFile} from '../model/drive-file';
+import {registerCardModel} from '../model/card';
 
 
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
@@ -25,8 +26,6 @@ const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 
 @Injectable()
 export class GoogleDriveService {
-
-  gapiLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   /**
    * The OAuth token that Google gives back for the current client.
@@ -44,10 +43,12 @@ export class GoogleDriveService {
     // (gapi = "Google API" for JS).
     gapi.load('auth:client,drive-realtime,drive-share', () => {
       this.zone.run(() => {
-        // Set a flag that we've finished downloading the rest of Gapi's client
-        // code.
-        this.gapiLoaded.next(true);
-        this.gapiLoaded.complete();
+        // Once Gapi has downloaded the rest of the client JS code
+        // we need to run our app, we're able to register our custom
+        // Google Realtime model classes.
+        //
+        // All custom Realtime model classes must be registered this way.
+        registerCardModel();
 
         // Also, immediately try to authorize the current user without showing
         // him the authorize dialog. May fail if the user has never authorized
