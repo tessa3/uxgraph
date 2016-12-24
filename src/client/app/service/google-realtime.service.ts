@@ -3,9 +3,8 @@ import 'rxjs/add/operator/switch';
 import {BehaviorSubject} from 'rxjs';
 import {Collaborator} from '../model/collaborator';
 import {Router} from '@angular/router';
-import Document = gapi.drive.realtime.Document;
 import {GoogleDriveService} from './google-drive.service';
-import {registerCardModel} from '../model/card';
+import Document = gapi.drive.realtime.Document;
 import ObjectChangedEvent = gapi.drive.realtime.ObjectChangedEvent;
 
 
@@ -33,13 +32,6 @@ export class GoogleRealtimeService {
   constructor(private googleDriveService: GoogleDriveService,
               private applicationRef: ApplicationRef,
               private router: Router) {
-    // // Sign up to listen for when the Google Drive service finishes downloading
-    // // the rest of the Gapi JS client code.
-    // this.googleDriveService.gapiLoaded
-    //     .subscribe((isLoaded: boolean) => {
-    //       if (isLoaded) {
-    //       }
-    //     });
   }
 
 
