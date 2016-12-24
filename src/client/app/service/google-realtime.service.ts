@@ -5,6 +5,7 @@ import {Collaborator} from '../model/collaborator';
 import {Router} from '@angular/router';
 import Document = gapi.drive.realtime.Document;
 import {GoogleDriveService} from './google-drive.service';
+import {registerCardModel} from '../model/card';
 
 
 
@@ -14,10 +15,6 @@ export const OBJECT_CHANGED = 'object_changed';
 
 const FORBIDDEN = 'forbidden';
 
-
-export const Card = function () {
-  // Do nothing.
-};
 
 /**
  * A service to authenticate and interact with Google's Realtime API.
@@ -36,7 +33,20 @@ export class GoogleRealtimeService {
   constructor(private googleDriveService: GoogleDriveService,
               private applicationRef: ApplicationRef,
               private router: Router) {
-    // Do nothing.
+    // Sign up to listen for when the Google Drive service finishes downloading
+    // the rest of the Gapi JS client code.
+    this.googleDriveService.gapiLoaded
+        .subscribe((isLoaded: boolean) => {
+          if (isLoaded) {
+
+            // Once Gapi has downloaded the rest of the client JS code
+            // we need to run our app, we're able to register our custom
+            // Google Realtime model classes.
+            //
+            // All custom Realtime model classes must be registered this way.
+            registerCardModel();
+          }
+        });
   }
 
 
