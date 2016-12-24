@@ -12,6 +12,7 @@ export function main() {
     let fakeGapi: FakeGapi;
 
     beforeEach(() => {
+      // Override the window.gapi global API with our fake implementation.
       (<any>window).gapi = fakeGapi = new FakeGapi();
 
       TestBed.configureTestingModule({

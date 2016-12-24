@@ -1,4 +1,3 @@
-
 /**
  * Represents a single Google Drive file.
  *

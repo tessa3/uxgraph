@@ -2,6 +2,7 @@
  * Not sure if we need this yet. Seems like the transpiled JS is looking for
  * an actual property called "gapi.drive.realtime.Collaborator" instead of
  * just using the imported TypeScript interface at compile time...
+ * TODO(girum): Move me to manual_typings?
  */
 export interface Collaborator {
   // The HTML color associated with this collaborator.

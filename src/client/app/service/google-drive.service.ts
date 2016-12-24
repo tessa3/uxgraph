@@ -1,13 +1,14 @@
 import {Injectable, NgZone} from '@angular/core';
-import {AsyncSubject, Observable} from 'rxjs';
+import {AsyncSubject, Observable, BehaviorSubject} from 'rxjs';
 import {
-  Http, URLSearchParams, Response, Headers,
-  RequestOptions, QueryEncoder
+  Http,
+  URLSearchParams,
+  Response,
+  Headers,
+  RequestOptions,
+  QueryEncoder
 } from '@angular/http';
 import {Router} from '@angular/router';
-import {
-  Card
-} from './google-realtime.service';
 import {DriveFile} from '../model/drive-file';
 
 
@@ -25,6 +26,8 @@ const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 @Injectable()
 export class GoogleDriveService {
 
+  gapiLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   /**
    * The OAuth token that Google gives back for the current client.
    * TODO(girum): This should be a BehaviorSubject instead to handle
@@ -41,17 +44,15 @@ export class GoogleDriveService {
     // (gapi = "Google API" for JS).
     gapi.load('auth:client,drive-realtime,drive-share', () => {
       this.zone.run(() => {
-        this.authorize(false);
+        // Set a flag that we've finished downloading the rest of Gapi's client
+        // code.
+        this.gapiLoaded.next(true);
+        this.gapiLoaded.complete();
 
-        // TODO(girum): Move me out to my own file that runs only after
-        // gapi.drive.realtime has been loaded by gapi.load().
-        gapi.drive.realtime.custom.registerType(Card, 'Card');
-        Card.prototype.x = gapi.drive.realtime.custom.collaborativeField('x');
-        Card.prototype.y = gapi.drive.realtime.custom.collaborativeField('y');
-        Card.prototype.text =
-            gapi.drive.realtime.custom.collaborativeField('text');
-        Card.prototype.selected =
-            gapi.drive.realtime.custom.collaborativeField('selected');
+        // Also, immediately try to authorize the current user without showing
+        // him the authorize dialog. May fail if the user has never authorized
+        // our app before.
+        this.authorize(false);
       });
     });
   }

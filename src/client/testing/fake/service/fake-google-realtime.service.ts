@@ -1,13 +1,10 @@
 import {Injectable} from '@angular/core';
-import {GoogleRealtimeService} from '../../../app/service/google-realtime.service';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
-export class FakeGoogleRealtimeService extends GoogleRealtimeService {
+export class FakeGoogleRealtimeService {
 
-  realtimeDocumentWasLoaded = false;
-
-  loadRealtimeDocument(driveFileId: string): any {
-    this.realtimeDocumentWasLoaded = true;
-  }
+  currentDocument: BehaviorSubject<Document> =
+      new BehaviorSubject<Document>(null);
 
 }

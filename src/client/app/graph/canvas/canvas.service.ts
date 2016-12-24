@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {
   GoogleRealtimeService,
-  Card
 } from '../../service/google-realtime.service';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
+import {Card} from '../../model/card';
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
