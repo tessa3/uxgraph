@@ -1,5 +1,6 @@
 import {CanvasService} from './canvas.service';
 import {TestBed} from '@angular/core/testing';
+import {GoogleRealtimeService} from '../../service/google-realtime.service';
 
 export function main() {
   describe('Canvas service', () => {
@@ -8,10 +9,12 @@ export function main() {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
+          GoogleRealtimeService,
           CanvasService
         ]
       });
 
+      let googleRealtimeService = TestBed.get(GoogleRealtimeService);
       cs = TestBed.get(CanvasService);
     });
 

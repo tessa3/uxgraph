@@ -3,6 +3,7 @@ import {GoogleRealtimeService} from '../../service/google-realtime.service';
 import {DriveFile} from '../../model/drive-file';
 import {Observable} from 'rxjs';
 import {Collaborator} from '../../model/collaborator';
+import {GoogleDriveService} from '../../service/google-drive.service';
 
 /**
  * This class represents the App Header component.
@@ -29,7 +30,8 @@ export class GraphHeaderComponent implements OnInit {
 
   collaborators: Observable<Collaborator[]>;
 
-  constructor(private googleRealtimeService: GoogleRealtimeService) {
+  constructor(private googleDriveService: GoogleDriveService,
+              private googleRealtimeService: GoogleRealtimeService) {
     // We can't do anything in the constructor yet because the [graphId]
     // @Input from the template hasn't been bound.
     //
@@ -41,7 +43,7 @@ export class GraphHeaderComponent implements OnInit {
   ngOnInit(): void {
     // Once the @Input binding is available, fetch the rest of the data to put
     // into "this.currentGraph".
-    this.googleRealtimeService.getFile(this.graphId)
+    this.googleDriveService.getFile(this.graphId)
         .subscribe((driveFile: DriveFile) => {
           this.currentGraph = driveFile;
 
@@ -58,14 +60,14 @@ export class GraphHeaderComponent implements OnInit {
     // Once the PATCH request goes through, update the rest of the
     // "this.currentGraph" object to reflect the truth that the Google Drive API
     // just returned to us.
-    this.googleRealtimeService.updateFile(this.currentGraph)
+    this.googleDriveService.updateFile(this.currentGraph)
         .subscribe((driveFile: DriveFile) => {
           this.currentGraph = driveFile;
         });
   }
 
   openShareDialog(): void {
-    this.googleRealtimeService.openShareDialog(this.currentGraph.id);
+    this.googleDriveService.openShareDialog(this.currentGraph.id);
   }
 
 

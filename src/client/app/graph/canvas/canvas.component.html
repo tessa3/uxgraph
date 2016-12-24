@@ -5,6 +5,6 @@
      (mousedown)="this.onMousedown($event)"
      (mousewheel)="this.onMousewheel($event)">
   <g uxg-card
-     *ngFor="let card of (this.canvasService.cards2 | toIterable)"
+     *ngFor="let card of (this.canvasService.cards | toIterable)"
      [card]="card"></g>
 </svg>
