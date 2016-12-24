@@ -37,9 +37,7 @@ export type CanvasCoord = Point;
 @Injectable()
 export class CanvasService {
   // The models of the cards to show on the canvas.
-  // cards: Card[];
-
-  cards2: CollaborativeList<any>;
+  cards: CollaborativeList<any>;
 
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
@@ -89,7 +87,7 @@ export class CanvasService {
         model.getRoot().set('cards', collaborativeCards);
       }
 
-      this.cards2 = model.getRoot().get('cards');
+      this.cards = model.getRoot().get('cards');
     });
   }
 
@@ -136,9 +134,9 @@ export class CanvasService {
   }
 
   deselectCards() {
-    // this.cards.forEach((card: any) => {
-    //   card.selected = false;
-    // });
+    for (let i = 0; i < this.cards.length; i++) {
+      this.cards.get(i).selected = false;
+    }
   }
 
   addListener(listener: {(): void}) {
