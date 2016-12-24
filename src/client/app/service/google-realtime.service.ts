@@ -6,7 +6,7 @@ import {Router} from '@angular/router';
 import Document = gapi.drive.realtime.Document;
 import {GoogleDriveService} from './google-drive.service';
 import {registerCardModel} from '../model/card';
-
+import ObjectChangedEvent = gapi.drive.realtime.ObjectChangedEvent;
 
 
 const COLLABORATOR_JOINED = 'collaborator_joined';
@@ -77,9 +77,11 @@ export class GoogleRealtimeService {
 
         // Wire up the global change detector to run on every change.
         this.applicationRef.tick();
-        document.getModel().getRoot().addEventListener(OBJECT_CHANGED, () => {
-          this.applicationRef.tick();
-        });
+        document.getModel().getRoot()
+            .addEventListener(OBJECT_CHANGED, (event: ObjectChangedEvent) => {
+              console.log(event);
+              this.applicationRef.tick();
+            });
       }, (model) => {
         // Do nothing.
       }, (error) => {
