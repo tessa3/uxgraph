@@ -19,6 +19,7 @@ import {
 })
 export class CardComponent implements OnInit {
   // The card data to render on the canvas.
+  // TODO(girum): Give these realtime custom models real static types.
   @Input() card: any = null;
 
   // xPosition: number;
