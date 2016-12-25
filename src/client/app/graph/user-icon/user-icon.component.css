@@ -1,0 +1,16 @@
+:host {
+  margin: 4px;
+}
+
+.user-image {
+  height: 24px;
+  width: 24px;
+  background-color: lightgrey;
+  background-size: 24px;
+}
+
+.user-color {
+  background-color: lightgrey;
+  height: 8px;
+  width: 24px;
+}

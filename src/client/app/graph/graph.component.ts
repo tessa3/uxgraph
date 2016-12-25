@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import {GoogleRealtimeService} from '../service/google-realtime/google-realtime.service';
+import {GoogleRealtimeService} from '../service/google-realtime.service';
 
 /**
  * This class represents the lazy loaded GraphComponent.
@@ -16,11 +16,11 @@ export class GraphComponent implements OnInit {
   graphId: string;
 
   constructor(private googleRealtimeService: GoogleRealtimeService,
-              private route: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.route.params.forEach((params: Params) => {
+    this.activatedRoute.params.forEach((params: Params) => {
       this.graphId = params['graphId'];
       this.googleRealtimeService.loadRealtimeDocument(this.graphId);
     });

@@ -1,18 +1,21 @@
 import {Injectable, NgZone} from '@angular/core';
+import {AsyncSubject, Observable} from 'rxjs';
 import {
-    Http, URLSearchParams, Response,
-    RequestOptions, Headers, QueryEncoder
+  Http,
+  URLSearchParams,
+  Response,
+  Headers,
+  RequestOptions,
+  QueryEncoder
 } from '@angular/http';
-import {AsyncSubject} from 'rxjs/AsyncSubject';
-import {Observable} from 'rxjs/Observable';
-import CollaborativeString = gapi.drive.realtime.CollaborativeString;
-import 'rxjs/add/operator/switch';
+import {Router} from '@angular/router';
+import {DriveFile} from '../model/drive-file';
+import {registerCardModel} from '../model/card';
 
 
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
 const CLIENT_ID =
     '458941249796-jfvnbelhroiit38vhe5d69av0jjnoi7b.apps.googleusercontent.com';
-
 
 const GOOGLE_APIS_FILES_URL = 'https://www.googleapis.com/drive/v3/files';
 const GOOGLE_DRIVE_FIELDS_TO_QUERY = 'nextPageToken, files(id, name)';
@@ -21,47 +24,40 @@ const PAGE_SIZE = 10;
 const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 
 
-/**
- * Represents a single Google Drive file.
- *
- * This object is just metadata for the file. Data for the file is stored in
- * the Realtime Document.
- *
- * TODO(girum): Create an ngrx/store domain layer that automatically implements
- * Realtime Document manipulation.
- */
-export interface DriveFile {
-  id: string;
-  name: string;
-  mimeType: string;
-  kind: string;
-}
-
-/**
- * A service to authenticate and interact with Google's Realtime API.
- * Includes Google Drive API interaction.
- */
 @Injectable()
-export class GoogleRealtimeService {
+export class GoogleDriveService {
 
   /**
    * The OAuth token that Google gives back for the current client.
-   * TODO(girum): This should be a BehaviorSubject instead to handle reconnects.
-   *
-   * @type {AsyncSubject<GoogleApiOAuth2TokenObject>}
+   * TODO(girum): This should be a BehaviorSubject instead to handle
+   * reconnects.
    */
   oauthToken: AsyncSubject<GoogleApiOAuth2TokenObject> =
       new AsyncSubject<GoogleApiOAuth2TokenObject>();
 
-  constructor(private http: Http, private zone: NgZone) {
+
+  constructor(private http: Http,
+              private zone: NgZone,
+              private router: Router) {
     // Immediately load additional JavaScript code to interact with gapi
     // (gapi = "Google API" for JS).
     gapi.load('auth:client,drive-realtime,drive-share', () => {
       this.zone.run(() => {
+        // Once Gapi has downloaded the rest of the client JS code
+        // we need to run our app, we're able to register our custom
+        // Google Realtime model classes.
+        //
+        // All custom Realtime model classes must be registered this way.
+        registerCardModel();
+
+        // Also, immediately try to authorize the current user without showing
+        // him the authorize dialog. May fail if the user has never authorized
+        // our app before.
         this.authorize(false);
       });
     });
   }
+
 
   /**
    * Attempt to authorize with Google.
@@ -80,15 +76,27 @@ export class GoogleRealtimeService {
       immediate: !usePopup
     }, (response) => {
       this.zone.run(() => {
-        this.oauthToken.next(response);
-        this.oauthToken.complete();
+        if (usePopup === false && !!response.error) {
+          // If auto-login failed, then auto-send the user back to the home
+          // screen to manually log back in.
+          this.router.navigateByUrl('/');
+        }
+
+        // If login worked fine, then save the OAuth token.
+        if (!response.error) {
+          this.oauthToken.next(response);
+          this.oauthToken.complete();
+        }
       });
     });
   }
 
+
   /**
    * Schedules an HTTP request to Google Drive's /listFiles API endpoint, once
    * RxJS tells us that we have an OAuthToken to use.
+   *
+   * This method gets us the {@link DriveFile} data for several Drive IDs.
    *
    * Filters for our custom "uxgraph" MIME type.
    */
@@ -104,30 +112,6 @@ export class GoogleRealtimeService {
             return response.json().files;
           });
     }).switch();
-  }
-
-  /**
-   * Loads the Realtime-version of a Google Drive file by Id.
-   * Again, this code will automatically run anytime this.oauthToken changes
-   * according to RxJS.
-   *
-   * @param driveFileId The ID of the Google Drive file you'd like to load
-   *                    Realtime for.
-   */
-  loadRealtimeDocument(driveFileId: string) {
-    this.oauthToken.subscribe(() => {
-      gapi.drive.realtime.load(driveFileId, (document) => {
-        let collaborativeString =
-            document.getModel().getRoot().get('demo_string');
-        GoogleRealtimeService.wireTextBoxes(collaborativeString);
-      }, (model) => {
-        let string = model.createString();
-        string.setText('Welcome to uxgraph!');
-        model.getRoot().set('demo_string', string);
-      }, (error) => {
-        console.error('Error loading Realtime API: ', error);
-      });
-    });
   }
 
   /**
@@ -151,6 +135,58 @@ export class GoogleRealtimeService {
   }
 
   /**
+   * Schedules an HTTP request to Google Drive's /files API endpoint, once
+   * RxJS tells us that we have an OAuth token to use.
+   *
+   * This method gets us the {@link DriveFile} data for a single Drive ID.
+   */
+  getFile(fileId: string): Observable<DriveFile> {
+    return this.oauthToken.map(oauthToken => {
+      let params = new URLSearchParams('', new GoogleDriveQueryEncoder());
+      const fileUrl = GOOGLE_APIS_FILES_URL + '/' + fileId;
+
+      return this.get(oauthToken.access_token, fileUrl, params)
+          .map((response: Response) => {
+            return response.json();
+          });
+    }).switch();
+  }
+
+
+  openShareDialog(fileId: string) {
+    return this.oauthToken.subscribe(oauthToken => {
+      let shareClient = new gapi.drive.share.ShareClient();
+      shareClient.setOAuthToken(oauthToken.access_token);
+      shareClient.setItemIds([fileId]);
+      shareClient.showSettingsDialog();
+    });
+  }
+
+
+
+  /**
+   * Schedules an HTTP PATCH request to Google Drive's /files API endpoint,
+   * once RxJS tells us that we have an OAuth token to use.
+   *
+   * Takes an entire {@link DriveFile} object and updates any fields it sees.
+   */
+  updateFile(driveFile: DriveFile): Observable<DriveFile> {
+    return this.oauthToken.map(oauthToken => {
+      let patchBody = {
+        name: driveFile.name
+      };
+
+      const fileUrl = GOOGLE_APIS_FILES_URL + '/' + driveFile.id;
+
+      return this.patch(oauthToken.access_token, fileUrl, patchBody)
+          .map((response: Response) => {
+            return response.json();
+          });
+    }).switch();
+  }
+
+
+  /**
    * A little private helper for sending HTTP GET requests via Angular's HTTP
    * service.
    *
@@ -159,10 +195,10 @@ export class GoogleRealtimeService {
   private get(accessToken: string,
               requestUrl: string,
               urlParams: URLSearchParams): Observable<Response> {
-    GoogleRealtimeService.addDefaultUrlParams(urlParams);
+    GoogleDriveService.addDefaultUrlParams(urlParams);
 
     return this.http.get(requestUrl, new RequestOptions({
-      headers: GoogleRealtimeService.getDefaultHeaders(accessToken),
+      headers: GoogleDriveService.getDefaultHeaders(accessToken),
       search: urlParams
     }));
   }
@@ -174,12 +210,28 @@ export class GoogleRealtimeService {
    * This method automatically puts in a few HTTP headers and query params.
    */
   private post(accessToken: string,
-               requestUrl: string, body: Object): Observable<Response> {
+               requestUrl: string,
+               body: Object): Observable<Response> {
     let urlParams = new URLSearchParams();
-    GoogleRealtimeService.addDefaultUrlParams(urlParams);
+    GoogleDriveService.addDefaultUrlParams(urlParams);
 
     return this.http.post(requestUrl, body, new RequestOptions({
-      headers: GoogleRealtimeService.getDefaultHeaders(accessToken),
+      headers: GoogleDriveService.getDefaultHeaders(accessToken),
+      search: urlParams
+    }));
+  }
+
+  /**
+   * Similar to {@code post()} above, but for PATCH requests.
+   */
+  private patch(accessToken: string,
+                requestUrl: string,
+                body: Object): Observable<Response> {
+    let urlParams = new URLSearchParams();
+    GoogleDriveService.addDefaultUrlParams(urlParams);
+
+    return this.http.patch(requestUrl, body, new RequestOptions({
+      headers: GoogleDriveService.getDefaultHeaders(accessToken),
       search: urlParams
     }));
   }
@@ -206,26 +258,16 @@ export class GoogleRealtimeService {
     params.set('key', API_KEY);
   }
 
-  /**
-   * Temporary, hacky code ripped straight from Google's Realtime API tutorial.
-   *
-   * TODO(girum): Delete me once we wire up Realtime to ngrx/store.
-   */
-  private static wireTextBoxes(collaborativeString: CollaborativeString) {
-    let textArea1 = document.getElementById('text_area_1');
-    let textArea2 = document.getElementById('text_area_2');
-    gapi.drive.realtime.databinding
-        .bindString(collaborativeString, <HTMLInputElement>textArea1);
-    gapi.drive.realtime.databinding
-        .bindString(collaborativeString, <HTMLInputElement>textArea2);
-  }
+
 }
+
+
 
 /**
  * A little helper class to correctly encode URL parameters. We need this at
  * the moment to URL-encode our custom MIME type as a URL parameter.
  */
-export class GoogleDriveQueryEncoder extends QueryEncoder {
+class GoogleDriveQueryEncoder extends QueryEncoder {
   encodeKey(key: string) {
     return encodeURIComponent(key);
   }

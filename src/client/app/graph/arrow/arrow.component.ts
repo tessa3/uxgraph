@@ -21,16 +21,20 @@ export class ArrowComponent implements OnInit {
   // The current display position of the tip in the viewport's coordinate space.
   tipPosition: ViewportCoord = {x:0, y:0};
   // The model of the card that the tail of the arrow is attached to.
-  private fromCard: Card = null;
+  private fromCard: any = null;
   // The model of the card that the tip of the arrow is attached to.
-  private toCard: Card = null;
+  private toCard: any = null;
 
   constructor(private canvasService: CanvasService) {
   }
 
   ngOnInit() {
-    this.fromCard = this.canvasService.cards[this.arrow.fromCardId];
-    this.toCard = this.canvasService.cards[this.arrow.toCardId];
+    setTimeout(this.setup.bind(this), 1000);
+  }
+
+  setup() {
+    this.fromCard = this.canvasService.cards.get(this.arrow.fromCardId);
+    this.toCard = this.canvasService.cards.get(this.arrow.toCardId);
     this.update();
     this.canvasService.addListener(this.update.bind(this));
   }

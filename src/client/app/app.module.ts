@@ -5,7 +5,6 @@ import {RouterModule} from '@angular/router';
 import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {routes} from './app.routes';
-
 import {GraphModule} from './graph/graph.module';
 import {HomeModule} from './home/home.module';
 import {SharedModule} from './shared/shared.module';
@@ -31,4 +30,5 @@ import {SharedModule} from './shared/shared.module';
 })
 
 export class AppModule {
+
 }
