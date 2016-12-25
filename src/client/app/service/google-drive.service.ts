@@ -11,6 +11,7 @@ import {
 import {Router} from '@angular/router';
 import {DriveFile} from '../model/drive-file';
 import {registerCardModel} from '../model/card';
+import {registerArrowModel} from '../model/arrow';
 
 
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
@@ -49,6 +50,7 @@ export class GoogleDriveService {
         //
         // All custom Realtime model classes must be registered this way.
         registerCardModel();
+        registerArrowModel();
 
         // Also, immediately try to authorize the current user without showing
         // him the authorize dialog. May fail if the user has never authorized

@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CanvasService, ViewportCoord } from '../canvas/canvas.service';
-import './arrow';
+import {
+  GoogleRealtimeService,
+  OBJECT_CHANGED
+} from '../../service/google-realtime.service';
 
 /**
  * This class represents the Arrow component.
@@ -13,7 +16,7 @@ import './arrow';
 })
 export class ArrowComponent implements OnInit {
   // The arrow data to render on the canvas.
-  @Input() arrow: Arrow = null;
+  @Input() arrow: any = null;
   // The current scale factor of the arrow shape.
   scale: number = 1;
   // The current display position of the tail in the viewport's coordinate
@@ -26,20 +29,21 @@ export class ArrowComponent implements OnInit {
   // The model of the card that the tip of the arrow is attached to.
   private toCard: any = null;
 
-  constructor(private canvasService: CanvasService) {
+  constructor(private canvasService: CanvasService,
+              private googleRealtimeService: GoogleRealtimeService) {
   }
 
   ngOnInit() {
-    setTimeout(this.setup.bind(this), 1000);
-  }
-
-  setup() {
     this.fromCard = this.canvasService.cards.get(this.arrow.fromCardId);
     this.toCard = this.canvasService.cards.get(this.arrow.toCardId);
     this.update();
     this.canvasService.addListener(this.update.bind(this));
-    this.fromCard.addEventListener(gapi.drive.realtime.EventType.VALUE_CHANGED, this.update.bind(this));
-    this.toCard.addEventListener(gapi.drive.realtime.EventType.VALUE_CHANGED, this.update.bind(this));
+    this.googleRealtimeService.currentDocument.subscribe(document => {
+      // TODO(eyuelt): change this. this causes a redraw whenever any object in
+      // the whole document changes.
+      document.getModel().getRoot()
+          .addEventListener(OBJECT_CHANGED, this.update.bind(this));
+    });
   }
 
   // Called by the CanvasService when a zoom or pan occurs

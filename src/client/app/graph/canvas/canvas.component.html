@@ -4,8 +4,9 @@
      xmlns:xlink="http://www.w3.org/1999/xlink"
      (mousedown)="this.onMousedown($event)"
      (mousewheel)="this.onMousewheel($event)">
-  <!-- TODO(eyuelt): fix this -->
-  <g uxg-arrow *ngFor="let arrow of this.canvasService.arrows" [arrow]="arrow"></g>
+  <g uxg-arrow
+     *ngFor="let arrow of (this.canvasService.arrows | toIterable)"
+     [arrow]="arrow"></g>
   <g uxg-card
      *ngFor="let card of (this.canvasService.cards | toIterable)"
      [card]="card"></g>

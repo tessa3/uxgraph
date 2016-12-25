@@ -4,7 +4,7 @@ import {
 } from '../../service/google-realtime.service';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 import {Card} from '../../model/card';
-import '../arrow/arrow';
+import {Arrow} from '../../model/arrow';
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
@@ -40,7 +40,7 @@ export class CanvasService {
   // The models of the cards to show on the canvas.
   cards: CollaborativeList<any>;
   // The models of the arrows to show on the canvas.
-  arrows: Arrow[] = []; //TODO(eyuelt): change to CollaborativeList
+  arrows: CollaborativeList<any>;
 
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
@@ -64,7 +64,6 @@ export class CanvasService {
   private kMaxZoomScale: number = 10.0;
 
   constructor(private googleRealtimeService: GoogleRealtimeService) {
-    this.arrows.push(new Arrow(0, 1)); //TODO: remove this
     this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
       if (currentDocument === null) {
         return;
@@ -92,6 +91,19 @@ export class CanvasService {
       }
 
       this.cards = model.getRoot().get('cards');
+
+      // Lazily instantiate some collaborative arrows.
+      if (model.getRoot().get('arrows') === null) {
+        console.log('no "arrows" object at root');
+        let arrow = model.create(Arrow);
+        arrow.fromCardId = 0;
+        arrow.toCardId = 1;
+
+        let collaborativeArrows = model.createList([arrow]);
+        model.getRoot().set('arrows', collaborativeArrows);
+      }
+
+      this.arrows = model.getRoot().get('arrows');
     });
   }
 
