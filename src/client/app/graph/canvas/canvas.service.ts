@@ -65,7 +65,6 @@ export class CanvasService {
 
   constructor(private googleRealtimeService: GoogleRealtimeService) {
     this.arrows.push(new Arrow(0, 1)); //TODO: remove this
-    setInterval(() => { this.notifyListeners(); } , 16); //TODO: remove this
     this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
       if (currentDocument === null) {
         return;

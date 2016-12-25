@@ -16,7 +16,8 @@ export class ArrowComponent implements OnInit {
   @Input() arrow: Arrow = null;
   // The current scale factor of the arrow shape.
   scale: number = 1;
-  // The current display position of the tail in the viewport's coordinate space.
+  // The current display position of the tail in the viewport's coordinate
+  // space. This will also be used as the origin of the SVG coordinate space.
   tailPosition: ViewportCoord = {x:0, y:0};
   // The current display position of the tip in the viewport's coordinate space.
   tipPosition: ViewportCoord = {x:0, y:0};
@@ -37,6 +38,8 @@ export class ArrowComponent implements OnInit {
     this.toCard = this.canvasService.cards.get(this.arrow.toCardId);
     this.update();
     this.canvasService.addListener(this.update.bind(this));
+    this.fromCard.addEventListener(gapi.drive.realtime.EventType.VALUE_CHANGED, this.update.bind(this));
+    this.toCard.addEventListener(gapi.drive.realtime.EventType.VALUE_CHANGED, this.update.bind(this));
   }
 
   // Called by the CanvasService when a zoom or pan occurs
@@ -51,8 +54,8 @@ export class ArrowComponent implements OnInit {
   }
 
   // Convert the tail/tip points to the string format expected by SVG polyline.
-  // TODO: change this to a property that gets updated whenever the tail/tip change. that way,
-  // when the property changes, change detection is triggered. also this will support >2 points.
+  // TODO: change this to a property that gets updated whenever the tail/tip change.
+  // otherwise, this function will get called every time the change detector runs
   pointsString() {
     const tail = this.tailPosition;
     const tip = this.tipPosition;
