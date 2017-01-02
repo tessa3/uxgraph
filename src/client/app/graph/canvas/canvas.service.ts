@@ -155,6 +155,9 @@ export class CanvasService {
     }
   }
 
+  // TODO(eyuelt): Get rid of this listener stuff. Instead, the objects that
+  // want to listen should just register with realtime for changes to the scale
+  // or originOffset properties of the canvasService.
   addListener(listener: {(): void}) {
     this.listeners.push(listener);
   }

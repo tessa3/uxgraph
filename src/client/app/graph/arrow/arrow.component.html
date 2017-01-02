@@ -1,10 +1,15 @@
-<svg:g x="0"
-       y="0"
-       attr.transform="translate({{tailPosition.x}},{{tailPosition.y}})">
+<svg:g x="0" y="0">
+  <polygon vector-effect="non-scaling-stroke"
+           fill="#f00"
+           stroke="#f00"
+           stroke-width="1"
+           attr.transform="translate({{tipPosition.x}},{{tipPosition.y}}) scale({{scale}})"
+           points="-7,-2 -7,2 0,0">
+  </polygon>
   <polyline vector-effect="non-scaling-stroke"
             fill="none"
             stroke="#f00"
-            stroke-width="2"
+            stroke-width="1"
             attr.points="{{pointsString()}}">
   </polyline>
 </svg:g>
