@@ -23,6 +23,9 @@ export class CardComponent implements OnInit, AfterViewInit {
   // TODO(girum): Give these realtime custom models real static types.
   @Input() card: any = null;
 
+  // A function pointer to the CanvasService's "getBounds()" function.
+  @Input() canvasBoundsGetter: (() => ClientRect);
+
   @ViewChild('cardTextArea') cardTextArea: ElementRef;
 
   // The current scale factor of the card shape.
@@ -68,7 +71,7 @@ export class CardComponent implements OnInit, AfterViewInit {
   onMousedown(event: MouseEvent) {
     if (EventUtils.eventIsFromPrimaryButton(event)) {
       this.dragging = true;
-      const canvasBounds = this.canvasService.getCanvasBounds();
+      const canvasBounds = this.canvasBoundsGetter();
       this.lastDragPnt = {
         x: event.clientX - canvasBounds.left,
         y: event.clientY - canvasBounds.top
@@ -86,7 +89,7 @@ export class CardComponent implements OnInit, AfterViewInit {
   onMousemove(event: MouseEvent) {
     if (this.dragging) {
       event.preventDefault();
-      const canvasBounds = this.canvasService.getCanvasBounds();
+      const canvasBounds = this.canvasBoundsGetter();
       const newDragPnt = {
         x: event.clientX - canvasBounds.left,
         y: event.clientY - canvasBounds.top
