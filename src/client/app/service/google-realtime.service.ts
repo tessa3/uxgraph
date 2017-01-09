@@ -64,7 +64,6 @@ export class GoogleRealtimeService {
         this.applicationRef.tick();
         document.getModel().getRoot()
             .addEventListener(OBJECT_CHANGED, (event: ObjectChangedEvent) => {
-              console.log(event);
               this.applicationRef.tick();
             });
       }, (model) => {

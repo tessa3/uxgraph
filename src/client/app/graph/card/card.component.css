@@ -5,9 +5,18 @@
 }
 
 textarea {
-  background-color: transparent;
+  background-color: lightblue;
   border: none;
   resize: none;
   outline: none;
   text-align: center;
+}
+
+.textarea-caret {
+  position: fixed;
+  background-color: red;
+  height: 16px;
+  width: 1px;
+  top: 0;
+  left: 0;
 }

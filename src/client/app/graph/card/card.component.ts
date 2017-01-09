@@ -1,5 +1,5 @@
 import {
-  Component, Input, OnInit, HostListener
+  Component, Input, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit
 } from '@angular/core';
 import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
 import {EventUtils} from '../../utils/event-utils';
@@ -17,10 +17,13 @@ import {
   templateUrl: 'card.component.html',
   styleUrls: ['card.component.css']
 })
-export class CardComponent implements OnInit {
+export class CardComponent implements OnInit, AfterViewInit {
+
   // The card data to render on the canvas.
   // TODO(girum): Give these realtime custom models real static types.
   @Input() card: any = null;
+
+  @ViewChild('cardTextArea') cardTextArea: ElementRef;
 
   // The current scale factor of the card shape.
   scale: number = 1;
@@ -52,6 +55,10 @@ export class CardComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    // this.cardTextArea.nativeElement.
+  }
+
   // Called by the CanvasService when a zoom or pan occurs
   update() {
     this.scale = this.canvasService.zoomScale;
@@ -74,6 +81,7 @@ export class CardComponent implements OnInit {
   }
 
   // Put mousemove on document to allow dragging outside of canvas
+  //noinspection JSUnusedGlobalSymbols
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
     if (this.dragging) {
@@ -94,12 +102,23 @@ export class CardComponent implements OnInit {
   }
 
   // Put mouseup on document to end drag even if mouseup is outside of canvas
+  //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     if (this.dragging) {
       this.dragging = false;
       this.lastDragPnt = null;
     }
+  }
+
+  onCardTextareaKeyup(textAreaValue: string) {
+    this.card.text = textAreaValue;
+
+    let textAreaElement = this.cardTextArea.nativeElement;
+    let caretCoordinates = (<any>window).getCaretCoordinates(
+        textAreaElement,
+        textAreaElement.selectionEnd);
+    console.log('caret coordinates: ', caretCoordinates);
   }
 
 }
