@@ -22,9 +22,6 @@ export class CardComponent implements OnInit {
   // TODO(girum): Give these realtime custom models real static types.
   @Input() card: any = null;
 
-  // xPosition: number;
-  // yPosition: number;
-
   // The current scale factor of the card shape.
   scale: number = 1;
   // The current display position in the viewport's coordinate space.
@@ -45,6 +42,10 @@ export class CardComponent implements OnInit {
   ngOnInit() {
     this.position = this.canvasService.canvasCoordToViewportCoord(this.card);
     this.canvasService.addListener(this.update.bind(this));
+
+    // TODO(girum): Only call update() for this card for change events for this
+    // card. That is, don't call update() for this card if some other card
+    // changed.
     this.googleRealtimeService.currentDocument.subscribe(document => {
       document.getModel().getRoot()
           .addEventListener(OBJECT_CHANGED, this.update.bind(this));

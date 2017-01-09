@@ -36,13 +36,14 @@
                [style.width] = "size.width + 'px'"
                [style.height] = "size.height + 'px'">
       <xhtml:textarea xmlns="http://www.w3.org/1999/xhtml"
-                      #text
+                      #cardTextArea
                       [style.width] = "size.width + 'px'"
                       [style.max-height] = "size.height + 'px'"
                       [style.border-radius] = "cornerRadius + 'px'"
                       [ngModel]="card.text"
-                      (change)="card.text = text.value"
-                      autosize></xhtml:textarea>
+                      (keyup)="card.text = cardTextArea.value"
+                      autosize>
+      </xhtml:textarea>
     </xhtml:div>
   </foreignObject>
 </svg:g>
