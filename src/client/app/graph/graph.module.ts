@@ -8,11 +8,14 @@ import {CardComponent} from './card/card.component';
 import {SidePanelComponent} from './side-panel/side-panel.component';
 import {GraphHeaderComponent} from './graph-header/graph-header.component';
 import {UserIconComponent} from './user-icon/user-icon.component';
+import {ToIterablePipe} from './canvas/to-iterable.pipe';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
-  imports: [CommonModule, SharedModule],
+  imports: [CommonModule, SharedModule, ReactiveFormsModule],
   declarations: [
+    ToIterablePipe,
     CardComponent,
     CanvasComponent,
     GraphComponent,

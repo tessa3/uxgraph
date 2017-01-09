@@ -1,81 +1,53 @@
-// import {GoogleRealtimeService} from './google-realtime.service';
-// import {
-//   Http, RequestOptions
-// } from '@angular/http';
-// import {MockBackend} from '@angular/http/testing/mock_backend';
-// import {FakeGapi} from '../../../testing/gapi/fake-gapi';
-
+import {GoogleRealtimeService} from './google-realtime.service';
+import {FakeGapi} from '../../testing/fake/fake-gapi';
+import {TestBed} from '@angular/core/testing';
+import {Http} from '@angular/http';
+import {GoogleDriveService} from './google-drive.service';
+import {FakeRouter} from '../../testing/fake/fake-router';
+import {Router} from '@angular/router';
+import {FakeHttp} from '../../testing/fake/fake-http';
 export function main() {
-  // describe('Google Realtime Service', () => {
-  //   let googleRealtimeService: GoogleRealtimeService;
-  //   let fakeGapi: FakeGapi;
-  //
-  //   beforeEach(() => {
-  //     (<any>window).gapi = fakeGapi = new FakeGapi();
-  //
-  //     let injector = ReflectiveInjector.resolveAndCreate([
-  //       disableDeprecatedForms(),
-  //       provideForms(),
-  //       HTTP_PROVIDERS,
-  //       GoogleRealtimeService,
-  //       BaseRequestOptions,
-  //       MockBackend,
-  //       provide(Http, {
-  //         useFactory: function(backend: ConnectionBackend,
-  //                              defaultOptions: BaseRequestOptions) {
-  //           return new Http(backend, defaultOptions);
-  //         },
-  //         deps: [MockBackend, BaseRequestOptions]
-  //       }),
-  //     ]);
-  //
-  //     googleRealtimeService = injector.get(GoogleRealtimeService);
-  //   });
-  //
-  //
-  //   it('should authorize with a popup', () => {
-  //     let mockHttp = new Http(new MockBackend(), new RequestOptions());
-  //     googleRealtimeService = new GoogleRealtimeService(mockHttp);
-  //
-  //     // Authorization without popup already happens in the constructor!
-  //     expect(fakeGapi.isLoaded).toBe(true);
-  //     expect(fakeGapi.auth.isAuthorized).toBe(true);
-  //
-  //     googleRealtimeService.authorize(true);
-  //
-  //     // Should still be authorized.
-  //     expect(fakeGapi.auth.isAuthorized).toBe(true);
-  //   });
-  //
-  //
-  //   // it('should authorize without a popup', () => {
-  //   //   let mockHttp = new Http(new MockBackend(), new RequestOptions());
-  //   //   googleRealtimeService = new GoogleRealtimeService(mockHttp);
-  //   //
-  //   //   // Authorization without popup already happens in the constructor!
-  //   //   expect(fakeGapi.isLoaded).toBe(true);
-  //   //   expect(fakeGapi.auth.isAuthorized).toBe(true);
-  //   //
-  //   //   googleRealtimeService.authorize(false);
-  //   //
-  //   //   // Should still be authorized.
-  //   //   expect(fakeGapi.auth.isAuthorized).toBe(true);
-  //   // });
-  //
-  //
-  //   it('should filter out files for MIME type uxgraph', () => {
-  //      expect(googleRealtimeService).not.toBeNull();
-  //   });
-  //
-  //
-  //   it('should load the Realtime Model', () => {
-  //     expect(googleRealtimeService).not.toBeNull();
-  //   });
-  //
-  //
-  //   it('should create files on Google Drive of MIME type uxgraph', () => {
-  //     expect(googleRealtimeService).not.toBeNull();
-  //   });
-  //
-  // });
+  describe('Google Realtime Service', () => {
+    let googleRealtimeService: GoogleRealtimeService;
+    let fakeGapi: FakeGapi;
+
+    beforeEach(() => {
+      // Override the window.gapi global API with our fake implementation.
+      (<any>window).gapi = fakeGapi = new FakeGapi();
+
+      TestBed.configureTestingModule({
+        providers: [
+          {provide: Http, useClass: FakeHttp},
+          {provide: Router, useClass: FakeRouter},
+          GoogleDriveService,
+          GoogleRealtimeService
+        ]
+      });
+
+      googleRealtimeService = TestBed.get(GoogleRealtimeService);
+    });
+
+
+    it('should be able to load a Realtime document by id', () => {
+      expect(googleRealtimeService).not.toBeNull();
+    });
+
+
+    it('should read the set of collaborators from the document', () => {
+      expect(googleRealtimeService).not.toBeNull();
+    });
+
+
+    it('should dynamically update the set of collaborators too', () => {
+      expect(googleRealtimeService).not.toBeNull();
+    });
+
+
+    it('should redirect back to the homepage if the user does not ' +
+        'have permission to view the current uxgraph', () => {
+      expect(googleRealtimeService).not.toBeNull();
+    });
+
+
+  });
 }

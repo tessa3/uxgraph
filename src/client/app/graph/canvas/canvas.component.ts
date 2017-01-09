@@ -106,4 +106,5 @@ export class CanvasComponent {
       this.canvasService.multiSelectMode = false;
     }
   }
+
 }

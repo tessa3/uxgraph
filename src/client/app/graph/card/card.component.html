@@ -1,6 +1,7 @@
 <svg:g x="0"
        y="0"
        attr.transform="translate({{position.x}},{{position.y}}) scale({{scale}})"
+       xmlns:xhtml="http://www.w3.org/1999/xhtml"
        (mousedown)="this.onMousedown($event)">
   <defs>
     <filter id="drop-shadow">
@@ -35,10 +36,14 @@
                [style.width] = "size.width + 'px'"
                [style.height] = "size.height + 'px'">
       <xhtml:textarea xmlns="http://www.w3.org/1999/xhtml"
+                      #cardTextArea
                       [style.width] = "size.width + 'px'"
                       [style.max-height] = "size.height + 'px'"
                       [style.border-radius] = "cornerRadius + 'px'"
-                      autosize>{{card.text}}</xhtml:textarea>
+                      [ngModel]="card.text"
+                      (keyup)="card.text = cardTextArea.value"
+                      autosize>
+      </xhtml:textarea>
     </xhtml:div>
   </foreignObject>
 </svg:g>

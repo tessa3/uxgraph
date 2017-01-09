@@ -2,8 +2,11 @@ import {
   Component, Input, OnInit, HostListener
 } from '@angular/core';
 import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
-import './card';
 import {EventUtils} from '../../utils/event-utils';
+import {
+  GoogleRealtimeService,
+  OBJECT_CHANGED
+} from '../../service/google-realtime.service';
 
 /**
  * This class represents the Card component.
@@ -16,7 +19,9 @@ import {EventUtils} from '../../utils/event-utils';
 })
 export class CardComponent implements OnInit {
   // The card data to render on the canvas.
-  @Input() card: Card = null;
+  // TODO(girum): Give these realtime custom models real static types.
+  @Input() card: any = null;
+
   // The current scale factor of the card shape.
   scale: number = 1;
   // The current display position in the viewport's coordinate space.
@@ -30,12 +35,21 @@ export class CardComponent implements OnInit {
   // The last point seen during the drag that is currently in progress.
   private lastDragPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
 
-  constructor(private canvasService: CanvasService) {
+  constructor(private canvasService: CanvasService,
+              private googleRealtimeService: GoogleRealtimeService) {
   }
 
   ngOnInit() {
     this.position = this.canvasService.canvasCoordToViewportCoord(this.card);
     this.canvasService.addListener(this.update.bind(this));
+
+    // TODO(girum): Only call update() for this card for change events for this
+    // card. That is, don't call update() for this card if some other card
+    // changed.
+    this.googleRealtimeService.currentDocument.subscribe(document => {
+      document.getModel().getRoot()
+          .addEventListener(OBJECT_CHANGED, this.update.bind(this));
+    });
   }
 
   // Called by the CanvasService when a zoom or pan occurs
