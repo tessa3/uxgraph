@@ -1,4 +1,4 @@
-import {Component, HostListener, ElementRef, DoCheck} from '@angular/core';
+import {Component, HostListener, ElementRef} from '@angular/core';
 import {CanvasService, Point} from './canvas.service';
 import {EventUtils} from '../../utils/event-utils';
 
@@ -12,7 +12,7 @@ import {EventUtils} from '../../utils/event-utils';
   styleUrls: ['canvas.component.css'],
   providers: [CanvasService]
 })
-export class CanvasComponent implements DoCheck {
+export class CanvasComponent {
   // Whether or not panning is in progress.
   private panning: boolean = false;
   // The last point seen during the pan that is currently in progress.
@@ -107,7 +107,4 @@ export class CanvasComponent implements DoCheck {
     }
   }
 
-  ngDoCheck(): void {
-    // Do nothing?
-  }
 }
