@@ -35,18 +35,16 @@
     <xhtml:div class="textarea-container"
                [style.width] = "size.width + 'px'"
                [style.height] = "size.height + 'px'">
-      <xhtml:div>
-        <xhtml:textarea xmlns="http://www.w3.org/1999/xhtml"
-                        #cardTextArea
-                        [style.width] = "size.width + 'px'"
-                        [style.max-height] = "size.height + 'px'"
-                        [style.border-radius] = "cornerRadius + 'px'"
-                        [ngModel]="card.text"
-                        (keyup)="onCardTextareaKeyup(cardTextArea.value)"
-                        autosize>
-        </xhtml:textarea>
-        <xhtml:div class="textarea-caret"></xhtml:div>
-      </xhtml:div>
+      <xhtml:textarea xmlns="http://www.w3.org/1999/xhtml"
+                      #cardTextArea
+                      [style.width] = "size.width + 'px'"
+                      [style.max-height] = "size.height + 'px'"
+                      [style.border-radius] = "cornerRadius + 'px'"
+                      [ngModel]="card.text"
+                      (keyup)="onCardTextareaKeyup(cardTextArea.value)"
+                      autosize>
+      </xhtml:textarea>
+      <xhtml:div class="textarea-caret"></xhtml:div>
     </xhtml:div>
   </foreignObject>
 </svg:g>

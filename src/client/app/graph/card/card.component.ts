@@ -69,7 +69,10 @@ export class CardComponent implements OnInit, AfterViewInit {
   }
 
   onMousedown(event: MouseEvent) {
-    if (EventUtils.eventIsFromPrimaryButton(event)) {
+    if (EventUtils.eventIsFromPrimaryButton(event) &&
+        // Don't let the user initiate "drag" if initiated from within the
+        // card's <textarea>.
+        !(event.srcElement instanceof HTMLTextAreaElement)) {
       this.dragging = true;
       const canvasBounds = this.canvasBoundsGetter();
       this.lastDragPnt = {
