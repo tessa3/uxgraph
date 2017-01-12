@@ -38,8 +38,9 @@
       <xhtml:textarea xmlns="http://www.w3.org/1999/xhtml"
                       #cardTextArea
                       [style.width] = "size.width + 'px'"
-                      [style.max-height] = "size.height + 'px'"
+                      [style.height] = "size.height + 'px'"
                       [style.border-radius] = "cornerRadius + 'px'"
+                      [style.font-size] = "(14 / scale) + 'px'"
                       [ngModel]="card.text"
                       (keyup)="onCardTextareaKeyup(cardTextArea.value)"
                       autosize>
