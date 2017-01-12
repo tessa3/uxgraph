@@ -1,7 +1,18 @@
 import {
-  Component, Input, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit
+  Component,
+  Input,
+  OnInit,
+  HostListener,
+  ViewChild,
+  ElementRef,
+  AfterViewInit
 } from '@angular/core';
-import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
+import {
+  CanvasService,
+  ViewportCoord,
+  Point,
+  Size
+} from '../canvas/canvas.service';
 import {EventUtils} from '../../utils/event-utils';
 import {
   GoogleRealtimeService,
@@ -36,6 +47,7 @@ export class CardComponent implements OnInit, AfterViewInit {
   size: Size = {width:60, height:80};
   // The radius of the rounded corners in the canvas' coordinate space.
   cornerRadius: number = 5;
+
   // Whether or not dragging is in progress.
   private dragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
@@ -69,10 +81,10 @@ export class CardComponent implements OnInit, AfterViewInit {
   }
 
   onMousedown(event: MouseEvent) {
-    if (EventUtils.eventIsFromPrimaryButton(event) &&
-        // Don't let the user initiate "drag" if initiated from within the
-        // card's <textarea>.
-        !(event.srcElement instanceof HTMLTextAreaElement)) {
+    if (EventUtils.eventIsFromPrimaryButton(event)) {
+        // // Don't let the user initiate "drag" if initiated from within the
+        // // card's <textarea>.
+        // !(event.srcElement instanceof HTMLTextAreaElement)
       this.dragging = true;
       const canvasBounds = this.canvasBoundsGetter();
       this.lastDragPnt = {
