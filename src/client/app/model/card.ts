@@ -34,4 +34,8 @@ export const registerCardModel = function() {
       gapi.drive.realtime.custom.collaborativeField('text');
   Card.prototype.selected =
       gapi.drive.realtime.custom.collaborativeField('selected');
+  Card.prototype.incomingArrow =
+      gapi.drive.realtime.custom.collaborativeField('incomingArrow');
+  Card.prototype.outgoingArrow =
+      gapi.drive.realtime.custom.collaborativeField('outgoingArrow');
 };

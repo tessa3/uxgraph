@@ -24,18 +24,12 @@ export class ArrowComponent implements OnInit {
   // The current display position of the tip of the arrow. This is the same as
   // the last point in anchorPoints, so this property is just for convenience.
   tipPosition: ViewportCoord = {x:0, y:0};
-  // The model of the card that the tail of the arrow is attached to.
-  private fromCard: any = null; // TODO(eyuelt): type should be Card
-  // The model of the card that the tip of the arrow is attached to.
-  private toCard: any = null; // TODO(eyuelt): type should be Card
 
   constructor(private canvasService: CanvasService,
               private googleRealtimeService: GoogleRealtimeService) {
   }
 
   ngOnInit() {
-    this.fromCard = this.canvasService.cards.get(this.arrow.fromCardId);
-    this.toCard = this.canvasService.cards.get(this.arrow.toCardId);
     this.update();
     this.canvasService.addListener(this.update.bind(this));
     this.googleRealtimeService.currentDocument.subscribe(document => {
@@ -49,13 +43,6 @@ export class ArrowComponent implements OnInit {
   // Called by the CanvasService when a zoom or pan occurs
   update() {
     this.scale = this.canvasService.zoomScale;
-
-    // TODO: don't hard code card sizes here
-    let fromCardPoint = {x: this.fromCard.x + 60, y: this.fromCard.y + 40};
-    this.arrow.tailPosition = fromCardPoint;
-    let toCardPoint = {x: this.toCard.x, y: this.toCard.y + 40};
-    this.arrow.tipPosition = toCardPoint;
-
     this.tipPosition = this.canvasService.canvasCoordToViewportCoord(this.arrow.tipPosition);
     this.anchorPoints = this.getAnchorPoints();
   }

@@ -89,6 +89,21 @@ export class CardComponent implements OnInit {
         this.canvasService.viewportCoordToCanvasCoord(this.position);
       this.card.x = newCardPosition.x;
       this.card.y = newCardPosition.y;
+      // TODO: move all associated arrows too
+      let inArrow = this.card.incomingArrow;
+      if (inArrow) {
+        inArrow.tipPosition = {x: newCardPosition.x, y: newCardPosition.y + 40};
+        if (inArrow.fromCardId == null) {
+          inArrow.tailPosition = {x: newCardPosition.x - 50, y: newCardPosition.y + 40};
+        }
+      }
+      let outArrow = this.card.outgoingArrow;
+      if (outArrow) {
+        outArrow.tailPosition = {x: newCardPosition.x + 60, y: newCardPosition.y + 40};
+        if (outArrow.toCardId == null) {
+          outArrow.tipPosition = {x: newCardPosition.x + 60 + 50, y: newCardPosition.y + 40};
+        }
+      }
       this.lastDragPnt = newDragPnt;
     }
   }

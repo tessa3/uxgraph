@@ -71,35 +71,19 @@ export class CanvasService {
 
       let model = currentDocument.getModel();
 
-      // Lazily instantiate some collaborative cards.
+      // Lazily instantiate the collaborative cards array.
       if (model.getRoot().get('cards') === null) {
         console.log('no "cards" object at root');
-        let card1 = model.create(Card);
-        card1.x = 30;
-        card1.y = 30;
-        card1.text = 'some text';
-        card1.selected = false;
-
-        let card2 = model.create(Card);
-        card2.x = 100;
-        card2.y = 100;
-        card2.text = 'more text';
-        card2.selected = false;
-
-        let collaborativeCards = model.createList([card1, card2]);
+        let collaborativeCards = model.createList([]);
         model.getRoot().set('cards', collaborativeCards);
       }
 
       this.cards = model.getRoot().get('cards');
 
-      // Lazily instantiate some collaborative arrows.
+      // Lazily instantiate the collaborative arrows array.
       if (model.getRoot().get('arrows') === null) {
         console.log('no "arrows" object at root');
-        let arrow = model.create(Arrow);
-        arrow.fromCardId = 0;
-        arrow.toCardId = 1;
-
-        let collaborativeArrows = model.createList([arrow]);
+        let collaborativeArrows = model.createList([]);
         model.getRoot().set('arrows', collaborativeArrows);
       }
 

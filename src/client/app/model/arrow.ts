@@ -26,13 +26,6 @@ export const Arrow = function() {
  */
 export const registerArrowModel = function() {
   gapi.drive.realtime.custom.registerType(Arrow, 'Arrow');
-  /*
-   * TODO(eyuelt): change arrow/card movement logic to use the following:
-   * Positioning the arrow is primarily done with tailPosition and tipPosition.
-   * The associated cards are stored in fromCardId and toCardId. If tailPosition
-   * or tipPosition is empty, the positions may be computed from fromCardId and
-   * toCardId.
-   */
   Arrow.prototype.tailPosition =
       gapi.drive.realtime.custom.collaborativeField('tailPosition');
   Arrow.prototype.tipPosition =
