@@ -3,8 +3,6 @@ import {
   GoogleRealtimeService,
 } from '../../service/google-realtime.service';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
-import {Card} from '../../model/card';
-import {Arrow} from '../../model/arrow';
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
