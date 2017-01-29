@@ -1,12 +1,14 @@
 import {
   Component, Input, OnInit, HostListener
 } from '@angular/core';
-import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
-import {EventUtils} from '../../utils/event-utils';
+import { CanvasService, ViewportCoord } from '../canvas/canvas.service';
+import { Size } from '../../model/geometry';
+import { EventUtils } from '../../utils/event-utils';
 import {
   GoogleRealtimeService,
   OBJECT_CHANGED
 } from '../../service/google-realtime.service';
+import { Card } from '../../model/card';
 
 /**
  * This class represents the Card component.
@@ -20,7 +22,7 @@ import {
 export class CardComponent implements OnInit {
   // The card data to render on the canvas.
   // TODO(girum): Give these realtime custom models real static types.
-  @Input() card: any = null;
+  @Input() card: Card = null;
 
   // The current scale factor of the card shape.
   scale: number = 1;
@@ -33,14 +35,14 @@ export class CardComponent implements OnInit {
   // Whether or not dragging is in progress.
   private dragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
-  private lastDragPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
+  private lastDragPnt: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
 
   constructor(private canvasService: CanvasService,
               private googleRealtimeService: GoogleRealtimeService) {
   }
 
   ngOnInit() {
-    this.position = this.canvasService.canvasCoordToViewportCoord(this.card);
+    this.position = this.canvasService.canvasCoordToViewportCoord(this.card.position);
     this.canvasService.addListener(this.update.bind(this));
 
     // TODO(girum): Only call update() for this card for change events for this
@@ -55,7 +57,7 @@ export class CardComponent implements OnInit {
   // Called by the CanvasService when a zoom or pan occurs
   update() {
     this.scale = this.canvasService.zoomScale;
-    this.position = this.canvasService.canvasCoordToViewportCoord(this.card);
+    this.position = this.canvasService.canvasCoordToViewportCoord(this.card.position);
   }
 
   onMousedown(event: MouseEvent) {
@@ -87,8 +89,7 @@ export class CardComponent implements OnInit {
       this.position.y += newDragPnt.y - this.lastDragPnt.y;
       const newCardPosition =
         this.canvasService.viewportCoordToCanvasCoord(this.position);
-      this.card.x = newCardPosition.x;
-      this.card.y = newCardPosition.y;
+      this.card.position = {x: newCardPosition.x, y: newCardPosition.y};
       // TODO: move all associated arrows too
       let inArrow = this.card.incomingArrow;
       if (inArrow) {

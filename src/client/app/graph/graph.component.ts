@@ -36,15 +36,13 @@ export class GraphComponent implements OnInit {
       let numCards = model.getRoot().get('cards').length;
 
       let card1 = model.create(Card);
-      card1.x = 10 + numCards * 5;
-      card1.y = 10 + numCards * 5;
+      card1.position = {x: 10 + numCards * 5, y: 10 + numCards * 5};
       card1.text = 'card #' + numCards;
       card1.selected = false;
       model.getRoot().get('cards').push(card1);
 
       let card2 = model.create(Card);
-      card2.x = 10 + numCards * 5;
-      card2.y = 10 + numCards * 5;
+      card2.position = {x: 10 + numCards * 5, y: 10 + numCards * 5};
       card2.text = 'card #' + (numCards+1);
       card2.selected = false;
       model.getRoot().get('cards').push(card2);
@@ -52,22 +50,22 @@ export class GraphComponent implements OnInit {
       let arrow1 = model.create(Arrow);
       arrow1.fromCardId = null;
       arrow1.toCardId = numCards;
-      arrow1.tailPosition = {x: card1.x - 50, y: card1.y + 40};
-      arrow1.tipPosition = {x: card1.x, y: card1.y + 40};
+      arrow1.tailPosition = {x: card1.position.x - 50, y: card1.position.y + 40};
+      arrow1.tipPosition = {x: card1.position.x, y: card1.position.y + 40};
       model.getRoot().get('arrows').push(arrow1);
 
       let arrow2 = model.create(Arrow);
       arrow2.fromCardId = numCards;
       arrow2.toCardId = numCards+1;
-      arrow2.tailPosition = {x: card1.x + 60, y: card1.y + 40};
-      arrow2.tipPosition = {x: card2.x, y: card2.y + 40};
+      arrow2.tailPosition = {x: card1.position.x + 60, y: card1.position.y + 40};
+      arrow2.tipPosition = {x: card2.position.x, y: card2.position.y + 40};
       model.getRoot().get('arrows').push(arrow2);
 
       let arrow3 = model.create(Arrow);
       arrow3.fromCardId = numCards+1;
       arrow3.toCardId = null;
-      arrow3.tailPosition = {x: card2.x + 60, y: card2.y + 40};
-      arrow3.tipPosition = {x: card2.x + 60 + 50, y: card2.y + 40};
+      arrow3.tailPosition = {x: card2.position.x + 60, y: card2.position.y + 40};
+      arrow3.tipPosition = {x: card2.position.x + 60 + 50, y: card2.position.y + 40};
       model.getRoot().get('arrows').push(arrow3);
 
       card1.incomingArrow = arrow1;

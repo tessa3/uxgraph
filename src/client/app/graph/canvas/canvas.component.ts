@@ -1,5 +1,5 @@
 import {Component, HostListener, ElementRef} from '@angular/core';
-import {CanvasService, Point} from './canvas.service';
+import {CanvasService, ViewportCoord} from './canvas.service';
 import {EventUtils} from '../../utils/event-utils';
 
 /**
@@ -16,7 +16,7 @@ export class CanvasComponent {
   // Whether or not panning is in progress.
   private panning: boolean = false;
   // The last point seen during the pan that is currently in progress.
-  private lastPanPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
+  private lastPanPnt: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
 
   /*
    * Note: The following two methods are properties because they are defined at
