@@ -1,8 +1,8 @@
-import { CanvasCoord } from '../graph/canvas/canvas.service';
+import { Point } from './geometry';
 
 export class Arrow {
-  tailPosition: CanvasCoord;
-  tipPosition: CanvasCoord;
+  tailPosition: Point;
+  tipPosition: Point;
   fromCardId: string;
   toCardId: string;
 

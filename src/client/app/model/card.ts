@@ -1,8 +1,8 @@
+import { Point } from './geometry';
 import { Arrow } from './arrow';
 
 export class Card {
-  x: number;
-  y: number;
+  position: Point;
   text: string;
   selected: boolean;
   incomingArrow: Arrow;
@@ -10,10 +10,8 @@ export class Card {
 
   static registerModel() {
     gapi.drive.realtime.custom.registerType(Card, 'Card');
-    Card.prototype.x =
-      gapi.drive.realtime.custom.collaborativeField('x');
-    Card.prototype.y =
-      gapi.drive.realtime.custom.collaborativeField('y');
+    Card.prototype.position =
+      gapi.drive.realtime.custom.collaborativeField('position');
     Card.prototype.text =
       gapi.drive.realtime.custom.collaborativeField('text');
     Card.prototype.selected =

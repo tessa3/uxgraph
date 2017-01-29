@@ -42,7 +42,7 @@ export class CardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.position = this.canvasService.canvasCoordToViewportCoord(this.card);
+    this.position = this.canvasService.canvasCoordToViewportCoord(this.card.position);
     this.canvasService.addListener(this.update.bind(this));
 
     // TODO(girum): Only call update() for this card for change events for this
@@ -57,7 +57,7 @@ export class CardComponent implements OnInit {
   // Called by the CanvasService when a zoom or pan occurs
   update() {
     this.scale = this.canvasService.zoomScale;
-    this.position = this.canvasService.canvasCoordToViewportCoord(this.card);
+    this.position = this.canvasService.canvasCoordToViewportCoord(this.card.position);
   }
 
   onMousedown(event: MouseEvent) {
@@ -89,8 +89,7 @@ export class CardComponent implements OnInit {
       this.position.y += newDragPnt.y - this.lastDragPnt.y;
       const newCardPosition =
         this.canvasService.viewportCoordToCanvasCoord(this.position);
-      this.card.x = newCardPosition.x;
-      this.card.y = newCardPosition.y;
+      this.card.position = {x: newCardPosition.x, y: newCardPosition.y};
       // TODO: move all associated arrows too
       let inArrow = this.card.incomingArrow;
       if (inArrow) {
