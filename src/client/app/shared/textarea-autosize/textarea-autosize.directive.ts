@@ -22,7 +22,7 @@ export class TextareaAutosizeDirective implements AfterContentChecked {
 
   adjust() {
     this.element.nativeElement.style.overflow = 'hidden';
-    this.element.nativeElement.style.height = '80px';
-    // this.element.nativeElement.style.height = this.element.nativeElement.scrollHeight + 'px';
+    this.element.nativeElement.style.height = 'auto';
+    this.element.nativeElement.style.height = this.element.nativeElement.scrollHeight + 'px';
   }
 }

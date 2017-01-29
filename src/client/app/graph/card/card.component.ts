@@ -46,7 +46,7 @@ export class CardComponent implements OnInit, AfterViewInit {
   // The size of the card in the canvas' coordinate space.
   size: Size = {width:60, height:80};
   // The radius of the rounded corners in the canvas' coordinate space.
-  cornerRadius: number = 5;
+  cornerRadius: number = 1;
 
   caretCoordinates = {
     top: 0,

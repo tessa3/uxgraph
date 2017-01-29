@@ -1,7 +1,6 @@
 .textarea-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 100%;
   cursor: -webkit-grab;
   cursor: -moz-grab;
   cursor: grab;
@@ -9,13 +8,15 @@
 
 textarea {
   background-color: transparent;
-  color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.55);
+  margin-top: 16px;
+  height: 24px;
   border: none;
   resize: none;
   outline: none;
   text-align: center;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 12px;
+  font-size: 8px;
   font-weight: 300;
   max-height: 80px;
 }
