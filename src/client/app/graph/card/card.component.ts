@@ -2,11 +2,12 @@ import {
   Component, Input, OnInit, HostListener
 } from '@angular/core';
 import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
-import {EventUtils} from '../../utils/event-utils';
+import { EventUtils } from '../../utils/event-utils';
 import {
   GoogleRealtimeService,
   OBJECT_CHANGED
 } from '../../service/google-realtime.service';
+import { Card } from '../../model/card';
 
 /**
  * This class represents the Card component.
@@ -20,7 +21,7 @@ import {
 export class CardComponent implements OnInit {
   // The card data to render on the canvas.
   // TODO(girum): Give these realtime custom models real static types.
-  @Input() card: any = null;
+  @Input() card: Card = null;
 
   // The current scale factor of the card shape.
   scale: number = 1;

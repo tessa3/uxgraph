@@ -3,6 +3,8 @@ import {
   GoogleRealtimeService,
 } from '../../service/google-realtime.service';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
+import { Card } from '../../model/card';
+import { Arrow } from '../../model/arrow';
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
@@ -36,9 +38,9 @@ export type CanvasCoord = Point;
 @Injectable()
 export class CanvasService {
   // The models of the cards to show on the canvas.
-  cards: CollaborativeList<any>;
+  cards: CollaborativeList<Card>;
   // The models of the arrows to show on the canvas.
-  arrows: CollaborativeList<any>;
+  arrows: CollaborativeList<Arrow>;
 
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
