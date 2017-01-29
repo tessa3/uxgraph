@@ -3,7 +3,6 @@ import {
   GoogleRealtimeService,
 } from '../../service/google-realtime.service';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
-import {Card} from '../../model/card';
 
 // TODO(eyuelt): move these to the data model layer
 export interface Point {
@@ -38,6 +37,8 @@ export type CanvasCoord = Point;
 export class CanvasService {
   // The models of the cards to show on the canvas.
   cards: CollaborativeList<any>;
+  // The models of the arrows to show on the canvas.
+  arrows: CollaborativeList<any>;
 
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
@@ -68,26 +69,23 @@ export class CanvasService {
 
       let model = currentDocument.getModel();
 
-      // Lazily instantiate some collaborative cards.
+      // Lazily instantiate the collaborative cards array.
       if (model.getRoot().get('cards') === null) {
         console.log('no "cards" object at root');
-        let card1 = model.create(Card);
-        card1.x = 30;
-        card1.y = 30;
-        card1.text = 'some text';
-        card1.selected = false;
-
-        let card2 = model.create(Card);
-        card2.x = 100;
-        card2.y = 100;
-        card2.text = 'more text';
-        card2.selected = false;
-
-        let collaborativeCards = model.createList([card1, card2]);
+        let collaborativeCards = model.createList([]);
         model.getRoot().set('cards', collaborativeCards);
       }
 
       this.cards = model.getRoot().get('cards');
+
+      // Lazily instantiate the collaborative arrows array.
+      if (model.getRoot().get('arrows') === null) {
+        console.log('no "arrows" object at root');
+        let collaborativeArrows = model.createList([]);
+        model.getRoot().set('arrows', collaborativeArrows);
+      }
+
+      this.arrows = model.getRoot().get('arrows');
     });
   }
 
@@ -139,6 +137,9 @@ export class CanvasService {
     }
   }
 
+  // TODO(eyuelt): Get rid of this listener stuff. Instead, the objects that
+  // want to listen should just register with realtime for changes to the scale
+  // or originOffset properties of the canvasService.
   addListener(listener: {(): void}) {
     this.listeners.push(listener);
   }

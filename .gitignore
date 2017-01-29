@@ -10,3 +10,9 @@ coverage
 # IntelliJ files
 *.iml
 .idea/
+
+# VSCode files
+.vscode/
+
+# NPM files
+npm-debug.log

@@ -6,7 +6,7 @@
  *
  * @constructor
  */
-export const Card = function() {
+export const Arrow = function() {
   // Do nothing.
 };
 
@@ -24,18 +24,14 @@ export const Card = function() {
  *
  * All custom Google Realtime model classes must be registered this way.
  */
-export const registerCardModel = function() {
-  gapi.drive.realtime.custom.registerType(Card, 'Card');
-  Card.prototype.x =
-      gapi.drive.realtime.custom.collaborativeField('x');
-  Card.prototype.y =
-      gapi.drive.realtime.custom.collaborativeField('y');
-  Card.prototype.text =
-      gapi.drive.realtime.custom.collaborativeField('text');
-  Card.prototype.selected =
-      gapi.drive.realtime.custom.collaborativeField('selected');
-  Card.prototype.incomingArrow =
-      gapi.drive.realtime.custom.collaborativeField('incomingArrow');
-  Card.prototype.outgoingArrow =
-      gapi.drive.realtime.custom.collaborativeField('outgoingArrow');
+export const registerArrowModel = function() {
+  gapi.drive.realtime.custom.registerType(Arrow, 'Arrow');
+  Arrow.prototype.tailPosition =
+      gapi.drive.realtime.custom.collaborativeField('tailPosition');
+  Arrow.prototype.tipPosition =
+      gapi.drive.realtime.custom.collaborativeField('tipPosition');
+  Arrow.prototype.fromCardId =
+      gapi.drive.realtime.custom.collaborativeField('fromCardId');
+  Arrow.prototype.toCardId =
+      gapi.drive.realtime.custom.collaborativeField('toCardId');
 };
