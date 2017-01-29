@@ -36,8 +36,6 @@ export class CardComponent implements OnInit {
   // A function pointer to the CanvasService's "getBounds()" function.
   @Input() canvasBoundsGetter: (() => ClientRect);
 
-  @ViewChild('cardTextArea') cardTextArea: ElementRef;
-
   // The current scale factor of the card shape.
   scale: number = 1;
   // The current display position in the viewport's coordinate space.
