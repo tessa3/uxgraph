@@ -9,6 +9,7 @@
 
 textarea {
   background-color: transparent;
+  color: rgba(0, 0, 0, 0.15);
   border: none;
   resize: none;
   outline: none;
@@ -17,13 +18,4 @@ textarea {
   font-size: 12px;
   font-weight: 300;
   max-height: 80px;
-}
-
-.textarea-caret {
-  position: fixed;
-  background-color: red;
-  height: 16px;
-  width: 1px;
-  top: 0;
-  left: 0;
 }

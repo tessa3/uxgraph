@@ -48,6 +48,11 @@ export class CardComponent implements OnInit, AfterViewInit {
   // The radius of the rounded corners in the canvas' coordinate space.
   cornerRadius: number = 5;
 
+  caretCoordinates = {
+    top: 0,
+    left: 0
+  };
+
   // Whether or not dragging is in progress.
   private dragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
@@ -131,12 +136,14 @@ export class CardComponent implements OnInit, AfterViewInit {
 
   onCardTextareaKeyup(textAreaValue: string) {
     this.card.text = textAreaValue;
+  }
 
+  renderCaret() {
     let textAreaElement = this.cardTextArea.nativeElement;
-    let caretCoordinates = (<any>window).getCaretCoordinates(
+    this.caretCoordinates = (<any>window).getCaretCoordinates(
         textAreaElement,
         textAreaElement.selectionEnd);
-    console.log('caret coordinates: ', caretCoordinates);
+    console.log('caret coordinates: ', this.caretCoordinates);
   }
 
 }
