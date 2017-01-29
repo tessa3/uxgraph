@@ -38,7 +38,6 @@ export class CanvasComponent {
       return event.target === elementRef.nativeElement ||
         event.target === elementRef.nativeElement.firstChild;
     };
-    this.canvasService.setCanvasBoundsGetter(this.getBounds);
   }
 
   // TODO(eyuelt): should this use HostListener or the template event binding?

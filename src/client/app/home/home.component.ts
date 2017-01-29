@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   createNewGraph() {
     this.createGraphSub = this.googleDriveService
-        .createFile('Untitled uxgraph')
+        .createFile('Untitled')
         .subscribe((newGraph: DriveFile) => {
           this.router.navigateByUrl('/graph/' + newGraph.id);
         });

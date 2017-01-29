@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   moduleId: module.id,
@@ -6,4 +7,12 @@ import {Component} from '@angular/core';
   templateUrl: 'home-header.component.html',
   styleUrls: ['home-header.component.css']
 })
-export class HomeHeaderComponent {}
+export class HomeHeaderComponent implements OnInit {
+
+  constructor(private titleService: Title) {
+  }
+
+  ngOnInit(): void {
+    this.titleService.setTitle('uxgraph');
+  }
+}

@@ -35,8 +35,6 @@ export class CanvasService {
 
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
-  // Returns the bounding box of the canvas.
-  getCanvasBounds: {(): ClientRect} = null;
   // The offset of the viewport from its original position.
   originOffset: CanvasCoord = {x: 0, y: 0};
   // If true, multipe
@@ -100,13 +98,13 @@ export class CanvasService {
 
   // Zoom the canvas incrementally by incZoomScale, while keeping zoomPnt at
   // the same position relative to the viewport.
-  zoom(zoomPnt: ViewportCoord, incZoomScale: number) {
-    const toZoom = this.zoomScale * incZoomScale;
+  zoom(zoomPoint: ViewportCoord, incrementalZoomScale: number) {
+    const toZoom = this.zoomScale * incrementalZoomScale;
     if (toZoom > this.kMinZoomScale && toZoom < this.kMaxZoomScale) {
       this.originOffset.x +=
-          zoomPnt.x * (1 - (1 / incZoomScale)) / this.zoomScale;
+          zoomPoint.x * (1 - (1 / incrementalZoomScale)) / this.zoomScale;
       this.originOffset.y +=
-          zoomPnt.y * (1 - (1 / incZoomScale)) / this.zoomScale;
+          zoomPoint.y * (1 - (1 / incrementalZoomScale)) / this.zoomScale;
       this.zoomScale = toZoom;
       this.notifyListeners();
     }
@@ -117,11 +115,6 @@ export class CanvasService {
     this.originOffset.x += delta.x / this.zoomScale;
     this.originOffset.y += delta.y / this.zoomScale;
     this.notifyListeners();
-  }
-
-  // Set the function that returns the canvas' bounding box.
-  setCanvasBoundsGetter(fn: {(): ClientRect}) {
-    this.getCanvasBounds = fn;
   }
 
   deselectCards() {

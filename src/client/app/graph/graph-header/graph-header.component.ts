@@ -4,6 +4,7 @@ import {DriveFile} from '../../model/drive-file';
 import {Observable} from 'rxjs';
 import {Collaborator} from '../../model/collaborator';
 import {GoogleDriveService} from '../../service/google-drive.service';
+import {Title} from '@angular/platform-browser';
 
 /**
  * This class represents the App Header component.
@@ -31,7 +32,8 @@ export class GraphHeaderComponent implements OnInit {
   collaborators: Observable<Collaborator[]>;
 
   constructor(private googleDriveService: GoogleDriveService,
-              private googleRealtimeService: GoogleRealtimeService) {
+              private googleRealtimeService: GoogleRealtimeService,
+              private titleService: Title) {
     // We can't do anything in the constructor yet because the [graphId]
     // @Input from the template hasn't been bound.
     //
@@ -46,6 +48,7 @@ export class GraphHeaderComponent implements OnInit {
     this.googleDriveService.getFile(this.graphId)
         .subscribe((driveFile: DriveFile) => {
           this.currentGraph = driveFile;
+          this.titleService.setTitle(this.currentGraph.name + ' | uxgraph');
 
           // TODO(girum): Save the filename into the Realtime API for
           // live-updates to other users.

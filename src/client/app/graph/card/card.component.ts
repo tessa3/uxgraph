@@ -1,14 +1,20 @@
 import {
-  Component, Input, OnInit, HostListener
+  Component,
+  Input,
+  OnInit,
+  HostListener,
 } from '@angular/core';
-import { CanvasService, ViewportCoord } from '../canvas/canvas.service';
-import { Size } from '../../model/geometry';
-import { EventUtils } from '../../utils/event-utils';
+import {
+  CanvasService,
+  ViewportCoord,
+} from '../canvas/canvas.service';
+import {EventUtils} from '../../utils/event-utils';
 import {
   GoogleRealtimeService,
   OBJECT_CHANGED
 } from '../../service/google-realtime.service';
 import { Card } from '../../model/card';
+import {Size} from '../../model/geometry';
 
 /**
  * This class represents the Card component.
@@ -20,9 +26,13 @@ import { Card } from '../../model/card';
   styleUrls: ['card.component.css']
 })
 export class CardComponent implements OnInit {
+
   // The card data to render on the canvas.
   // TODO(girum): Give these realtime custom models real static types.
   @Input() card: Card = null;
+
+  // A function pointer to the CanvasService's "getBounds()" function.
+  @Input() canvasBoundsGetter: (() => ClientRect);
 
   // The current scale factor of the card shape.
   scale: number = 1;
@@ -31,7 +41,13 @@ export class CardComponent implements OnInit {
   // The size of the card in the canvas' coordinate space.
   size: Size = {width:60, height:80};
   // The radius of the rounded corners in the canvas' coordinate space.
-  cornerRadius: number = 5;
+  cornerRadius: number = 1;
+
+  caretCoordinates = {
+    top: 0,
+    left: 0
+  };
+
   // Whether or not dragging is in progress.
   private dragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
@@ -61,9 +77,12 @@ export class CardComponent implements OnInit {
   }
 
   onMousedown(event: MouseEvent) {
-    if (EventUtils.eventIsFromPrimaryButton(event)) {
+    if (EventUtils.eventIsFromPrimaryButton(event)
+        // // Don't let the user initiate "drag" if initiated from within the
+        // // card's <textarea>.
+        && !(event.srcElement instanceof HTMLTextAreaElement)) {
       this.dragging = true;
-      const canvasBounds = this.canvasService.getCanvasBounds();
+      const canvasBounds = this.canvasBoundsGetter();
       this.lastDragPnt = {
         x: event.clientX - canvasBounds.left,
         y: event.clientY - canvasBounds.top
@@ -76,11 +95,12 @@ export class CardComponent implements OnInit {
   }
 
   // Put mousemove on document to allow dragging outside of canvas
+  //noinspection JSUnusedGlobalSymbols
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
     if (this.dragging) {
       event.preventDefault();
-      const canvasBounds = this.canvasService.getCanvasBounds();
+      const canvasBounds = this.canvasBoundsGetter();
       const newDragPnt = {
         x: event.clientX - canvasBounds.left,
         y: event.clientY - canvasBounds.top
@@ -110,12 +130,24 @@ export class CardComponent implements OnInit {
   }
 
   // Put mouseup on document to end drag even if mouseup is outside of canvas
+  //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     if (this.dragging) {
       this.dragging = false;
       this.lastDragPnt = null;
     }
+  }
+
+  onCardTextareaKeyup(textAreaValue: string) {
+    this.card.text = textAreaValue;
+  }
+
+  renderCaret(textAreaElement: HTMLTextAreaElement) {
+    this.caretCoordinates = (<any>window).getCaretCoordinates(
+        textAreaElement,
+        textAreaElement.selectionEnd);
+    console.log('caret coordinates: ', this.caretCoordinates);
   }
 
 }

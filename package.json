@@ -124,6 +124,7 @@
     "es6-module-loader": "^0.17.8",
     "rxjs": "5.0.0-beta.12",
     "systemjs": "0.19.27",
+    "textarea-caret": "^3.0.2",
     "zone.js": "0.6.26"
   },
   "stylelint": {

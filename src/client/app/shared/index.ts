@@ -4,4 +4,3 @@
 export * from '../home/graph-preview-list/index';
 export * from '../graph/side-panel/index';
 export * from './config/env.config';
-export * from './textarea-autosize/index';
