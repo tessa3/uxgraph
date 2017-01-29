@@ -5,16 +5,7 @@ import {
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 import { Card } from '../../model/card';
 import { Arrow } from '../../model/arrow';
-
-// TODO(eyuelt): move these to the data model layer
-export interface Point {
-  x: number;
-  y: number;
-}
-export interface Size {
-  width: number;
-  height: number;
-}
+import { Point } from '../../model/geometry';
 
 // NOTE: These type aliases are not type-checked. They are just for readability.
 // TODO(eyuelt): is there a way of getting these type-checked?

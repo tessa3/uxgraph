@@ -1,7 +1,8 @@
 import {
   Component, Input, OnInit, HostListener
 } from '@angular/core';
-import { CanvasService, ViewportCoord, Point, Size } from '../canvas/canvas.service';
+import { CanvasService, ViewportCoord } from '../canvas/canvas.service';
+import { Size } from '../../model/geometry';
 import { EventUtils } from '../../utils/event-utils';
 import {
   GoogleRealtimeService,
@@ -34,7 +35,7 @@ export class CardComponent implements OnInit {
   // Whether or not dragging is in progress.
   private dragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
-  private lastDragPnt: Point = null; //TODO(eyuelt): make this nullable after TS2 update
+  private lastDragPnt: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
 
   constructor(private canvasService: CanvasService,
               private googleRealtimeService: GoogleRealtimeService) {
