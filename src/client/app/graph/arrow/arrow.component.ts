@@ -4,6 +4,7 @@ import {
   GoogleRealtimeService,
   OBJECT_CHANGED
 } from '../../service/google-realtime.service';
+import { Arrow } from '../../model/arrow';
 
 /**
  * This class represents the Arrow component.
@@ -16,7 +17,7 @@ import {
 })
 export class ArrowComponent implements OnInit {
   // The arrow data to render on the canvas.
-  @Input() arrow: any = null; // TODO(eyuelt): type should be Arrow
+  @Input() arrow: Arrow = null;
   // The current scale factor of the arrow shape.
   scale: number = 1;
   // The list of anchor points for the arrow's polyline.

@@ -3,16 +3,9 @@ import {
   GoogleRealtimeService,
 } from '../../service/google-realtime.service';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
-
-// TODO(eyuelt): move these to the data model layer
-export interface Point {
-  x: number;
-  y: number;
-}
-export interface Size {
-  width: number;
-  height: number;
-}
+import { Card } from '../../model/card';
+import { Arrow } from '../../model/arrow';
+import { Point } from '../../model/geometry';
 
 // NOTE: These type aliases are not type-checked. They are just for readability.
 // TODO(eyuelt): is there a way of getting these type-checked?
@@ -36,10 +29,9 @@ export type CanvasCoord = Point;
 @Injectable()
 export class CanvasService {
   // The models of the cards to show on the canvas.
-  // TODO(girum): Statically type these Cards somehow.
-  cards: CollaborativeList<any>;
+  cards: CollaborativeList<Card>;
   // The models of the arrows to show on the canvas.
-  arrows: CollaborativeList<any>;
+  arrows: CollaborativeList<Arrow>;
 
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
