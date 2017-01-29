@@ -4,8 +4,7 @@ import {
   OnInit,
   HostListener,
   ViewChild,
-  ElementRef,
-  AfterViewInit
+  ElementRef
 } from '@angular/core';
 import {
   CanvasService,
@@ -28,7 +27,7 @@ import {
   templateUrl: 'card.component.html',
   styleUrls: ['card.component.css']
 })
-export class CardComponent implements OnInit, AfterViewInit {
+export class CardComponent implements OnInit {
 
   // The card data to render on the canvas.
   // TODO(girum): Give these realtime custom models real static types.
@@ -75,10 +74,6 @@ export class CardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    // this.cardTextArea.nativeElement.
-  }
-
   // Called by the CanvasService when a zoom or pan occurs
   update() {
     this.scale = this.canvasService.zoomScale;
@@ -86,10 +81,10 @@ export class CardComponent implements OnInit, AfterViewInit {
   }
 
   onMousedown(event: MouseEvent) {
-    if (EventUtils.eventIsFromPrimaryButton(event)) {
+    if (EventUtils.eventIsFromPrimaryButton(event)
         // // Don't let the user initiate "drag" if initiated from within the
         // // card's <textarea>.
-        // !(event.srcElement instanceof HTMLTextAreaElement)
+        && !(event.srcElement instanceof HTMLTextAreaElement)) {
       this.dragging = true;
       const canvasBounds = this.canvasBoundsGetter();
       this.lastDragPnt = {
@@ -153,8 +148,7 @@ export class CardComponent implements OnInit, AfterViewInit {
     this.card.text = textAreaValue;
   }
 
-  renderCaret() {
-    let textAreaElement = this.cardTextArea.nativeElement;
+  renderCaret(textAreaElement: HTMLTextAreaElement) {
     this.caretCoordinates = (<any>window).getCaretCoordinates(
         textAreaElement,
         textAreaElement.selectionEnd);

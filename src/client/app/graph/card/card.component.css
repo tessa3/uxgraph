@@ -1,9 +1,7 @@
 .textarea-container {
   display: flex;
   height: 100%;
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
-  cursor: grab;
+  cursor: pointer;
 }
 
 textarea {

@@ -51,8 +51,8 @@
                       spellcheck="false"
                       rows="1"
                       [ngModel]="card.text"
-                      (click)="renderCaret()"
-                      (keyup)="renderCaret(); onCardTextareaKeyup(cardTextArea.value)">
+                      (click)="renderCaret(cardTextArea)"
+                      (keyup)="renderCaret(cardTextArea); onCardTextareaKeyup(cardTextArea.value)">
       </xhtml:textarea>
     </xhtml:div>
   </foreignObject>
