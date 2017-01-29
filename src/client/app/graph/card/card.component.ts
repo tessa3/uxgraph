@@ -74,10 +74,6 @@ export class CardComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    // this.cardTextArea.nativeElement.
-  }
-
   // Called by the CanvasService when a zoom or pan occurs
   update() {
     this.scale = this.canvasService.zoomScale;
