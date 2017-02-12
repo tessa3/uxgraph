@@ -31,7 +31,7 @@
   <line attr.x1="{{caretCoordinates.left}}"
         attr.x2="{{caretCoordinates.left}}"
         attr.y1="{{caretCoordinates.top + 16}}"
-        attr.y2="{{caretCoordinates.top + 24}}"
+        attr.y2="{{caretCoordinates.top + 30}}"
         stroke="red"
         stroke-width="1px">
   </line>
@@ -43,9 +43,8 @@
       <xhtml:textarea xmlns="http://www.w3.org/1999/xhtml"
                       #cardTextArea
                       [style.width] = "size.width + 'px'"
-                      spellcheck="false"
-                      rows="1"
                       [ngModel]="card.text"
+                      maxlength="36"
                       (click)="renderCaret(cardTextArea)"
                       (keyup)="renderCaret(cardTextArea); onCardTextareaKeyup(cardTextArea.value)">
       </xhtml:textarea>
