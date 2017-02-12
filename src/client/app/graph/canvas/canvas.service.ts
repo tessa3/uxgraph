@@ -3,7 +3,6 @@ import {
   GoogleRealtimeService,
 } from '../../service/google-realtime.service';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
-import { Card } from '../../model/card';
 import { Arrow } from '../../model/arrow';
 import { Point } from '../../model/geometry';
 
@@ -29,7 +28,7 @@ export type CanvasCoord = Point;
 @Injectable()
 export class CanvasService {
   // The models of the cards to show on the canvas.
-  cards: CollaborativeList<Card>;
+  cards: CollaborativeList<OldCard>;
   // The models of the arrows to show on the canvas.
   arrows: CollaborativeList<Arrow>;
 

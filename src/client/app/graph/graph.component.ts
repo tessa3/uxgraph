@@ -35,15 +35,15 @@ export class GraphComponent implements OnInit {
       let model = currentDocument.getModel();
       let numCards = model.getRoot().get('cards').length;
 
-      let card1 = model.create(Card);
+      let card1 = Card.create(model);
       card1.position = {x: 10 + numCards * 5, y: 10 + numCards * 5};
-      card1.text = 'card #' + numCards;
+      card1.text.setText('card #' + numCards);
       card1.selected = false;
       model.getRoot().get('cards').push(card1);
 
-      let card2 = model.create(Card);
+      let card2 = Card.create(model);
       card2.position = {x: 10 + numCards * 5, y: 10 + numCards * 5};
-      card2.text = 'card #' + (numCards+1);
+      card2.text.setText('card #' + (numCards+1));
       card2.selected = false;
       model.getRoot().get('cards').push(card2);
 
