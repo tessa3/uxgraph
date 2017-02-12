@@ -118,9 +118,6 @@ export class CanvasService {
   }
 
   deselectCards() {
-    // for (let i = 0; i < this.cards.length; i++) {
-    //   this.cards.get(i).selected = false;
-    // }
     for (let card of this.cards) {
       card.selected = false;
     }
