@@ -10,7 +10,7 @@ import {
 } from '@angular/http';
 import {Router} from '@angular/router';
 import {DriveFile} from '../model/drive-file';
-import {OldCard} from '../model/card';
+import {Card} from '../model/card';
 import {Arrow} from '../model/arrow';
 
 
@@ -49,7 +49,6 @@ export class GoogleDriveService {
         // Google Realtime model classes.
         //
         // All custom Realtime model classes must be registered this way.
-        OldCard.registerModel();
         Arrow.registerModel();
 
         // Also, immediately try to authorize the current user without showing

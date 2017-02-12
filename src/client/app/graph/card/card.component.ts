@@ -13,11 +13,11 @@ import {
   GoogleRealtimeService,
   OBJECT_CHANGED
 } from '../../service/google-realtime.service';
-import { OldCard } from '../../model/card';
+import { Card } from '../../model/card';
 import {Size} from '../../model/geometry';
 
 /**
- * This class represents the OldCard component.
+ * This class represents the Card component.
  */
 @Component({
   moduleId: module.id,
@@ -29,7 +29,7 @@ export class CardComponent implements OnInit {
 
   // The card data to render on the canvas.
   // TODO(girum): Give these realtime custom models real static types.
-  @Input() card: OldCard = null;
+  @Input() card: Card = null;
 
   // A function pointer to the CanvasService's "getBounds()" function.
   @Input() canvasBoundsGetter: (() => ClientRect);
@@ -140,7 +140,7 @@ export class CardComponent implements OnInit {
   }
 
   onCardTextareaKeyup(textAreaValue: string) {
-    this.card.text = textAreaValue;
+    this.card.text.setText(textAreaValue);
   }
 
   renderCaret(textAreaElement: HTMLTextAreaElement) {

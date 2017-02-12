@@ -5,6 +5,7 @@ import {
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 import { Arrow } from '../../model/arrow';
 import { Point } from '../../model/geometry';
+import {CardList} from '../../model/card-list';
 
 // NOTE: These type aliases are not type-checked. They are just for readability.
 // TODO(eyuelt): is there a way of getting these type-checked?
@@ -28,7 +29,7 @@ export type CanvasCoord = Point;
 @Injectable()
 export class CanvasService {
   // The models of the cards to show on the canvas.
-  cards: CollaborativeList<OldCard>;
+  cards: CardList;
   // The models of the arrows to show on the canvas.
   arrows: CollaborativeList<Arrow>;
 
@@ -66,7 +67,7 @@ export class CanvasService {
         model.getRoot().set('cards', collaborativeCards);
       }
 
-      this.cards = model.getRoot().get('cards');
+      this.cards = new CardList(model.getRoot().get('cards'));
 
       // Lazily instantiate the collaborative arrows array.
       if (model.getRoot().get('arrows') === null) {
@@ -117,8 +118,11 @@ export class CanvasService {
   }
 
   deselectCards() {
-    for (let i = 0; i < this.cards.length; i++) {
-      this.cards.get(i).selected = false;
+    // for (let i = 0; i < this.cards.length; i++) {
+    //   this.cards.get(i).selected = false;
+    // }
+    for (let card of this.cards) {
+      card.selected = false;
     }
   }
 
