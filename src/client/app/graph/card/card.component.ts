@@ -39,7 +39,7 @@ export class CardComponent implements OnInit {
   // The current display position in the viewport's coordinate space.
   position: ViewportCoord = {x:0, y:0};
   // The size of the card in the canvas' coordinate space.
-  size: Size = {width:60, height:80};
+  size: Size = {width:120, height:160};
   // The radius of the rounded corners in the canvas' coordinate space.
   cornerRadius: number = 1;
 

@@ -8,13 +8,14 @@ textarea {
   background-color: transparent;
   color: rgba(0, 0, 0, 0.55);
   margin-top: 16px;
-  height: 24px;
+  height: 40px;
   border: none;
   resize: none;
   outline: none;
   text-align: center;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 300;
   max-height: 80px;
+  overflow: hidden;
 }
