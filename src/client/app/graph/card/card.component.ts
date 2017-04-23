@@ -115,7 +115,7 @@ export class CardComponent implements OnInit {
       this.card.incomingArrows.asArray().forEach((inArrow: Arrow) => {
         if (inArrow) {
           inArrow.tipPosition = {x: newCardPosition.x, y: newCardPosition.y + 40};
-          if (inArrow.fromCardId === null) {
+          if (inArrow.fromCard === null) {
             inArrow.tailPosition = {x: newCardPosition.x - 50, y: newCardPosition.y + 40};
           }
         }
@@ -123,7 +123,7 @@ export class CardComponent implements OnInit {
       this.card.outgoingArrows.asArray().forEach((outArrow: Arrow) => {
         if (outArrow) {
           outArrow.tailPosition = { x: newCardPosition.x + 60, y: newCardPosition.y + 40 };
-          if (outArrow.toCardId === null) {
+          if (outArrow.toCard === null) {
             outArrow.tipPosition = { x: newCardPosition.x + 60 + 50, y: newCardPosition.y + 40 };
           }
         }

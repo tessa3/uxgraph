@@ -48,22 +48,22 @@ export class GraphComponent implements OnInit {
       model.getRoot().get('cards').push(card2);
 
       let arrow1 = model.create(Arrow);
-      arrow1.fromCardId = null;
-      arrow1.toCardId = numCards;
+      arrow1.fromCard = null;
+      arrow1.toCard = card1;
       arrow1.tailPosition = {x: card1.position.x - 50, y: card1.position.y + 40};
       arrow1.tipPosition = {x: card1.position.x, y: card1.position.y + 40};
       model.getRoot().get('arrows').push(arrow1);
 
       let arrow2 = model.create(Arrow);
-      arrow2.fromCardId = numCards;
-      arrow2.toCardId = numCards+1;
+      arrow2.fromCard = card1;
+      arrow2.toCard = card2;
       arrow2.tailPosition = {x: card1.position.x + 60, y: card1.position.y + 40};
       arrow2.tipPosition = {x: card2.position.x, y: card2.position.y + 40};
       model.getRoot().get('arrows').push(arrow2);
 
       let arrow3 = model.create(Arrow);
-      arrow3.fromCardId = numCards+1;
-      arrow3.toCardId = null;
+      arrow3.fromCard = card2;
+      arrow3.toCard = null;
       arrow3.tailPosition = {x: card2.position.x + 60, y: card2.position.y + 40};
       arrow3.tipPosition = {x: card2.position.x + 60 + 50, y: card2.position.y + 40};
       model.getRoot().get('arrows').push(arrow3);
