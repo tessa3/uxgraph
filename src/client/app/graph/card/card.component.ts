@@ -15,6 +15,7 @@ import {
 } from '../../service/google-realtime.service';
 import { Card } from '../../model/card';
 import {Size} from '../../model/geometry';
+import {Arrow} from '../../model/arrow';
 
 /**
  * This class represents the Card component.
@@ -109,21 +110,23 @@ export class CardComponent implements OnInit {
       const newCardPosition =
         this.canvasService.viewportCoordToCanvasCoord(this.position);
       this.card.position = {x: newCardPosition.x, y: newCardPosition.y};
-      // TODO: move all associated arrows too
-      let inArrow = this.card.incomingArrow;
-      if (inArrow) {
-        inArrow.tipPosition = {x: newCardPosition.x, y: newCardPosition.y + 40};
-        if (inArrow.fromCardId === null) {
-          inArrow.tailPosition = {x: newCardPosition.x - 50, y: newCardPosition.y + 40};
+      // Move all associated arrows too
+      this.card.incomingArrows.asArray().forEach((inArrow: Arrow) => {
+        if (inArrow) {
+          inArrow.tipPosition = {x: newCardPosition.x, y: newCardPosition.y + 40};
+          if (inArrow.fromCardId === null) {
+            inArrow.tailPosition = {x: newCardPosition.x - 50, y: newCardPosition.y + 40};
+          }
         }
-      }
-      let outArrow = this.card.outgoingArrow;
-      if (outArrow) {
-        outArrow.tailPosition = {x: newCardPosition.x + 60, y: newCardPosition.y + 40};
-        if (outArrow.toCardId === null) {
-          outArrow.tipPosition = {x: newCardPosition.x + 60 + 50, y: newCardPosition.y + 40};
+      });
+      this.card.outgoingArrows.asArray().forEach((outArrow: Arrow) => {
+        if (outArrow) {
+          outArrow.tailPosition = { x: newCardPosition.x + 60, y: newCardPosition.y + 40 };
+          if (outArrow.toCardId === null) {
+            outArrow.tipPosition = { x: newCardPosition.x + 60 + 50, y: newCardPosition.y + 40 };
+          }
         }
-      }
+      });
       this.lastDragPnt = newDragPnt;
     }
   }

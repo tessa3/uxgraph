@@ -77,10 +77,10 @@ export class GraphComponent implements OnInit, OnDestroy {
       arrow3.tipPosition = {x: card2.position.x + 60 + 50, y: card2.position.y + 40};
       model.getRoot().get('arrows').push(arrow3);
 
-      card1.incomingArrow = arrow1;
-      card1.outgoingArrow = arrow2;
-      card2.incomingArrow = arrow2;
-      card2.outgoingArrow = arrow3;
+      card1.incomingArrows.push(arrow1);
+      card1.outgoingArrows.push(arrow2);
+      card2.incomingArrows.push(arrow2);
+      card2.outgoingArrows.push(arrow3);
     });
   }
 
