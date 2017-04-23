@@ -1,9 +1,10 @@
-import { Point } from './geometry';
+import { Point, Size } from './geometry';
 import { Arrow } from './arrow';
 import { CollaborativeObjectModel } from './collaborative-object-model';
 
 export class Card extends CollaborativeObjectModel {
   protected static modelName = 'Card';
+  readonly size: Size = {width:120, height:160};
   // Collaborative fields
   position: Point;
   text: string;

@@ -25,17 +25,17 @@
         style="filter:url(#drop-shadow)"
         attr.rx="{{cornerRadius}}"
         attr.ry="{{cornerRadius}}"
-        attr.width="{{size.width}}"
-        attr.height="{{size.height}}">
+        attr.width="{{card.size.width}}"
+        attr.height="{{card.size.height}}">
   </rect>
   <foreignObject x="0"
                  y="0"
-                 attr.width="{{size.width}}"
-                 attr.height="{{size.height}}">
+                 attr.width="{{card.size.width}}"
+                 attr.height="{{card.size.height}}">
     <xhtml:div class="textarea-container">
       <xhtml:textarea xmlns="http://www.w3.org/1999/xhtml"
                       #cardTextArea
-                      [style.width] = "size.width + 'px'"
+                      [style.width] = "card.size.width + 'px'"
                       [ngModel]="card.text"
                       maxlength="36"
                       (focus)="onCardTextareaFocus()"
