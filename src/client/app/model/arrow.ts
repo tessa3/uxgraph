@@ -1,4 +1,5 @@
 import { Point } from './geometry';
+import { Card } from './card';
 import { CollaborativeObjectModel } from './collaborative-object-model';
 
 export class Arrow extends CollaborativeObjectModel {
@@ -6,8 +7,8 @@ export class Arrow extends CollaborativeObjectModel {
   // Collaborative fields
   tailPosition: Point;
   tipPosition: Point;
-  fromCardId: string;
-  toCardId: string;
+  fromCard: Card;
+  toCard: Card;
 
   static registerModel() {
     super.registerModel();
@@ -15,9 +16,9 @@ export class Arrow extends CollaborativeObjectModel {
       gapi.drive.realtime.custom.collaborativeField('tailPosition');
     this.prototype.tipPosition =
       gapi.drive.realtime.custom.collaborativeField('tipPosition');
-    this.prototype.fromCardId =
-      gapi.drive.realtime.custom.collaborativeField('fromCardId');
-    this.prototype.toCardId =
-      gapi.drive.realtime.custom.collaborativeField('toCardId');
+    this.prototype.fromCard =
+      gapi.drive.realtime.custom.collaborativeField('fromCard');
+    this.prototype.toCard =
+      gapi.drive.realtime.custom.collaborativeField('toCard');
   }
 };
