@@ -5,20 +5,28 @@ export class Card {
   position: Point;
   text: string;
   selected: boolean;
-  incomingArrow: Arrow;
-  outgoingArrow: Arrow;
+  incomingArrows: gapi.drive.realtime.CollaborativeList<Arrow>;
+  outgoingArrows: gapi.drive.realtime.CollaborativeList<Arrow>;
+
+  // Called once when the model is first created.
+  initializeModel() {
+    var model = gapi.drive.realtime.custom.getModel(this);
+    this.incomingArrows = model.createList();
+    this.outgoingArrows = model.createList();
+  }
 
   static registerModel() {
     gapi.drive.realtime.custom.registerType(Card, 'Card');
+    gapi.drive.realtime.custom.setInitializer(Card, Card.prototype.initializeModel);
     Card.prototype.position =
       gapi.drive.realtime.custom.collaborativeField('position');
     Card.prototype.text =
       gapi.drive.realtime.custom.collaborativeField('text');
     Card.prototype.selected =
       gapi.drive.realtime.custom.collaborativeField('selected');
-    Card.prototype.incomingArrow =
-      gapi.drive.realtime.custom.collaborativeField('incomingArrow');
-    Card.prototype.outgoingArrow =
-      gapi.drive.realtime.custom.collaborativeField('outgoingArrow');
+    Card.prototype.incomingArrows =
+      gapi.drive.realtime.custom.collaborativeField('incomingArrows');
+    Card.prototype.outgoingArrows =
+      gapi.drive.realtime.custom.collaborativeField('outgoingArrows');
   }
 };
