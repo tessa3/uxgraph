@@ -1,12 +1,15 @@
-import { Point } from './geometry';
+import { Point, Size } from './geometry';
 import { Arrow } from './arrow';
 
 export class Card {
+  // Collaborative fields
   position: Point;
   text: string;
   selected: boolean;
   incomingArrows: gapi.drive.realtime.CollaborativeList<Arrow>;
   outgoingArrows: gapi.drive.realtime.CollaborativeList<Arrow>;
+
+  readonly size: Size = {width:120, height:160};
 
   // Called once when the model is first created.
   initializeModel() {
