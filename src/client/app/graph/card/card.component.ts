@@ -138,4 +138,9 @@ export class CardComponent implements OnInit {
     this.card.text = textAreaValue;
   }
 
+  onCardTextareaMousedown() {
+    this.canvasService.deselectCards();
+    this.card.selected = true;
+  }
+
 }
