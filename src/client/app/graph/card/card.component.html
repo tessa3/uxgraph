@@ -28,13 +28,6 @@
         attr.width="{{size.width}}"
         attr.height="{{size.height}}">
   </rect>
-  <line attr.x1="{{caretCoordinates.left}}"
-        attr.x2="{{caretCoordinates.left}}"
-        attr.y1="{{caretCoordinates.top + 16}}"
-        attr.y2="{{caretCoordinates.top + 30}}"
-        stroke="red"
-        stroke-width="1px">
-  </line>
   <foreignObject x="0"
                  y="0"
                  attr.width="{{size.width}}"
@@ -45,8 +38,7 @@
                       [style.width] = "size.width + 'px'"
                       [ngModel]="card.text"
                       maxlength="36"
-                      (click)="renderCaret(cardTextArea)"
-                      (keyup)="renderCaret(cardTextArea); onCardTextareaKeyup(cardTextArea.value)">
+                      (keyup)="onCardTextareaKeyup(cardTextArea.value)">
       </xhtml:textarea>
     </xhtml:div>
   </foreignObject>
