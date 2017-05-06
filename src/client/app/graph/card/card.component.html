@@ -38,7 +38,7 @@
                       [style.width] = "size.width + 'px'"
                       [ngModel]="card.text"
                       maxlength="36"
-                      (mousedown)="onCardTextareaMousedown()"
+                      (focus)="onCardTextareaMousedown()"
                       (keyup)="onCardTextareaKeyup(cardTextArea.value)">
       </xhtml:textarea>
     </xhtml:div>
