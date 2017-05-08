@@ -106,4 +106,8 @@ export class CanvasComponent {
     }
   }
 
+  // TODO: remove
+  printClassName() {
+    console.log("canvas.component.ts");
+  }
 }

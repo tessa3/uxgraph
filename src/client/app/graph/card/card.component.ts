@@ -149,4 +149,12 @@ export class CardComponent implements OnInit {
     console.log('caret coordinates: ', this.caretCoordinates);
   }
 
+  onClick(event: MouseEvent) {
+    console.log(document.elementsFromPoint(event.clientX, event.clientY));
+  }
+
+  // TODO: remove
+  printClassName() {
+    console.log("card.component.ts");
+  }
 }

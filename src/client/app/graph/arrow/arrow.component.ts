@@ -38,6 +38,7 @@ export class ArrowComponent implements OnInit {
   private lastDragPnt: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
 
   constructor(private canvasService: CanvasService,
+              //private dropzoneService: DropzoneService,
               private googleRealtimeService: GoogleRealtimeService) {
   }
 
@@ -116,11 +117,38 @@ export class ArrowComponent implements OnInit {
     }
   }
 
+  // Finds the first element in the given list that is a descendent of a
+  // uxg-card and returns the ancestor uxg-card element. Returns null if
+  // no such element exists.
+  // TODO(eyuelt): optimize this if needed
+  topCardFromElements(elements: Element[]) {
+    for (let element of elements) {
+      while (element !== null) {
+        if (element.hasAttribute('uxg-card')) {
+          return element;
+        }
+        element = element.parentElement;
+      }
+    }
+    return null;
+  }
+
   // Put mouseup on document to end drag even if mouseup is outside of canvas
   //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     if (this.tipDragging) {
+      //console.log("Send an arrowDrop event to these elements:");
+      //window.foo = document.elementsFromPoint(event.clientX, event.clientY);
+      //console.log(window.foo);
+
+      var topCard = this.topCardFromElements(document.elementsFromPoint(event.clientX, event.clientY));
+      if (topCard !== null) {
+        //console.log("top card is:");
+        //console.log(topCard);
+        // send an attachArrow event to topCard
+      }
+
       this.tipDragging = false;
       this.lastDragPnt = null;
     }
