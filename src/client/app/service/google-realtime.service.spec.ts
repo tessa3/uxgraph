@@ -43,6 +43,11 @@ export function main() {
     });
 
 
+    it('should de-dupe collaborators with the same user id', () => {
+      expect(googleRealtimeService).not.toBeNull();
+    });
+
+
     it('should redirect back to the homepage if the user does not ' +
         'have permission to view the current uxgraph', () => {
       expect(googleRealtimeService).not.toBeNull();

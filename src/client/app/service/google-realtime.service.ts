@@ -46,15 +46,18 @@ export class GoogleRealtimeService {
   loadRealtimeDocument(driveFileId: string) {
     this.googleDriveService.oauthToken.subscribe(() => {
       gapi.drive.realtime.load(driveFileId, (document) => {
+        let dedupedCollaborators =
+            GoogleRealtimeService.dedupe(document.getCollaborators());
+
         // Read the current array of collaborators from the document.
-        this.collaborators.next(document.getCollaborators());
+        this.collaborators.next(dedupedCollaborators);
 
         // Also sign up for changes in the collaborators list.
         document.addEventListener(COLLABORATOR_JOINED, () => {
-          this.collaborators.next(document.getCollaborators());
+          this.collaborators.next(dedupedCollaborators);
         });
         document.addEventListener(COLLABORATOR_LEFT, () => {
-          this.collaborators.next(document.getCollaborators());
+          this.collaborators.next(dedupedCollaborators);
         });
 
         // Hold onto the current document in-memory.
@@ -82,5 +85,18 @@ export class GoogleRealtimeService {
     });
   }
 
+  private static dedupe(collaborators: Collaborator[]) {
+    let filtered = new Map();
+    for (let collaborator of collaborators) {
+      filtered.set(collaborator.userId, collaborator);
+    }
+
+    let filteredList: Collaborator[] = [];
+    filtered.forEach((value: Collaborator) => {
+      filteredList.push(value);
+    });
+
+    return filteredList;
+  }
 
 }
