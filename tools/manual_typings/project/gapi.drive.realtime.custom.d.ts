@@ -6,4 +6,6 @@ declare namespace gapi.drive.realtime.custom {
       typename: string): void;
 
   export function setInitializer(type: any, initializerFn: () => void): void;
+
+  export function getModel(obj: Object): gapi.drive.realtime.Model;
 }
