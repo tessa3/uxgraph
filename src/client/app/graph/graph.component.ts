@@ -3,6 +3,7 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {GoogleRealtimeService} from '../service/google-realtime.service';
 import {Card} from '../model/card';
 import {Arrow} from '../model/arrow';
+import {CardSelectionService} from "../service/card-selection.service";
 
 /**
  * This class represents the lazy loaded GraphComponent.
@@ -18,6 +19,7 @@ export class GraphComponent implements OnInit, OnDestroy {
   graphId: string;
 
   constructor(private googleRealtimeService: GoogleRealtimeService,
+              private cardSelectionService: CardSelectionService,
               private activatedRoute: ActivatedRoute) {
   }
 
