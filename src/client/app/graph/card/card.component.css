@@ -19,3 +19,12 @@ textarea {
   max-height: 80px;
   overflow: hidden;
 }
+
+.icon-strip {
+  height: 24px;
+  width: 118px;
+  background-color: #eaeaea;
+  margin-top: 135px;
+  margin-left: 1px;
+}
+
