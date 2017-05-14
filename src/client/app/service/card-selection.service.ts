@@ -4,6 +4,7 @@ import {Injectable} from "@angular/core";
 const SELECTIONS = 'selections';
 const CARDS = 'cards';
 const USERS = 'users';
+const COLLABORATORS = 'collaborators';
 
 /**
  * A service to manage card selection state using Google's Realtime API.
@@ -31,15 +32,30 @@ export class CardSelectionService {
                 model.endCompoundOperation();
             }
         });
-
-        this.startSelection(['card1', 'card2', 'card3'], 'user1');
     }
 
     /**
      * TODO comment
      */
     startSelection(cardIds: string[], userId: string) {
+        this._selectCards(cardIds, userId, true);
+    }
 
+    /**
+     * Adds the selected cards
+     */
+    continueSelection(cardIds: string[], userId: string) {
+        this._selectCards(cardIds, userId, false);
+    }
+
+    /**
+     * Selects the provided cards for the provided user.
+     * @param cardIds Selects the cards with these ids
+     * @param userId Selects the cards as the user with this id
+     * @param isNewSelection If true, clears existing card selections for this user
+     * @private
+     */
+    _selectCards(cardIds: string[], userId: string, isNewSelection: boolean) {
         if (!cardIds || cardIds.length === 0) { return; }
 
         this.googleRealtimeService.currentDocument.subscribe((document) => {
@@ -49,17 +65,20 @@ export class CardSelectionService {
 
             // clear selection
             // for each card in cardIds
-                // get the card in cardSelections.cards
-                // if it doesn't exist, create it
-                // add collaborator.userId to cardSelections.cards.cardId map
-                // get cardSelections.users
-                // if it doesn't exist, create it
-                // add cardId to collaborator.users.userId map
+            //   get the card in cardSelections.cards
+            //   if it doesn't exist, create it
+            //   add collaborator.userId to cardSelections.cards.cardId map
+            //   get cardSelections.users
+            //   if it doesn't exist, create it
+            //   add cardId to collaborator.users.userId map
 
             let model = document.getModel();
 
             model.beginCompoundOperation(`Starting selection for ${cardIds.length}`);
-            this.clearSelection();
+
+            if (isNewSelection) {
+                this.clearSelection();
+            }
 
             for (let cardId of cardIds) {
                 let selectionsObject = model.getRoot().get(SELECTIONS);
@@ -90,28 +109,6 @@ export class CardSelectionService {
             }
             model.endCompoundOperation();
         });
-
-        // model.beginCompoundOperation();
-        // this.clearSelection();
-        // for each card in cardIds
-            // get the card in cardSelections.cards
-            // if it doesn't exist, create it
-            // add collaborator.userId to cardSelections.cards.cardId map
-            // get cardSelections.users
-            // if it doesn't exist, create it
-            // add cardId to collaborator.users.userId map
-        // model.endCompoundOperation();
-
-        // this.googleRealtimeService.currentDocument.subscribe((document) => {
-        //     console.log('document = ' + document);
-        // });
-    }
-
-    /**
-     * Adds the selected cards
-     */
-    continueSelection(cardIds: string[]) {
-
     }
 
     /**
