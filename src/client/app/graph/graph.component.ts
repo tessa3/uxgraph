@@ -36,7 +36,7 @@ export class GraphComponent implements OnInit, OnDestroy {
   //TODO(eyuelt): this is a temporary hack for adding cards to canvas
   addCardsAndArrows() {
     //TODO(eyuelt): is first() the correct way to do this thing only once?
-    this.googleRealtimeService.currentDocument.subscribe((document) => {
+    this.googleRealtimeService.currentDocument.first().subscribe((document) => {
       if (document === null) {
         return;
       }
