@@ -46,18 +46,15 @@ export class GoogleRealtimeService {
   loadRealtimeDocument(driveFileId: string) {
     this.googleDriveService.oauthToken.subscribe(() => {
       gapi.drive.realtime.load(driveFileId, (document) => {
-        let dedupedCollaborators =
-            GoogleRealtimeService.dedupe(document.getCollaborators());
-
         // Read the current array of collaborators from the document.
-        this.collaborators.next(dedupedCollaborators);
+        this.collaborators.next(document.getCollaborators());
 
         // Also sign up for changes in the collaborators list.
         document.addEventListener(COLLABORATOR_JOINED, () => {
-          this.collaborators.next(dedupedCollaborators);
+          this.collaborators.next(document.getCollaborators());
         });
         document.addEventListener(COLLABORATOR_LEFT, () => {
-          this.collaborators.next(dedupedCollaborators);
+          this.collaborators.next(document.getCollaborators());
         });
 
         // Hold onto the current document in-memory.
