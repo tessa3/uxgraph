@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {GoogleRealtimeService} from '../service/google-realtime.service';
+import {CardSelectionService} from '../service/card-selection.service';
 import {FabComponent} from './fab/index';
 import {GraphPreviewListService} from '../home/graph-preview-list/index';
 import {GoogleDriveService} from '../service/google-drive.service';
@@ -35,6 +36,7 @@ export class SharedModule {
         GoogleDriveService,
         GoogleRealtimeService,
         GraphPreviewListService,
+        CardSelectionService
       ]
     };
   }
