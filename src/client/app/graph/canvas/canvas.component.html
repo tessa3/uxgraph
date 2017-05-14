@@ -10,5 +10,6 @@
   <g uxg-card
      *ngFor="let card of (this.canvasService.cards | toIterable)"
      [card]="card"
+     [attr.card-id]="card.id"
      [canvasBoundsGetter]="getBounds"></g>
 </svg>
