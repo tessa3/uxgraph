@@ -34,6 +34,10 @@ export class ArrowComponent implements OnInit {
     this.update();
     this.canvasService.addListener(this.update.bind(this));
     this.googleRealtimeService.currentDocument.subscribe(document => {
+      if (document === null) {
+        return;
+      }
+
       // TODO(eyuelt): change this. this causes a redraw whenever any object in
       // the whole document changes.
       document.getModel().getRoot()

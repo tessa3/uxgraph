@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {GoogleRealtimeService} from '../service/google-realtime.service';
 import {Card} from '../model/card';
@@ -13,7 +13,7 @@ import {Arrow} from '../model/arrow';
   templateUrl: 'graph.component.html',
   styleUrls: ['graph.component.css']
 })
-export class GraphComponent implements OnInit {
+export class GraphComponent implements OnInit, OnDestroy {
 
   graphId: string;
 
@@ -28,11 +28,20 @@ export class GraphComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.googleRealtimeService.currentDocument.getValue().close();
+    this.googleRealtimeService.currentDocument.next(null);
+  }
+
   //TODO(eyuelt): this is a temporary hack for adding cards to canvas
   addCardsAndArrows() {
     //TODO(eyuelt): is first() the correct way to do this thing only once?
-    this.googleRealtimeService.currentDocument.first().subscribe((currentDocument) => {
-      let model = currentDocument.getModel();
+    this.googleRealtimeService.currentDocument.subscribe((document) => {
+      if (document === null) {
+        return;
+      }
+
+      let model = document.getModel();
       let numCards = model.getRoot().get('cards').length;
 
       let card1 = model.create(Card);

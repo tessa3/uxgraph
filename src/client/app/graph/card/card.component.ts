@@ -60,6 +60,10 @@ export class CardComponent implements OnInit {
     // card. That is, don't call update() for this card if some other card
     // changed.
     this.googleRealtimeService.currentDocument.subscribe(document => {
+      if (document === null) {
+        return;
+      }
+
       document.getModel().getRoot()
           .addEventListener(OBJECT_CHANGED, this.update.bind(this));
     });
