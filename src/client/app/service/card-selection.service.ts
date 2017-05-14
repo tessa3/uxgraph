@@ -12,7 +12,20 @@ const COLLABORATORS = 'collaborators';
 @Injectable()
 export class CardSelectionService {
 
+    userId: string;
+
     constructor(private googleRealtimeService: GoogleRealtimeService) {
+        // TODO must be a better way of getting the userId...
+        googleRealtimeService.collaborators.subscribe((collaborators) => {
+            if (!!this.userId) { return; }
+            for (let index in collaborators) {
+                let collaborator = collaborators[index];
+                if (collaborator.isMe) {
+                    this.userId = collaborator.userId;
+                }
+            }
+        });
+
         // Make sure card selections object is in Realtime
         this.googleRealtimeService.currentDocument.subscribe((document) => {
             if (document === null) {
