@@ -15,6 +15,9 @@ import {
 } from '../../service/google-realtime.service';
 import { Card } from '../../model/card';
 import {Size} from '../../model/geometry';
+import {CardSelectionService} from "../../service/card-selection.service";
+import {BehaviorSubject} from "rxjs";
+import {Collaborator} from "../../model/collaborator";
 
 /**
  * This class represents the Card component.
@@ -48,13 +51,19 @@ export class CardComponent implements OnInit {
   // The last point seen during the drag that is currently in progress.
   private lastDragPnt: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
 
+  // The Observable that contains the list of users selecting this card
+  selectingUserIds: string[] = [];
+
   constructor(private canvasService: CanvasService,
+              private cardSelectionService: CardSelectionService,
               private googleRealtimeService: GoogleRealtimeService) {
   }
 
   ngOnInit() {
     this.position = this.canvasService.canvasCoordToViewportCoord(this.card.position);
     this.canvasService.addListener(this.update.bind(this));
+
+    let that = this;
 
     // TODO(girum): Only call update() for this card for change events for this
     // card. That is, don't call update() for this card if some other card
@@ -66,6 +75,13 @@ export class CardComponent implements OnInit {
 
       document.getModel().getRoot()
           .addEventListener(OBJECT_CHANGED, this.update.bind(this));
+
+
+      // TODO make sure it's not null
+      that.cardSelectionService.getUsersSelectingCard(this.card.id).subscribe((selectors: string[]) => {
+        this.selectingUserIds = selectors;
+      });
+
     });
   }
 
@@ -135,6 +151,14 @@ export class CardComponent implements OnInit {
     if (this.dragging) {
       this.dragging = false;
       this.lastDragPnt = null;
+    }
+  }
+
+  onClick(event: MouseEvent) {
+    if (this.canvasService.multiSelectMode) {
+      this.cardSelectionService.continueSelection([this.card.id]);
+    } else {
+      this.cardSelectionService.startSelection([this.card.id]);
     }
   }
 

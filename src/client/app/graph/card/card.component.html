@@ -1,7 +1,7 @@
 <svg:g x="0"
        y="0"
        attr.transform="translate({{position.x}},{{position.y}}) scale({{scale}})"
-       xmlns:xhtml="http://www.w3.org/1999/xhtml"
+       (click)="this.onClick($event)"
        (mousedown)="this.onMousedown($event)">
   <defs>
     <filter id="drop-shadow">

@@ -1,6 +1,7 @@
 import {Component, HostListener, ElementRef} from '@angular/core';
 import {CanvasService, ViewportCoord} from './canvas.service';
 import {EventUtils} from '../../utils/event-utils';
+import {CardSelectionService} from "../../service/card-selection.service";
 
 /**
  * This class represents the Canvas component.
@@ -29,7 +30,9 @@ export class CanvasComponent {
   private eventTargetIsCanvas: ((event:Event) => boolean) = null;
 
   // Note: ElementRef should be treated as read-only to avoid XSS vulnerabilites
-  constructor(elementRef: ElementRef, private canvasService: CanvasService) {
+  constructor(elementRef: ElementRef,
+              private canvasService: CanvasService,
+              private cardSelectionService: CardSelectionService) {
     this.getBounds = () => {
       return elementRef.nativeElement.getBoundingClientRect();
     };
@@ -59,6 +62,10 @@ export class CanvasComponent {
         x: event.clientX - this.getBounds().left,
         y: event.clientY - this.getBounds().top
       };
+
+      // deselect cards
+      this.cardSelectionService.clearSelection();
+
     }
   }
 
