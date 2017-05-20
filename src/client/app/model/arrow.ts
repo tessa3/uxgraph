@@ -1,20 +1,23 @@
 import { Point } from './geometry';
+import { CollaborativeObjectModel } from './collaborative-object-model';
 
-export class Arrow {
+export class Arrow extends CollaborativeObjectModel {
+  protected static modelName = 'Arrow';
+  // Collaborative fields
   tailPosition: Point;
   tipPosition: Point;
   fromCardId: string;
   toCardId: string;
 
   static registerModel() {
-    gapi.drive.realtime.custom.registerType(Arrow, 'Arrow');
-    Arrow.prototype.tailPosition =
+    super.registerModel();
+    this.prototype.tailPosition =
       gapi.drive.realtime.custom.collaborativeField('tailPosition');
-    Arrow.prototype.tipPosition =
+    this.prototype.tipPosition =
       gapi.drive.realtime.custom.collaborativeField('tipPosition');
-    Arrow.prototype.fromCardId =
+    this.prototype.fromCardId =
       gapi.drive.realtime.custom.collaborativeField('fromCardId');
-    Arrow.prototype.toCardId =
+    this.prototype.toCardId =
       gapi.drive.realtime.custom.collaborativeField('toCardId');
   }
 };
