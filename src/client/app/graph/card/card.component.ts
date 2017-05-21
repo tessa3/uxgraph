@@ -52,7 +52,7 @@ export class CardComponent implements OnInit {
   private lastDragPnt: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
 
   // The Observable that contains the list of users selecting this card
-  selectingUserIds: string[] = [];
+  selectingUsersIds: string[] = [];
 
   constructor(private canvasService: CanvasService,
               private cardSelectionService: CardSelectionService,
@@ -79,7 +79,7 @@ export class CardComponent implements OnInit {
 
       // TODO make sure it's not null
       that.cardSelectionService.getUsersSelectingCard(this.card.id).subscribe((selectors: string[]) => {
-        this.selectingUserIds = selectors;
+        this.selectingUsersIds = selectors;
       });
 
     });
