@@ -28,12 +28,38 @@ export class GoogleRealtimeService {
   collaborators: BehaviorSubject<Collaborator[]> =
       new BehaviorSubject<Collaborator[]>([]);
 
+  // TODO comment
+  collaboratorsMap: { [key:string]: Collaborator; } = {};
+
 
   constructor(private googleDriveService: GoogleDriveService,
               private applicationRef: ApplicationRef,
               private router: Router) {
+
+    // set up collaborators map
+    this.collaborators.subscribe((collaborators) => {
+      if (collaborators.length === 0) {
+        return;
+      }
+      let map : { [key:string]: Collaborator; } = {};
+      collaborators.map((obj) => {
+        map[obj.userId] = obj;
+      });
+      this.collaboratorsMap = map;
+    });
   }
 
+  /**
+   * Returns a collaborator given a string userId
+   * @param userId
+   */
+  getCollaborator (userId: string) {
+    if (this.collaboratorsMap.hasOwnProperty(userId)) {
+      return this.collaboratorsMap[userId];
+    } else {
+      return null;
+    }
+  }
 
   /**
    * Loads the Realtime-version of a Google Drive file by Id.

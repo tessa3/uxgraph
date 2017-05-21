@@ -45,9 +45,8 @@
   </foreignObject>
   <foreignObject>
     <xhtml:div class="icon-strip">
-      <xhtml:div *ngFor="let userId of selectingUsersIds"
-                 class="selector-icon">{{ userId.substring(userId.length - 2) }}
-      </xhtml:div>
+      <xhtml:img *ngFor="let collaborator of selectingCollaborators"
+                 class="collaborator-img" attr.src="{{collaborator.photoUrl}}"></xhtml:img>
     </xhtml:div>
   </foreignObject>
 </svg:g>

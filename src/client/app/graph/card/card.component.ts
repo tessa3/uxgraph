@@ -53,6 +53,7 @@ export class CardComponent implements OnInit {
 
   // The Observable that contains the list of users selecting this card
   selectingUsersIds: string[] = [];
+  selectingCollaborators: Collaborator[] = [];
 
   constructor(private canvasService: CanvasService,
               private cardSelectionService: CardSelectionService,
@@ -78,8 +79,16 @@ export class CardComponent implements OnInit {
 
 
       // TODO make sure it's not null
-      that.cardSelectionService.getUsersSelectingCard(this.card.id).subscribe((selectors: string[]) => {
-        this.selectingUsersIds = selectors;
+      that.cardSelectionService.getUsersSelectingCard(this.card.id).subscribe((selectorIds: string[]) => {
+        this.selectingUsersIds = selectorIds;
+        let collaborators: Collaborator[] = [];
+        selectorIds.map((selectorId) => {
+          let collaborator = that.googleRealtimeService.getCollaborator(selectorId);
+          if (collaborator !== null) {
+            collaborators.push(collaborator);
+          }
+        });
+        that.selectingCollaborators = collaborators;
       });
 
     });
