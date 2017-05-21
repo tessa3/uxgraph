@@ -1,8 +1,8 @@
 import {CanvasService} from './canvas.service';
 import {TestBed} from '@angular/core/testing';
-import {GoogleRealtimeService} from '../../service/google-realtime.service';
-import {FakeGapi} from '../../../testing/fake/fake-gapi';
-import {FakeGoogleRealtimeService} from '../../../testing/fake/service/fake-google-realtime.service';
+import {GoogleRealtimeService} from './google-realtime.service';
+import {FakeGapi} from '../../testing/fake/fake-gapi';
+import {FakeGoogleRealtimeService} from '../../testing/fake/service/fake-google-realtime.service';
 
 export function main() {
   describe('Canvas service', () => {

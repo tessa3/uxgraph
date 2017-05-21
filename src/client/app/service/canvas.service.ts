@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {
   GoogleRealtimeService,
-} from '../../service/google-realtime.service';
+} from './google-realtime.service';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
-import { Card } from '../../model/card';
-import { Arrow } from '../../model/arrow';
-import { Point } from '../../model/geometry';
+import { Card } from '../model/card';
+import { Arrow } from '../model/arrow';
+import { Point } from '../model/geometry';
 
 // NOTE: These type aliases are not type-checked. They are just for readability.
 // TODO(eyuelt): is there a way of getting these type-checked?

@@ -7,7 +7,7 @@ import {
 import {
   CanvasService,
   ViewportCoord,
-} from '../canvas/canvas.service';
+} from '../../service/canvas.service';
 import {EventUtils} from '../../utils/event-utils';
 import {
   GoogleRealtimeService,
