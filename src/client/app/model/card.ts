@@ -1,6 +1,7 @@
 import { Point, Size } from './geometry';
 import { Arrow } from './arrow';
 import { CollaborativeObjectModel } from './collaborative-object-model';
+import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 
 export class Card extends CollaborativeObjectModel {
   protected static modelName = 'Card';
@@ -9,14 +10,16 @@ export class Card extends CollaborativeObjectModel {
   position: Point;
   text: string;
   selected: boolean;
-  incomingArrows: gapi.drive.realtime.CollaborativeList<Arrow>;
-  outgoingArrows: gapi.drive.realtime.CollaborativeList<Arrow>;
+  // TODO(eyuelt): Change these to normal arrays since CollaborativeLists
+  // inside custom collaborative objects are not actually collaborative.
+  incomingArrows: CollaborativeList<Arrow>;
+  outgoingArrows: CollaborativeList<Arrow>;
 
   initializeModel() {
     super.initializeModel();
-    var model = gapi.drive.realtime.custom.getModel(this);
-    this.incomingArrows = model.createList() as gapi.drive.realtime.CollaborativeList<Arrow>;
-    this.outgoingArrows = model.createList() as gapi.drive.realtime.CollaborativeList<Arrow>;
+    const model = gapi.drive.realtime.custom.getModel(this);
+    this.incomingArrows = model.createList() as CollaborativeList<Arrow>;
+    this.outgoingArrows = model.createList() as CollaborativeList<Arrow>;
   }
 
   static registerModel() {

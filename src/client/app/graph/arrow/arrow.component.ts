@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { CanvasService, ViewportCoord } from '../canvas/canvas.service';
+import { CanvasService, ViewportCoord, ArrowConnectionType } from '../canvas/canvas.service';
 import {
   GoogleRealtimeService,
   OBJECT_CHANGED
@@ -120,11 +120,36 @@ export class ArrowComponent implements OnInit {
     }
   }
 
+  // Finds the first element in the given list that is a descendant of a
+  // uxg-card and returns the ancestor uxg-card element. Returns null if
+  // no such element exists.
+  // TODO(eyuelt): optimize this if needed
+  // TODO(eyuelt): move this somewhere else
+  private topCardElementFromList(elements: Element[]): Element {
+    for (let element of elements) {
+      while (element !== null) {
+        if (element.hasAttribute('uxg-card')) {
+          return element;
+        }
+        element = element.parentElement;
+      }
+    }
+    return null;
+  }
+
   // Put mouseup on document to end drag even if mouseup is outside of canvas
   //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     if (this.tipDragging) {
+      const topCard = this.topCardElementFromList(document.elementsFromPoint(event.clientX, event.clientY));
+      if (topCard !== null) {
+        const cardId = topCard.getAttribute('card-id');
+        console.log('clicked on card id: ' + cardId);
+        const card = this.canvasService.getCardById(cardId);
+        this.canvasService.connectArrowAndCard(this.arrow, card, ArrowConnectionType.INCOMING);
+        // TODO(eyuelt): reposition the arrow
+      }
       this.tipDragging = false;
       this.lastDragPnt = null;
     }

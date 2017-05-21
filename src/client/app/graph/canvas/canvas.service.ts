@@ -14,6 +14,11 @@ export type ViewportCoord = Point;
 // A point in the coordinate system of the canvas.
 export type CanvasCoord = Point;
 
+// Specifies the type of connection an arrow has to a card.
+export enum ArrowConnectionType {
+  INCOMING,
+  OUTGOING
+}
 
 /*
  * The CanvasService maintains the data of the cards to show on the canvas,
@@ -120,6 +125,33 @@ export class CanvasService {
   deselectCards() {
     for (let i = 0; i < this.cards.length; i++) {
       this.cards.get(i).selected = false;
+    }
+  }
+
+  getCardById(id: string): Card {
+    // TODO(eyuelt): change CollaborativeList to CollaborativeMap
+    let cardsArray = this.cards.asArray();
+    for (let card of cardsArray) {
+      if (card.id === id) {
+        return card;
+      }
+    }
+    return null;
+  }
+
+  connectArrowAndCard(arrow: Arrow, card: Card, arrowConnection: ArrowConnectionType) {
+    if (arrowConnection === ArrowConnectionType.INCOMING) {
+      if (arrow.toCard) {
+        arrow.toCard.incomingArrows.removeValue(arrow);
+      }
+      arrow.toCard = card;
+      card.incomingArrows.push(arrow);
+    } else if (arrowConnection === ArrowConnectionType.OUTGOING) {
+      if (arrow.fromCard) {
+        arrow.fromCard.outgoingArrows.removeValue(arrow);
+      }
+      arrow.fromCard = card;
+      card.outgoingArrows.push(arrow);
     }
   }
 
