@@ -48,6 +48,8 @@ export class CardSelectionService {
                 cardSelections.set(USERS, model.createMap());
                 model.endCompoundOperation();
             }
+
+            this.clearSelection();
         });
     }
 

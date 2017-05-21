@@ -23,8 +23,10 @@ textarea {
 .icon-strip {
   height: 24px;
   width: 118px;
-  margin-top: 135px;
+  margin-top: 140px;
   margin-left: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .icon-strip img.collaborator-img {
@@ -34,7 +36,7 @@ textarea {
   -moz-border-radius: 50%;
   border-radius: 50%;
 
-  margin-left: 1px;
+  margin-right: 3px;
   display: inline-block
 }
 

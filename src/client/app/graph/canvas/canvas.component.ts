@@ -56,15 +56,12 @@ export class CanvasComponent {
 
   onMousedown(event: MouseEvent) {
     if (this.eventTargetIsCanvas(event) &&
-        EventUtils.eventIsFromPrimaryButton(event)) {
+        EventUtils.eventIsFromPrimaryButton(event)) { // TODO this isn't proving "panning" (could just be a click)
       this.panning = true;
       this.lastPanPnt = {
         x: event.clientX - this.getBounds().left,
         y: event.clientY - this.getBounds().top
       };
-
-      // deselect cards
-      this.cardSelectionService.clearSelection();
 
     }
   }
@@ -94,6 +91,11 @@ export class CanvasComponent {
     if (this.panning) {
       this.panning = false;
       this.lastPanPnt = null;
+    }
+    if (this.eventTargetIsCanvas(event)) {
+      // TODO if not panning
+      // TODO what if they're defining the bounds for a selection?
+      this.cardSelectionService.clearSelection();
     }
   }
 
