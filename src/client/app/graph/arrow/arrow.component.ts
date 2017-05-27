@@ -153,7 +153,7 @@ export class ArrowComponent implements OnInit {
         console.log('clicked on card id: ' + cardId);
         const card = this.canvasService.getCardById(cardId);
         this.canvasService.connectArrowAndCard(this.arrow, card, ArrowConnectionType.INCOMING);
-        // TODO(eyuelt): reposition the arrow
+        this.canvasService.repositionArrow(this.arrow);
       }
       this.tipDragging = false;
       this.lastDragPoint = null;
