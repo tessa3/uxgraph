@@ -14,7 +14,7 @@ import {
   OBJECT_CHANGED
 } from '../../service/google-realtime.service';
 import { Card } from '../../model/card';
-import {Size} from '../../model/geometry';
+import {Arrow} from '../../model/arrow';
 
 /**
  * This class represents the Card component.
@@ -28,7 +28,6 @@ import {Size} from '../../model/geometry';
 export class CardComponent implements OnInit {
 
   // The card data to render on the canvas.
-  // TODO(girum): Give these realtime custom models real static types.
   @Input() card: Card = null;
 
   // A function pointer to the CanvasService's "getBounds()" function.
@@ -38,8 +37,6 @@ export class CardComponent implements OnInit {
   scale: number = 1;
   // The current display position in the viewport's coordinate space.
   position: ViewportCoord = {x:0, y:0};
-  // The size of the card in the canvas' coordinate space.
-  size: Size = {width:120, height:160};
   // The radius of the rounded corners in the canvas' coordinate space.
   cornerRadius: number = 1;
 
@@ -109,21 +106,35 @@ export class CardComponent implements OnInit {
       const newCardPosition =
         this.canvasService.viewportCoordToCanvasCoord(this.position);
       this.card.position = {x: newCardPosition.x, y: newCardPosition.y};
-      // TODO: move all associated arrows too
-      let inArrow = this.card.incomingArrow;
-      if (inArrow) {
-        inArrow.tipPosition = {x: newCardPosition.x, y: newCardPosition.y + 40};
-        if (inArrow.fromCardId === null) {
-          inArrow.tailPosition = {x: newCardPosition.x - 50, y: newCardPosition.y + 40};
+      // Move all associated arrows too
+      this.card.incomingArrows.asArray().forEach((inArrow: Arrow) => {
+        if (inArrow) {
+          inArrow.tipPosition = {
+            x: newCardPosition.x,
+            y: newCardPosition.y + this.card.size.height / 2
+          };
+          if (inArrow.fromCard === null) {
+            inArrow.tailPosition = {
+              x: newCardPosition.x - 50,
+              y: newCardPosition.y + this.card.size.height / 2
+            };
+          }
         }
-      }
-      let outArrow = this.card.outgoingArrow;
-      if (outArrow) {
-        outArrow.tailPosition = {x: newCardPosition.x + 60, y: newCardPosition.y + 40};
-        if (outArrow.toCardId === null) {
-          outArrow.tipPosition = {x: newCardPosition.x + 60 + 50, y: newCardPosition.y + 40};
+      });
+      this.card.outgoingArrows.asArray().forEach((outArrow: Arrow) => {
+        if (outArrow) {
+          outArrow.tailPosition = {
+            x: newCardPosition.x + this.card.size.width,
+            y: newCardPosition.y + this.card.size.height / 2
+          };
+          if (outArrow.toCard === null) {
+            outArrow.tipPosition = {
+              x: newCardPosition.x + this.card.size.width + 50,
+              y: newCardPosition.y + this.card.size.height / 2
+            };
+          }
         }
-      }
+      });
       this.lastDragPnt = newDragPnt;
     }
   }

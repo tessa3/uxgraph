@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CanvasService, ViewportCoord } from '../canvas/canvas.service';
+import { Component, Input, OnInit, HostListener } from '@angular/core';
+import { CanvasService, ViewportCoord, ArrowConnectionType } from '../canvas/canvas.service';
 import {
   GoogleRealtimeService,
   OBJECT_CHANGED
 } from '../../service/google-realtime.service';
 import { Arrow } from '../../model/arrow';
+import { EventUtils } from '../../utils/event-utils';
 
 /**
  * This class represents the Arrow component.
@@ -18,6 +19,9 @@ import { Arrow } from '../../model/arrow';
 export class ArrowComponent implements OnInit {
   // The arrow data to render on the canvas.
   @Input() arrow: Arrow = null;
+  // A function pointer to the CanvasService's "getBounds()" function.
+  @Input() canvasBoundsGetter: (() => ClientRect);
+
   // The current scale factor of the arrow shape.
   scale: number = 1;
   // The list of anchor points for the arrow's polyline.
@@ -25,6 +29,13 @@ export class ArrowComponent implements OnInit {
   // The current display position of the tip of the arrow. This is the same as
   // the last point in anchorPoints, so this property is just for convenience.
   tipPosition: ViewportCoord = {x:0, y:0};
+
+  // Whether or not tail dragging is in progress.
+  private tailDragging: boolean = false;
+  // Whether or not tip dragging is in progress.
+  private tipDragging: boolean = false;
+  // The last point seen during the drag that is currently in progress.
+  private lastDragPoint: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
 
   constructor(private canvasService: CanvasService,
               private googleRealtimeService: GoogleRealtimeService) {
@@ -76,6 +87,77 @@ export class ArrowComponent implements OnInit {
       pointsStr += `${point.x},${point.y} `;
     }
     return pointsStr;
+  }
+
+  // TODO(eyuelt): increase arrow hitbox
+  // TODO(eyuelt): put the mousedown listener on the tip of the arrow, otherwise
+  // dragging anywhere on the arrow will move the tip
+  onMousedown(event: MouseEvent) {
+    if (EventUtils.eventIsFromPrimaryButton(event)) {
+      this.tipDragging = true;
+      const canvasBounds = this.canvasBoundsGetter();
+      this.lastDragPoint = {
+        x: event.clientX - canvasBounds.left,
+        y: event.clientY - canvasBounds.top
+      };
+    }
+  }
+
+  // Put mousemove on document to allow dragging outside of canvas
+  //noinspection JSUnusedGlobalSymbols
+  @HostListener('document:mousemove', ['$event'])
+  onMousemove(event: MouseEvent) {
+    if (this.tipDragging) {
+      event.preventDefault();
+      const canvasBounds = this.canvasBoundsGetter();
+      const newDragPoint = {
+        x: event.clientX - canvasBounds.left,
+        y: event.clientY - canvasBounds.top
+      };
+      this.tipPosition = {
+        x: this.tipPosition.x + newDragPoint.x - this.lastDragPoint.x,
+        y: this.tipPosition.y + newDragPoint.y - this.lastDragPoint.y
+      }
+      const newTipPosition =
+        this.canvasService.viewportCoordToCanvasCoord(this.tipPosition);
+      this.arrow.tipPosition = {x: newTipPosition.x, y: newTipPosition.y};
+      this.lastDragPoint = newDragPoint;
+    }
+  }
+
+  // Finds the first element in the given list that is a descendant of a
+  // uxg-card and returns the ancestor uxg-card element. Returns null if
+  // no such element exists.
+  // TODO(eyuelt): optimize this if needed
+  // TODO(eyuelt): move this somewhere else
+  private topCardElementFromList(elements: Element[]): Element {
+    for (let element of elements) {
+      while (element !== null) {
+        if (element.hasAttribute('uxg-card')) {
+          return element;
+        }
+        element = element.parentElement;
+      }
+    }
+    return null;
+  }
+
+  // Put mouseup on document to end drag even if mouseup is outside of canvas
+  //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+  @HostListener('document:mouseup', ['$event'])
+  onMouseup(event: MouseEvent) {
+    if (this.tipDragging) {
+      const topCard = this.topCardElementFromList(document.elementsFromPoint(event.clientX, event.clientY));
+      if (topCard !== null) {
+        const cardId = topCard.getAttribute('card-id');
+        console.log('clicked on card id: ' + cardId);
+        const card = this.canvasService.getCardById(cardId);
+        this.canvasService.connectArrowAndCard(this.arrow, card, ArrowConnectionType.INCOMING);
+        // TODO(eyuelt): reposition the arrow
+      }
+      this.tipDragging = false;
+      this.lastDragPoint = null;
+    }
   }
 
 }
