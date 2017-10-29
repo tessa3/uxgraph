@@ -14,7 +14,9 @@ export type ViewportCoord = Point;
 // A point in the coordinate system of the canvas.
 export type CanvasCoord = Point;
 
-// Specifies the type of connection an arrow has to a card.
+// Specifies the type of connection an arrow has to a card. Note that an arrow
+// may be connected to up to two cards, so it could have an INCOMING connection
+// and an OUTGOING connection.
 export enum ArrowConnectionType {
   INCOMING,
   OUTGOING

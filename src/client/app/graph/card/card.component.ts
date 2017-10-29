@@ -109,17 +109,29 @@ export class CardComponent implements OnInit {
       // Move all associated arrows too
       this.card.incomingArrows.asArray().forEach((inArrow: Arrow) => {
         if (inArrow) {
-          inArrow.tipPosition = {x: newCardPosition.x, y: newCardPosition.y + this.card.size.height/2};
+          inArrow.tipPosition = {
+            x: newCardPosition.x,
+            y: newCardPosition.y + this.card.size.height / 2
+          };
           if (inArrow.fromCard === null) {
-            inArrow.tailPosition = {x: newCardPosition.x - 50, y: newCardPosition.y + this.card.size.height/2};
+            inArrow.tailPosition = {
+              x: newCardPosition.x - 50,
+              y: newCardPosition.y + this.card.size.height / 2
+            };
           }
         }
       });
       this.card.outgoingArrows.asArray().forEach((outArrow: Arrow) => {
         if (outArrow) {
-          outArrow.tailPosition = { x: newCardPosition.x + this.card.size.width, y: newCardPosition.y + this.card.size.height/2 };
+          outArrow.tailPosition = {
+            x: newCardPosition.x + this.card.size.width,
+            y: newCardPosition.y + this.card.size.height / 2
+          };
           if (outArrow.toCard === null) {
-            outArrow.tipPosition = { x: newCardPosition.x + this.card.size.width + 50, y: newCardPosition.y + this.card.size.height/2 };
+            outArrow.tipPosition = {
+              x: newCardPosition.x + this.card.size.width + 50,
+              y: newCardPosition.y + this.card.size.height / 2
+            };
           }
         }
       });

@@ -35,7 +35,7 @@ export class ArrowComponent implements OnInit {
   // Whether or not tip dragging is in progress.
   private tipDragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
-  private lastDragPnt: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
+  private lastDragPoint: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
 
   constructor(private canvasService: CanvasService,
               private googleRealtimeService: GoogleRealtimeService) {
@@ -89,11 +89,14 @@ export class ArrowComponent implements OnInit {
     return pointsStr;
   }
 
+  // TODO(eyuelt): increase arrow hitbox
+  // TODO(eyuelt): put the mousedown listener on the tip of the arrow, otherwise
+  // dragging anywhere on the arrow will move the tip
   onMousedown(event: MouseEvent) {
     if (EventUtils.eventIsFromPrimaryButton(event)) {
       this.tipDragging = true;
       const canvasBounds = this.canvasBoundsGetter();
-      this.lastDragPnt = {
+      this.lastDragPoint = {
         x: event.clientX - canvasBounds.left,
         y: event.clientY - canvasBounds.top
       };
@@ -107,16 +110,18 @@ export class ArrowComponent implements OnInit {
     if (this.tipDragging) {
       event.preventDefault();
       const canvasBounds = this.canvasBoundsGetter();
-      const newDragPnt = {
+      const newDragPoint = {
         x: event.clientX - canvasBounds.left,
         y: event.clientY - canvasBounds.top
       };
-      this.tipPosition.x += newDragPnt.x - this.lastDragPnt.x;
-      this.tipPosition.y += newDragPnt.y - this.lastDragPnt.y;
+      this.tipPosition = {
+        x: this.tipPosition.x + newDragPoint.x - this.lastDragPoint.x,
+        y: this.tipPosition.y + newDragPoint.y - this.lastDragPoint.y
+      }
       const newTipPosition =
         this.canvasService.viewportCoordToCanvasCoord(this.tipPosition);
       this.arrow.tipPosition = {x: newTipPosition.x, y: newTipPosition.y};
-      this.lastDragPnt = newDragPnt;
+      this.lastDragPoint = newDragPoint;
     }
   }
 
@@ -151,7 +156,7 @@ export class ArrowComponent implements OnInit {
         // TODO(eyuelt): reposition the arrow
       }
       this.tipDragging = false;
-      this.lastDragPnt = null;
+      this.lastDragPoint = null;
     }
   }
 

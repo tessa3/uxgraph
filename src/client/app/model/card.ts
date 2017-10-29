@@ -5,7 +5,10 @@ import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 
 export class Card extends CollaborativeObjectModel {
   protected static modelName = 'Card';
-  readonly size: Size = {width:120, height:160};
+  readonly size: Size = {
+    width: 120,
+    height: 160
+  };
   // Collaborative fields
   position: Point;
   text: string;
