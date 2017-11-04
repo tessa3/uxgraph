@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {CanvasService, ArrowConnectionType} from '../../service/canvas.service';
 
 @Component({
   moduleId: module.id,
@@ -7,4 +8,15 @@ import {Component} from '@angular/core';
   styleUrls: ['secondary-toolbar.css']
 })
 export class SecondaryToolbarComponent {
+  constructor(private canvasService: CanvasService) {
+  }
+
+  onAddCardButtonPressed(event: MouseEvent) {
+    this.canvasService.realtimeTransaction(() => {
+      const card = this.canvasService.addCard();
+      const arrow = this.canvasService.addArrow();
+      this.canvasService.connectArrowAndCard(arrow, card, ArrowConnectionType.OUTGOING);
+      this.canvasService.repositionArrow(arrow);
+    });
+  }
 }

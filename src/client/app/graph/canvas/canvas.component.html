@@ -4,13 +4,13 @@
      xmlns:xlink="http://www.w3.org/1999/xlink"
      (mousedown)="this.onMousedown($event)"
      (mousewheel)="this.onMousewheel($event)">
-  <g uxg-arrow
-     *ngFor="let arrow of (this.canvasService.arrows | toIterable)"
-     [arrow]="arrow"
-     [canvasBoundsGetter]="getBounds"></g>
   <g uxg-card
      *ngFor="let card of (this.canvasService.cards | toIterable)"
      [card]="card"
      [attr.card-id]="card.id"
+     [canvasBoundsGetter]="getBounds"></g>
+  <g uxg-arrow
+     *ngFor="let arrow of (this.canvasService.arrows | toIterable)"
+     [arrow]="arrow"
      [canvasBoundsGetter]="getBounds"></g>
 </svg>

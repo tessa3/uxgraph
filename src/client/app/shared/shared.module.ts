@@ -6,6 +6,7 @@ import {GoogleRealtimeService} from '../service/google-realtime.service';
 import {FabComponent} from './fab/index';
 import {GraphPreviewListService} from '../home/graph-preview-list/index';
 import {GoogleDriveService} from '../service/google-drive.service';
+import {CanvasService} from '../service/canvas.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -32,6 +33,7 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
+        CanvasService,
         GoogleDriveService,
         GoogleRealtimeService,
         GraphPreviewListService,

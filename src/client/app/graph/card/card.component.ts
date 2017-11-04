@@ -7,7 +7,7 @@ import {
 import {
   CanvasService,
   ViewportCoord,
-} from '../canvas/canvas.service';
+} from '../../service/canvas.service';
 import {EventUtils} from '../../utils/event-utils';
 import {
   GoogleRealtimeService,
@@ -107,33 +107,12 @@ export class CardComponent implements OnInit {
         this.canvasService.viewportCoordToCanvasCoord(this.position);
       this.card.position = {x: newCardPosition.x, y: newCardPosition.y};
       // Move all associated arrows too
-      this.card.incomingArrows.asArray().forEach((inArrow: Arrow) => {
-        if (inArrow) {
-          inArrow.tipPosition = {
-            x: newCardPosition.x,
-            y: newCardPosition.y + this.card.size.height / 2
-          };
-          if (inArrow.fromCard === null) {
-            inArrow.tailPosition = {
-              x: newCardPosition.x - 50,
-              y: newCardPosition.y + this.card.size.height / 2
-            };
-          }
-        }
+      // TODO(eyuelt): instead, have arrows subscribe to card position changes
+      this.card.incomingArrows.asArray().forEach((arrow: Arrow) => {
+        this.canvasService.repositionArrow(arrow);
       });
-      this.card.outgoingArrows.asArray().forEach((outArrow: Arrow) => {
-        if (outArrow) {
-          outArrow.tailPosition = {
-            x: newCardPosition.x + this.card.size.width,
-            y: newCardPosition.y + this.card.size.height / 2
-          };
-          if (outArrow.toCard === null) {
-            outArrow.tipPosition = {
-              x: newCardPosition.x + this.card.size.width + 50,
-              y: newCardPosition.y + this.card.size.height / 2
-            };
-          }
-        }
+      this.card.outgoingArrows.asArray().forEach((arrow: Arrow) => {
+        this.canvasService.repositionArrow(arrow);
       });
       this.lastDragPnt = newDragPnt;
     }

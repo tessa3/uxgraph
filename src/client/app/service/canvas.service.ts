@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {
   GoogleRealtimeService,
-} from '../../service/google-realtime.service';
+} from './google-realtime.service';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
-import { Card } from '../../model/card';
-import { Arrow } from '../../model/arrow';
-import { Point } from '../../model/geometry';
+import { Card } from '../model/card';
+import { Arrow } from '../model/arrow';
+import { Point } from '../model/geometry';
 
 // NOTE: These type aliases are not type-checked. They are just for readability.
 // TODO(eyuelt): is there a way of getting these type-checked?
@@ -59,11 +59,15 @@ export class CanvasService {
   private kMinZoomScale: number = 0.1;
   private kMaxZoomScale: number = 10.0;
 
+  // A reference to the Realtime Document. Used here to create Cards and Arrows.
+  private realtimeDocument: gapi.drive.realtime.Document = null;
+
   constructor(private googleRealtimeService: GoogleRealtimeService) {
     this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
       if (currentDocument === null) {
         return;
       }
+      this.realtimeDocument = currentDocument;
 
       let model = currentDocument.getModel();
 
@@ -141,7 +145,38 @@ export class CanvasService {
     return null;
   }
 
-  connectArrowAndCard(arrow: Arrow, card: Card, arrowConnection: ArrowConnectionType) {
+  // Creates a card and adds it to the canvas.
+  addCard(position: Point = {x:0, y:0},
+          text: string = "",
+          selected = false): Card {
+    const model = this.realtimeDocument.getModel();
+    if (model) {
+      let card = model.create(Card);
+      card.position = position;
+      card.text = text;
+      card.selected = selected;
+      model.getRoot().get('cards').push(card);
+      return card;
+    }
+    return null;
+  }
+
+  // Creates an arrow and adds it to the canvas.
+  addArrow(tailPosition: Point = {x:0, y:0},
+           tipPosition: Point = {x:0, y:0}): Arrow {
+    const model = this.realtimeDocument.getModel();
+    if (model) {
+      let arrow = model.create(Arrow);
+      arrow.tailPosition = tailPosition;
+      arrow.tipPosition = tipPosition;
+      model.getRoot().get('arrows').push(arrow);
+      return arrow;
+    }
+    return null;
+  }
+
+  connectArrowAndCard(arrow: Arrow, card: Card,
+                      arrowConnection: ArrowConnectionType) {
     if (arrowConnection === ArrowConnectionType.INCOMING) {
       if (arrow.toCard) {
         arrow.toCard.incomingArrows.removeValue(arrow);
@@ -157,6 +192,35 @@ export class CanvasService {
     }
   }
 
+  // Repositions the given arrow's tail and tip based on its attached cards.
+  repositionArrow(arrow: Arrow) {
+    if (!arrow.fromCard && !arrow.toCard) return;
+    if (arrow.toCard) {
+      arrow.tipPosition = {
+        x: arrow.toCard.position.x,
+        y: arrow.toCard.position.y + arrow.toCard.size.height / 2
+      };
+      if (arrow.fromCard === null) {
+        arrow.tailPosition = {
+          x: arrow.toCard.position.x - 50,
+          y: arrow.toCard.position.y + arrow.toCard.size.height / 2
+        };
+      }
+    }
+    if (arrow.fromCard) {
+      arrow.tailPosition = {
+        x: arrow.fromCard.position.x + arrow.fromCard.size.width,
+        y: arrow.fromCard.position.y + arrow.fromCard.size.height / 2
+      };
+      if (arrow.toCard === null) {
+        arrow.tipPosition = {
+          x: arrow.fromCard.position.x + arrow.fromCard.size.width + 50,
+          y: arrow.fromCard.position.y + arrow.fromCard.size.height / 2
+        };
+      }
+    }
+  }
+
   // TODO(eyuelt): Get rid of this listener stuff. Instead, the objects that
   // want to listen should just register with realtime for changes to the scale
   // or originOffset properties of the canvasService.
@@ -168,5 +232,14 @@ export class CanvasService {
     this.listeners.forEach((listener) => {
       listener();
     });
+  }
+
+  // This function calls the given function within a Realtime compound
+  // operation, which treats the function as a transaction.
+  realtimeTransaction(fn: {(): void}) {
+    const model = this.realtimeDocument.getModel();
+    model.beginCompoundOperation();
+    fn();
+    model.endCompoundOperation();
   }
 }
