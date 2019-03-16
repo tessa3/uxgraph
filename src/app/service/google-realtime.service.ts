@@ -72,7 +72,7 @@ export class GoogleRealtimeService {
         // Do nothing.
       }, (error) => {
         // If the user doesn't have permission to view this uxgraph, just send
-        // him back to the home screen.
+        // them back to the home screen.
         if (error.type === FORBIDDEN) {
           // TODO(girum): We can do better than an alert() here...
           alert('You do not have permission to view this uxgraph. ' +

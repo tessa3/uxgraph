@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'uxg-app',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'uxgraph';  // TODO(eyuelt): also set this as the page title?
+  constructor(private titleService: Title) {
+    this.titleService.setTitle('uxgraph');
+  }
 }

@@ -66,10 +66,10 @@ export class CanvasService {
 
   constructor(private googleRealtimeService: GoogleRealtimeService) {
     this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
+      this.realtimeDocument = currentDocument;
       if (currentDocument === null) {
         return;
       }
-      this.realtimeDocument = currentDocument;
 
       let model = currentDocument.getModel();
 

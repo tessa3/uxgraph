@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser'
 import { GraphModule } from './graph.module';
 import { GraphComponent } from './graph.component';
-import { GoogleRealtimeService } from '../service';
+import { GoogleRealtimeService } from '../service/google-realtime.service';
 import { FakeGoogleRealtimeService } from 'src/testing/fake/fake-google-realtime.service';
 import { GoogleDriveService } from '../service/google-drive.service';
 import { FakeGoogleDriveService } from 'src/testing/fake/fake-google-drive.service';

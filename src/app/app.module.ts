@@ -16,7 +16,7 @@ import { GraphModule } from './graph/graph.module';
     BrowserModule,
     GraphModule,
     HomeModule,
-    SharedModule.forRoot()
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

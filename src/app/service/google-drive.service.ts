@@ -57,8 +57,8 @@ export class GoogleDriveService {
         Arrow.registerModel();
 
         // Also, immediately try to authorize the current user without showing
-        // him the authorize dialog. May fail if the user has never authorized
-        // our app before.
+        // the authorize dialog. May fail if the user has never authorized our
+        // app before.
         this.authorize(false);
       });
     });
@@ -70,7 +70,7 @@ export class GoogleDriveService {
    *
    * @param usePopup If true, will show popup on the screen for the user to
    *                 click. If false, will attempt to automatically authenticate
-   *                 the user in without showing him the popup.
+   *                 the user in without showing the popup.
    */
   authorize(usePopup: boolean) {
     gapi.auth.authorize({

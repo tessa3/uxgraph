@@ -1,4 +1,3 @@
-// TODO(eyuelt): get the Drive typings and delete this file
 /**
  * Not sure if we need this yet. Seems like the transpiled JS is looking for
  * an actual property called "gapi.drive.realtime.Collaborator" instead of

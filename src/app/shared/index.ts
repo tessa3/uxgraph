@@ -1,5 +1,6 @@
 /**
  * This barrel file provides the exports for the shared resources (services, components).
  */
-export * from '../home/graph-preview-list/index';
-export * from '../graph/side-panel/index';
+export * from './fab/fab.component';
+export * from './pipe/to-iterable.pipe';
+export * from './shared.module';

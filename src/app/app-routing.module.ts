@@ -6,7 +6,8 @@ import { GraphRoutes } from './graph';
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   ...HomeRoutes,
-  ...GraphRoutes
+  ...GraphRoutes,
+  // TODO(eyuelt): { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({

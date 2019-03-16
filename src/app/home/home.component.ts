@@ -5,7 +5,7 @@ import {DriveFile} from '../model/drive-file';
 import {GoogleDriveService} from '../service/google-drive.service';
 
 /**
- * This class represents the lazy loaded HomeComponent.
+ * This class represents the HomeComponent.
  */
 @Component({
   selector: 'uxg-home',
@@ -23,8 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private createGraphSub: Subscription;
 
   /**
-   * Creates an instance of the HomeComponent with the injected
-   * GraphPreviewListService.
+   * Creates an instance of the HomeComponent.
    */
   constructor(private googleDriveService: GoogleDriveService,
               private router: Router) {

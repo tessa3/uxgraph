@@ -1,8 +1,9 @@
-import {NgModule, ModuleWithProviders} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {RouterModule} from '@angular/router';
-import {FabComponent} from './fab/index';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { FabComponent } from './fab/index';
+import { ToIterablePipe } from './pipe/to-iterable.pipe';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -16,19 +17,12 @@ import {FabComponent} from './fab/index';
   ],
   declarations: [
     FabComponent,
+    ToIterablePipe,
   ],
   exports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
     FabComponent,
+    ToIterablePipe,
   ]
 })
 export class SharedModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: SharedModule,
-      providers: []
-    };
-  }
 }

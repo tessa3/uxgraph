@@ -3,7 +3,7 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {GoogleRealtimeService} from '../service/google-realtime.service';
 
 /**
- * This class represents the lazy loaded GraphComponent.
+ * This class represents the GraphComponent.
  */
 @Component({
   selector: 'uxg-graph',
@@ -13,6 +13,7 @@ import {GoogleRealtimeService} from '../service/google-realtime.service';
 export class GraphComponent implements OnInit, OnDestroy {
 
   graphId: string;
+  private realtimeDocument: gapi.drive.realtime.Document = null;
 
   constructor(private googleRealtimeService: GoogleRealtimeService,
               private activatedRoute: ActivatedRoute) {
@@ -22,11 +23,16 @@ export class GraphComponent implements OnInit, OnDestroy {
     this.activatedRoute.params.forEach((params: Params) => {
       this.graphId = params['graphId'];
       this.googleRealtimeService.loadRealtimeDocument(this.graphId);
+      this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
+        this.realtimeDocument = currentDocument;
+      });
     });
   }
 
   ngOnDestroy() {
-    this.googleRealtimeService.currentDocument.getValue().close();
-    this.googleRealtimeService.currentDocument.next(null);
+    if (this.realtimeDocument) {
+      this.realtimeDocument.close();
+      this.googleRealtimeService.currentDocument.next(null);
+    }
   }
 }
