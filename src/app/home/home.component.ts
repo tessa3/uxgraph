@@ -13,26 +13,20 @@ import {GoogleDriveService} from '../service/google-drive.service';
   styleUrls: ['home.component.css'],
 })
 
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnDestroy {
 
   userLoggedIn: boolean = false;
   graphPreviews: DriveFile[] = [];
 
   private oauthSub: Subscription;
   private listFilesSub: Subscription;
-  private createGraphSub: Subscription;
+  private createGraphSub?: Subscription;
 
   /**
    * Creates an instance of the HomeComponent.
    */
   constructor(private googleDriveService: GoogleDriveService,
               private router: Router) {
-  }
-
-  /**
-   * Get the names OnInit
-   */
-  ngOnInit() {
     this.oauthSub = this.googleDriveService.oauthToken
         .subscribe((oauthToken) => {
           if (!!oauthToken) {
@@ -61,7 +55,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.oauthSub.unsubscribe();
     this.listFilesSub.unsubscribe();
-    if (this.createGraphSub) {
+    if (this.createGraphSub !== undefined) {
       this.createGraphSub.unsubscribe();
     }
   }

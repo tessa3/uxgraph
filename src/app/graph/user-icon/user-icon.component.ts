@@ -7,5 +7,5 @@ import {Collaborator} from '../../model/collaborator';
   styleUrls: ['user-icon.component.css']
 })
 export class UserIconComponent {
-  @Input() user: Collaborator;
+  @Input() user!: Collaborator;
 }

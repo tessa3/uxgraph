@@ -12,8 +12,8 @@ import {GoogleRealtimeService} from '../service/google-realtime.service';
 })
 export class GraphComponent implements OnInit, OnDestroy {
 
-  graphId: string;
-  private realtimeDocument: gapi.drive.realtime.Document = null;
+  graphId: string|undefined;
+  private realtimeDocument: gapi.drive.realtime.Document|null = null;
 
   constructor(private googleRealtimeService: GoogleRealtimeService,
               private activatedRoute: ActivatedRoute) {
@@ -22,10 +22,12 @@ export class GraphComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.activatedRoute.params.forEach((params: Params) => {
       this.graphId = params['graphId'];
-      this.googleRealtimeService.loadRealtimeDocument(this.graphId);
-      this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
-        this.realtimeDocument = currentDocument;
-      });
+      if (this.graphId) {
+        this.googleRealtimeService.loadRealtimeDocument(this.graphId);
+        this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
+          this.realtimeDocument = currentDocument;
+        });
+      }
     });
   }
 

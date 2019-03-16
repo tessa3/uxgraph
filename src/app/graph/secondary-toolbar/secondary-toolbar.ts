@@ -14,8 +14,10 @@ export class SecondaryToolbarComponent {
     this.canvasService.realtimeTransaction(() => {
       const card = this.canvasService.addCard();
       const arrow = this.canvasService.addArrow();
-      this.canvasService.connectArrowAndCard(arrow, card, ArrowConnectionType.OUTGOING);
-      this.canvasService.repositionArrow(arrow);
+      if (card !== null && arrow !== null) {
+        this.canvasService.connectArrowAndCard(arrow, card, ArrowConnectionType.OUTGOING);
+        this.canvasService.repositionArrow(arrow);
+      }
     });
   }
 }

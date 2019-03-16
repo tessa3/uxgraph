@@ -27,10 +27,10 @@ import {Arrow} from '../../model/arrow';
 export class CardComponent implements OnInit {
 
   // The card data to render on the canvas.
-  @Input() card: Card = null;
+  @Input() card!: Card;
 
   // A function pointer to the CanvasService's "getBounds()" function.
-  @Input() canvasBoundsGetter: (() => ClientRect);
+  @Input() canvasBoundsGetter!: (() => ClientRect);
 
   // The current scale factor of the card shape.
   scale: number = 1;
@@ -42,7 +42,7 @@ export class CardComponent implements OnInit {
   // Whether or not dragging is in progress.
   private dragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
-  private lastDragPnt: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
+  private lastDragPnt: ViewportCoord|null = null;
 
   constructor(private canvasService: CanvasService,
               private googleRealtimeService: GoogleRealtimeService) {
@@ -100,8 +100,9 @@ export class CardComponent implements OnInit {
         x: event.clientX - canvasBounds.left,
         y: event.clientY - canvasBounds.top
       };
-      this.position.x += newDragPnt.x - this.lastDragPnt.x;
-      this.position.y += newDragPnt.y - this.lastDragPnt.y;
+      // TODO(eyuelt): see comment about CanvasPanner in canvas.component.ts.
+      this.position.x += newDragPnt.x - this.lastDragPnt!.x;
+      this.position.y += newDragPnt.y - this.lastDragPnt!.y;
       const newCardPosition =
         this.canvasService.viewportCoordToCanvasCoord(this.position);
       this.card.position = {x: newCardPosition.x, y: newCardPosition.y};

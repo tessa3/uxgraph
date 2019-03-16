@@ -24,8 +24,8 @@ const FORBIDDEN = 'forbidden';
 @Injectable()
 export class GoogleRealtimeService {
 
-  currentDocument: BehaviorSubject<Document> =
-      new BehaviorSubject<Document>(null);
+  currentDocument: BehaviorSubject<Document|null> =
+      new BehaviorSubject<Document|null>(null);
 
   collaborators: BehaviorSubject<Collaborator[]> =
       new BehaviorSubject<Collaborator[]>([]);

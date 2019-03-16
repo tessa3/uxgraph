@@ -38,9 +38,9 @@ export enum ArrowConnectionType {
 })
 export class CanvasService {
   // The models of the cards to show on the canvas.
-  cards: CollaborativeList<Card>;
+  cards: CollaborativeList<Card>|undefined;
   // The models of the arrows to show on the canvas.
-  arrows: CollaborativeList<Arrow>;
+  arrows: CollaborativeList<Arrow>|undefined;
 
   // The zoom scale relative to the original viewport size.
   zoomScale: number = 1;
@@ -62,7 +62,7 @@ export class CanvasService {
   private kMaxZoomScale: number = 10.0;
 
   // A reference to the Realtime Document. Used here to create Cards and Arrows.
-  private realtimeDocument: gapi.drive.realtime.Document = null;
+  private realtimeDocument: gapi.drive.realtime.Document|null = null;
 
   constructor(private googleRealtimeService: GoogleRealtimeService) {
     this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
@@ -131,17 +131,21 @@ export class CanvasService {
   }
 
   deselectCards() {
-    for (let i = 0; i < this.cards.length; i++) {
-      this.cards.get(i).selected = false;
+    if (this.cards) {
+      for (let i = 0; i < this.cards.length; i++) {
+        this.cards.get(i).selected = false;
+      }
     }
   }
 
-  getCardById(id: string): Card {
+  getCardById(id: string): Card|null {
     // TODO(eyuelt): change CollaborativeList to CollaborativeMap
-    let cardsArray = this.cards.asArray();
-    for (let card of cardsArray) {
-      if (card.id === id) {
-        return card;
+    if (this.cards) {
+      let cardsArray = this.cards.asArray();
+      for (let card of cardsArray) {
+        if (card.id === id) {
+          return card;
+        }
       }
     }
     return null;
@@ -150,29 +154,33 @@ export class CanvasService {
   // Creates a card and adds it to the canvas.
   addCard(position: Point = {x:0, y:0},
           text: string = "",
-          selected = false): Card {
-    const model = this.realtimeDocument.getModel();
-    if (model) {
-      let card = model.create(Card);
-      card.position = position;
-      card.text = text;
-      card.selected = selected;
-      model.getRoot().get('cards').push(card);
-      return card;
+          selected = false): Card|null {
+    if (this.realtimeDocument !== null) {
+      const model = this.realtimeDocument.getModel();
+      if (model) {
+        let card = model.create(Card);
+        card.position = position;
+        card.text = text;
+        card.selected = selected;
+        model.getRoot().get('cards').push(card);  // TODO(eyuelt): shouldn't we be adding directly to this.cards?
+        return card;
+      }
     }
     return null;
   }
 
   // Creates an arrow and adds it to the canvas.
   addArrow(tailPosition: Point = {x:0, y:0},
-           tipPosition: Point = {x:0, y:0}): Arrow {
-    const model = this.realtimeDocument.getModel();
-    if (model) {
-      let arrow = model.create(Arrow);
-      arrow.tailPosition = tailPosition;
-      arrow.tipPosition = tipPosition;
-      model.getRoot().get('arrows').push(arrow);
-      return arrow;
+           tipPosition: Point = {x:0, y:0}): Arrow|null {
+    if (this.realtimeDocument !== null) {
+      const model = this.realtimeDocument.getModel();
+      if (model) {
+        let arrow = model.create(Arrow);
+        arrow.tailPosition = tailPosition;
+        arrow.tipPosition = tipPosition;
+        model.getRoot().get('arrows').push(arrow);  // TODO(eyuelt): same as above
+        return arrow;
+      }
     }
     return null;
   }
@@ -239,9 +247,11 @@ export class CanvasService {
   // This function calls the given function within a Realtime compound
   // operation, which treats the function as a transaction.
   realtimeTransaction(fn: {(): void}) {
-    const model = this.realtimeDocument.getModel();
-    model.beginCompoundOperation();
-    fn();
-    model.endCompoundOperation();
+    if (this.realtimeDocument !== null) {
+      const model = this.realtimeDocument.getModel();
+      model.beginCompoundOperation();
+      fn();
+      model.endCompoundOperation();
+    }
   }
 }

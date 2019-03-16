@@ -3,7 +3,8 @@ import { UUID } from 'angular2-uuid';
 export abstract class CollaborativeObjectModel {
   protected static modelName: string;
   // Collaborative fields
-  private _id: string;
+  // TODO(eyuelt): get rid of non-null assertions
+  private _id!: string;
 
   // Set getter for id but no setter to prevent overwriting.
   get id() {

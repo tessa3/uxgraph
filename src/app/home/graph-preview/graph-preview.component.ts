@@ -10,11 +10,10 @@ import { Component, Input } from '@angular/core';
 })
 
 export class GraphPreviewComponent {
-    @Input() name: string;
-    lastEdited: string;
+    @Input() name?: string;
+    lastEdited: string|null;
 
     constructor() {
-        this.name = null;
         this.lastEdited = null;
     }
 }

@@ -16,7 +16,7 @@ import {Title} from '@angular/platform-browser';
 })
 export class GraphHeaderComponent implements OnInit {
 
-  @Input() graphId: string;
+  @Input() graphId!: string;
 
   currentGraph: DriveFile = {
     // Give a temporary name to this graph while we load the real name...

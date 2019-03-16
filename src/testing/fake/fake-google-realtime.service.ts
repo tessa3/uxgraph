@@ -5,8 +5,8 @@ import { DriveFile } from 'src/app/model';
 @Injectable()
 export class FakeGoogleRealtimeService {
 
-  currentDocument: BehaviorSubject<Document> =
-      new BehaviorSubject<Document>(null);
+  currentDocument: BehaviorSubject<Document|null> =
+      new BehaviorSubject<Document|null>(null);
 
   loadRealtimeDocument(driveFileId: string) {
   }

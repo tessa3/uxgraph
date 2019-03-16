@@ -5,10 +5,11 @@ import { CollaborativeObjectModel } from './collaborative-object-model';
 export class Arrow extends CollaborativeObjectModel {
   protected static modelName = 'Arrow';
   // Collaborative fields
-  tailPosition: Point;
-  tipPosition: Point;
-  fromCard: Card;
-  toCard: Card;
+  // TODO(eyuelt): get rid of non-null assertions
+  tailPosition!: Point;
+  tipPosition!: Point;
+  fromCard!: Card;
+  toCard!: Card;
 
   static registerModel() {
     super.registerModel();

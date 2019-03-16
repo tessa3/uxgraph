@@ -1,5 +1,5 @@
 declare namespace gapi.drive.share {
-  export function ShareClient(): void;
+  export class ShareClient {}
 
   interface ShareClient {
     setOAuthToken: (oauthToken: string) => void;

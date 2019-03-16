@@ -10,13 +10,14 @@ export class Card extends CollaborativeObjectModel {
     height: 160
   };
   // Collaborative fields
-  position: Point;
-  text: string;
-  selected: boolean;
+  // TODO(eyuelt): get rid of non-null assertions
+  position!: Point;
+  text!: string;
+  selected!: boolean;
   // TODO(eyuelt): Change these to normal arrays since CollaborativeLists
   // inside custom collaborative objects are not actually collaborative.
-  incomingArrows: CollaborativeList<Arrow>;
-  outgoingArrows: CollaborativeList<Arrow>;
+  incomingArrows!: CollaborativeList<Arrow>;
+  outgoingArrows!: CollaborativeList<Arrow>;
 
   initializeModel() {
     super.initializeModel();

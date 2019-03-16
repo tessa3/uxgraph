@@ -17,9 +17,9 @@ import { EventUtils } from '../../utils/event-utils';
 })
 export class ArrowComponent implements OnInit {
   // The arrow data to render on the canvas.
-  @Input() arrow: Arrow = null;
+  @Input() arrow!: Arrow;
   // A function pointer to the CanvasService's "getBounds()" function.
-  @Input() canvasBoundsGetter: (() => ClientRect);
+  @Input() canvasBoundsGetter!: (() => ClientRect);
 
   // The current scale factor of the arrow shape.
   scale: number = 1;
@@ -34,7 +34,7 @@ export class ArrowComponent implements OnInit {
   // Whether or not tip dragging is in progress.
   private tipDragging: boolean = false;
   // The last point seen during the drag that is currently in progress.
-  private lastDragPoint: ViewportCoord = null; //TODO(eyuelt): make this nullable after TS2 update
+  private lastDragPoint: ViewportCoord|null = null;
 
   constructor(private canvasService: CanvasService,
               private googleRealtimeService: GoogleRealtimeService) {
@@ -114,8 +114,9 @@ export class ArrowComponent implements OnInit {
         y: event.clientY - canvasBounds.top
       };
       this.tipPosition = {
-        x: this.tipPosition.x + newDragPoint.x - this.lastDragPoint.x,
-        y: this.tipPosition.y + newDragPoint.y - this.lastDragPoint.y
+        // TODO(eyuelt): see comment about CanvasPanner in canvas.component.ts.
+        x: this.tipPosition.x + newDragPoint.x - this.lastDragPoint!.x,
+        y: this.tipPosition.y + newDragPoint.y - this.lastDragPoint!.y
       }
       const newTipPosition =
         this.canvasService.viewportCoordToCanvasCoord(this.tipPosition);
@@ -129,13 +130,14 @@ export class ArrowComponent implements OnInit {
   // no such element exists.
   // TODO(eyuelt): optimize this if needed
   // TODO(eyuelt): move this somewhere else
-  private topCardElementFromList(elements: Element[]): Element {
-    for (let element of elements) {
-      while (element !== null) {
-        if (element.hasAttribute('uxg-card')) {
-          return element;
+  private topCardElementFromList(elements: Element[]): Element|null {
+    for (const element of elements) {
+      let elem: Element|null = element;
+      while (elem !== null) {
+        if (elem.hasAttribute('uxg-card')) {
+          return elem;
         }
-        element = element.parentElement;
+        elem = elem.parentElement;
       }
     }
     return null;
@@ -149,10 +151,14 @@ export class ArrowComponent implements OnInit {
       const topCard = this.topCardElementFromList(document.elementsFromPoint(event.clientX, event.clientY));
       if (topCard !== null) {
         const cardId = topCard.getAttribute('card-id');
-        console.log('clicked on card id: ' + cardId);
-        const card = this.canvasService.getCardById(cardId);
-        this.canvasService.connectArrowAndCard(this.arrow, card, ArrowConnectionType.INCOMING);
-        this.canvasService.repositionArrow(this.arrow);
+        if (cardId !== null) {
+          console.log('clicked on card id: ' + cardId);
+          const card = this.canvasService.getCardById(cardId);
+          if (card !== null) {
+            this.canvasService.connectArrowAndCard(this.arrow, card, ArrowConnectionType.INCOMING);
+            this.canvasService.repositionArrow(this.arrow);
+          }
+        }
       }
       this.tipDragging = false;
       this.lastDragPoint = null;

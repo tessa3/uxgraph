@@ -1,20 +1,27 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { AsyncSubject, Observable, of } from 'rxjs';
 import { DriveFile } from 'src/app/model';
 
 @Injectable()
 export class FakeGoogleDriveService {
 
-  oauthToken: BehaviorSubject<GoogleApiOAuth2TokenObject> =
-      new BehaviorSubject<GoogleApiOAuth2TokenObject>(null);
+  private driveFile: DriveFile = {
+    name: 'fakeName',
+    mimeType: 'fakeMimeType',
+    kind: 'fakeKind',
+    id: 'chingy'
+  };
+
+  oauthToken: AsyncSubject<GoogleApiOAuth2TokenObject> =
+      new AsyncSubject<GoogleApiOAuth2TokenObject>();
 
   authorize(usePopup: boolean) {}
 
   listFiles(): Observable<DriveFile[]> {
-    return new Observable<DriveFile[]>(null);
+    return of([this.driveFile]);
   }
 
   getFile(fileId: string): Observable<DriveFile> {
-    return new Observable<DriveFile>(null);
+    return of(this.driveFile);
   }
 }

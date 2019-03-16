@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {RequestOptionsArgs, Response} from '@angular/http';
+import {RequestOptionsArgs, Response, ResponseOptions} from '@angular/http';
 import {Observable, from} from 'rxjs';
 
 @Injectable()
 export class FakeHttp {
 
-  fakeResponse: Response;
+  fakeResponse: Response = new Response(new ResponseOptions());
 
   get(url: string,
       options?: RequestOptionsArgs): Observable<Response> {
