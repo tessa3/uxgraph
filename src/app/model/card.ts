@@ -19,13 +19,6 @@ export class Card extends CollaborativeObjectModel {
   incomingArrows!: CollaborativeList<Arrow>;
   outgoingArrows!: CollaborativeList<Arrow>;
 
-  initializeModel() {
-    super.initializeModel();
-    const model = gapi.drive.realtime.custom.getModel(this);
-    this.incomingArrows = model.createList() as CollaborativeList<Arrow>;
-    this.outgoingArrows = model.createList() as CollaborativeList<Arrow>;
-  }
-
   static registerModel() {
     super.registerModel();
     this.prototype.position =
@@ -39,4 +32,11 @@ export class Card extends CollaborativeObjectModel {
     this.prototype.outgoingArrows =
       gapi.drive.realtime.custom.collaborativeField('outgoingArrows');
   }
-};
+
+  initializeModel() {
+    super.initializeModel();
+    const model = gapi.drive.realtime.custom.getModel(this);
+    this.incomingArrows = model.createList() as CollaborativeList<Arrow>;
+    this.outgoingArrows = model.createList() as CollaborativeList<Arrow>;
+  }
+}

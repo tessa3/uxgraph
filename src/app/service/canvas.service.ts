@@ -43,11 +43,11 @@ export class CanvasService {
   arrows: CollaborativeList<Arrow>|undefined;
 
   // The zoom scale relative to the original viewport size.
-  zoomScale: number = 1;
+  zoomScale = 1;
   // The offset of the viewport from its original position.
   originOffset: CanvasCoord = {x: 0, y: 0};
   // If true, multipe
-  multiSelectMode: boolean = false;
+  multiSelectMode = false;
   // These are the keyboard keys that enable multi-select
   MULTI_SELECT_KEY_CODES: string[] = [
     'MetaLeft',  // Left cmd button on Mac
@@ -56,10 +56,10 @@ export class CanvasService {
   // TODO(eyuelt): I think I can use RXJS' Subject for this?
   // The list of functions to call when zoom or pan occurs. This is used to
   // essentially watch this class' properties.
-  private listeners: {(): void}[] = [];
+  private listeners: (() => void)[] = [];
   // The min and max zoom scales.
-  private kMinZoomScale: number = 0.1;
-  private kMaxZoomScale: number = 10.0;
+  private kMinZoomScale = 0.1;
+  private kMaxZoomScale = 10.0;
 
   // A reference to the Realtime Document. Used here to create Cards and Arrows.
   private realtimeDocument: gapi.drive.realtime.Document|null = null;
@@ -71,12 +71,12 @@ export class CanvasService {
         return;
       }
 
-      let model = currentDocument.getModel();
+      const model = currentDocument.getModel();
 
       // Lazily instantiate the collaborative cards array.
       if (model.getRoot().get('cards') === null) {
         console.log('no "cards" object at root');
-        let collaborativeCards = model.createList([]);
+        const collaborativeCards = model.createList([]);
         model.getRoot().set('cards', collaborativeCards);
       }
 
@@ -85,7 +85,7 @@ export class CanvasService {
       // Lazily instantiate the collaborative arrows array.
       if (model.getRoot().get('arrows') === null) {
         console.log('no "arrows" object at root');
-        let collaborativeArrows = model.createList([]);
+        const collaborativeArrows = model.createList([]);
         model.getRoot().set('arrows', collaborativeArrows);
       }
 
@@ -141,8 +141,8 @@ export class CanvasService {
   getCardById(id: string): Card|null {
     // TODO(eyuelt): change CollaborativeList to CollaborativeMap
     if (this.cards) {
-      let cardsArray = this.cards.asArray();
-      for (let card of cardsArray) {
+      const cardsArray = this.cards.asArray();
+      for (const card of cardsArray) {
         if (card.id === id) {
           return card;
         }
@@ -152,13 +152,13 @@ export class CanvasService {
   }
 
   // Creates a card and adds it to the canvas.
-  addCard(position: Point = {x:0, y:0},
-          text: string = "",
+  addCard(position: Point = {x: 0, y: 0},
+          text: string = '',
           selected = false): Card|null {
     if (this.realtimeDocument !== null) {
       const model = this.realtimeDocument.getModel();
       if (model) {
-        let card = model.create(Card);
+        const card = model.create(Card);
         card.position = position;
         card.text = text;
         card.selected = selected;
@@ -170,12 +170,12 @@ export class CanvasService {
   }
 
   // Creates an arrow and adds it to the canvas.
-  addArrow(tailPosition: Point = {x:0, y:0},
-           tipPosition: Point = {x:0, y:0}): Arrow|null {
+  addArrow(tailPosition: Point = {x: 0, y: 0},
+           tipPosition: Point = {x: 0, y: 0}): Arrow|null {
     if (this.realtimeDocument !== null) {
       const model = this.realtimeDocument.getModel();
       if (model) {
-        let arrow = model.create(Arrow);
+        const arrow = model.create(Arrow);
         arrow.tailPosition = tailPosition;
         arrow.tipPosition = tipPosition;
         model.getRoot().get('arrows').push(arrow);  // TODO(eyuelt): same as above
@@ -204,7 +204,9 @@ export class CanvasService {
 
   // Repositions the given arrow's tail and tip based on its attached cards.
   repositionArrow(arrow: Arrow) {
-    if (!arrow.fromCard && !arrow.toCard) return;
+    if (!arrow.fromCard && !arrow.toCard) {
+      return;
+    }
     if (arrow.toCard) {
       arrow.tipPosition = {
         x: arrow.toCard.position.x,
@@ -234,7 +236,7 @@ export class CanvasService {
   // TODO(eyuelt): Get rid of this listener stuff. Instead, the objects that
   // want to listen should just register with realtime for changes to the scale
   // or originOffset properties of the canvasService.
-  addListener(listener: {(): void}) {
+  addListener(listener: () => void) {
     this.listeners.push(listener);
   }
 
@@ -246,7 +248,7 @@ export class CanvasService {
 
   // This function calls the given function within a Realtime compound
   // operation, which treats the function as a transaction.
-  realtimeTransaction(fn: {(): void}) {
+  realtimeTransaction(fn: () => void) {
     if (this.realtimeDocument !== null) {
       const model = this.realtimeDocument.getModel();
       model.beginCompoundOperation();

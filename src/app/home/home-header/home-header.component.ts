@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'home-header',
+  selector: 'uxg-home-header',
   templateUrl: 'home-header.component.html',
   styleUrls: ['home-header.component.css']
 })

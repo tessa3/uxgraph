@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, convertToParamMap} from '@angular/router';
 import {GoogleRealtimeService} from '../service/google-realtime.service';
 
 /**
@@ -10,18 +10,20 @@ import {GoogleRealtimeService} from '../service/google-realtime.service';
   templateUrl: 'graph.component.html',
   styleUrls: ['graph.component.css']
 })
-export class GraphComponent implements OnInit, OnDestroy {
+export class GraphComponent implements OnDestroy {
+
+  // The names of the expected url params for this page.
+  static readonly paramKeys = {
+    graphId: 'graphId'
+  };
 
   graphId: string|undefined;
   private realtimeDocument: gapi.drive.realtime.Document|null = null;
 
   constructor(private googleRealtimeService: GoogleRealtimeService,
               private activatedRoute: ActivatedRoute) {
-  }
-
-  ngOnInit() {
     this.activatedRoute.params.forEach((params: Params) => {
-      this.graphId = params['graphId'];
+      this.graphId = params[GraphComponent.paramKeys.graphId];
       if (this.graphId) {
         this.googleRealtimeService.loadRealtimeDocument(this.graphId);
         this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {

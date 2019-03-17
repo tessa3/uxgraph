@@ -30,6 +30,19 @@ export class GoogleRealtimeService {
   collaborators: BehaviorSubject<Collaborator[]> =
       new BehaviorSubject<Collaborator[]>([]);
 
+  private static dedupe(collaborators: Collaborator[]) {
+    const filtered = new Map();
+    for (const collaborator of collaborators) {
+      filtered.set(collaborator.userId, collaborator);
+    }
+
+    const filteredList: Collaborator[] = [];
+    filtered.forEach((value: Collaborator) => {
+      filteredList.push(value);
+    });
+
+    return filteredList;
+  }
 
   constructor(private googleDriveService: GoogleDriveService,
               private applicationRef: ApplicationRef,
@@ -82,20 +95,6 @@ export class GoogleRealtimeService {
         console.error('Error loading Realtime API: ', error);
       });
     });
-  }
-
-  private static dedupe(collaborators: Collaborator[]) {
-    let filtered = new Map();
-    for (let collaborator of collaborators) {
-      filtered.set(collaborator.userId, collaborator);
-    }
-
-    let filteredList: Collaborator[] = [];
-    filtered.forEach((value: Collaborator) => {
-      filteredList.push(value);
-    });
-
-    return filteredList;
   }
 
 }

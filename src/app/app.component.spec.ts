@@ -24,7 +24,7 @@ describe('AppComponent', () => {
   });
 
   it('should set the title of the tab', () => {
-    const titleService = <Title>TestBed.get(Title);
+    const titleService = TestBed.get(Title) as Title;
     expect(titleService.getTitle()).toEqual('uxgraph');
   });
 });

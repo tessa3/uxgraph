@@ -1,10 +1,10 @@
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser'
+import { By } from '@angular/platform-browser';
 import { HomeModule } from './home.module';
 import { HomeComponent } from './home.component';
 import { GoogleDriveService } from '../service/google-drive.service';
-import { FakeGoogleDriveService } from '../utils/testing/fake-google-drive.service'
+import { FakeGoogleDriveService } from '../utils/testing/fake-google-drive.service';
 
 describe('Home', () => {
   let fixture: ComponentFixture<HomeComponent>;
@@ -29,7 +29,7 @@ describe('Home', () => {
     fixture.detectChanges();
     const button = fixture.debugElement.query(By.css('button.auth-button'));
     expect(button).toBeTruthy();
-    expect((<HTMLElement>button.nativeElement).innerText.toLowerCase())
+    expect((button.nativeElement as HTMLElement).innerText.toLowerCase())
         .toContain('log in');
   });
 

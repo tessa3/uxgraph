@@ -11,7 +11,7 @@ import { EventUtils } from '../../utils/event-utils';
  * This class represents the Arrow component.
  */
 @Component({
-  selector: '[uxg-arrow]',
+  selector: '[uxg-arrow]',  // tslint:disable-line:component-selector
   templateUrl: 'arrow.component.html',
   styleUrls: ['arrow.component.css']
 })
@@ -22,17 +22,17 @@ export class ArrowComponent implements OnInit {
   @Input() canvasBoundsGetter!: (() => ClientRect);
 
   // The current scale factor of the arrow shape.
-  scale: number = 1;
+  scale = 1;
   // The list of anchor points for the arrow's polyline.
   anchorPoints: ViewportCoord[] = [];
   // The current display position of the tip of the arrow. This is the same as
   // the last point in anchorPoints, so this property is just for convenience.
-  tipPosition: ViewportCoord = {x:0, y:0};
+  tipPosition: ViewportCoord = { x: 0, y: 0 };
 
   // Whether or not tail dragging is in progress.
-  private tailDragging: boolean = false;
+  private tailDragging = false;
   // Whether or not tip dragging is in progress.
-  private tipDragging: boolean = false;
+  private tipDragging = false;
   // The last point seen during the drag that is currently in progress.
   private lastDragPoint: ViewportCoord|null = null;
 
@@ -65,12 +65,12 @@ export class ArrowComponent implements OnInit {
   // Get the anchor points of the arrow based on the tailPosition and tipPosition
   getAnchorPoints() {
     // TODO(eyuelt): clean this up
-    let anchorPoints: ViewportCoord[] = [];
+    const anchorPoints: ViewportCoord[] = [];
     anchorPoints.push(this.canvasService.canvasCoordToViewportCoord(this.arrow.tailPosition));
-    const foo1 = {x:this.arrow.tailPosition.x, y:this.arrow.tailPosition.y};
+    const foo1 = { x: this.arrow.tailPosition.x, y: this.arrow.tailPosition.y };
     foo1.x += 10;
     anchorPoints.push(this.canvasService.canvasCoordToViewportCoord(foo1));
-    const foo2 = {x:this.arrow.tipPosition.x, y:this.arrow.tipPosition.y};
+    const foo2 = { x: this.arrow.tipPosition.x, y: this.arrow.tipPosition.y };
     foo2.x -= 20;
     anchorPoints.push(this.canvasService.canvasCoordToViewportCoord(foo2));
     anchorPoints.push(this.canvasService.canvasCoordToViewportCoord(this.arrow.tipPosition));
@@ -103,10 +103,10 @@ export class ArrowComponent implements OnInit {
   }
 
   // Put mousemove on document to allow dragging outside of canvas
-  //noinspection JSUnusedGlobalSymbols
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
-    if (this.tipDragging) {
+    // TODO(eyuelt): see comment about CanvasPanner in canvas.component.ts.
+    if (this.tipDragging && this.lastDragPoint !== null) {
       event.preventDefault();
       const canvasBounds = this.canvasBoundsGetter();
       const newDragPoint = {
@@ -114,10 +114,9 @@ export class ArrowComponent implements OnInit {
         y: event.clientY - canvasBounds.top
       };
       this.tipPosition = {
-        // TODO(eyuelt): see comment about CanvasPanner in canvas.component.ts.
-        x: this.tipPosition.x + newDragPoint.x - this.lastDragPoint!.x,
-        y: this.tipPosition.y + newDragPoint.y - this.lastDragPoint!.y
-      }
+        x: this.tipPosition.x + newDragPoint.x - this.lastDragPoint.x,
+        y: this.tipPosition.y + newDragPoint.y - this.lastDragPoint.y
+      };
       const newTipPosition =
         this.canvasService.viewportCoordToCanvasCoord(this.tipPosition);
       this.arrow.tipPosition = {x: newTipPosition.x, y: newTipPosition.y};
@@ -144,7 +143,6 @@ export class ArrowComponent implements OnInit {
   }
 
   // Put mouseup on document to end drag even if mouseup is outside of canvas
-  //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     if (this.tipDragging) {

@@ -11,18 +11,18 @@ export class ToIterablePipe implements PipeTransform {
       return undefined;
     }
 
-    let collaborativeList = value as CollaborativeList<any>;
+    const collaborativeList = value as CollaborativeList<any>;
 
-    value[Symbol.iterator] = function() {
+    value[Symbol.iterator] = () => {
       let nextIndex = 0;
 
       return {
-        next: (): Object => {
+        next: (): object => {
           if (nextIndex >= collaborativeList.length) {
             return {done: true};
           }
 
-          let element = collaborativeList.get(nextIndex);
+          const element = collaborativeList.get(nextIndex);
           nextIndex++;
           return {value: element, done: false};
         }

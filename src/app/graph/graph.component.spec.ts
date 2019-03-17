@@ -1,6 +1,6 @@
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser'
+import { By } from '@angular/platform-browser';
 import { GraphModule } from './graph.module';
 import { GraphComponent } from './graph.component';
 import { GoogleRealtimeService } from '../service/google-realtime.service';
@@ -26,7 +26,7 @@ describe('Graph', () => {
   }));
 
   it('should have a side panel', () => {
-    const sidePanel = fixture.debugElement.query(By.css('side-panel'));
+    const sidePanel = fixture.debugElement.query(By.css('uxg-side-panel'));
     expect(sidePanel).toBeTruthy();
   });
 

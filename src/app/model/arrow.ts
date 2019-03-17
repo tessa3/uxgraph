@@ -22,4 +22,4 @@ export class Arrow extends CollaborativeObjectModel {
     this.prototype.toCard =
       gapi.drive.realtime.custom.collaborativeField('toCard');
   }
-};
+}

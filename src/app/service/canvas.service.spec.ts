@@ -9,7 +9,7 @@ describe('Canvas service', () => {
 
   beforeEach(() => {
     // Override the window.gapi global API with our fake implementation.
-    (<any>window).gapi = new FakeGapi();
+    (window as any).gapi = new FakeGapi();
 
     TestBed.configureTestingModule({
       providers: [

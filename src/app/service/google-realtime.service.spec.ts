@@ -12,14 +12,14 @@ describe('Google Realtime Service', () => {
 
   beforeEach(async(() => {
     // Override the window.gapi global API with our fake implementation.
-    (<any>window).gapi = fakeGapi = new FakeGapi();
+    (window as any).gapi = fakeGapi = new FakeGapi();
 
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
       providers: [
-        {provide: Http, useClass: FakeHttp},
+        {provide: Http, useClass: FakeHttp},  // tslint:disable-line:deprecation
         GoogleDriveService,
         GoogleRealtimeService
       ]

@@ -20,7 +20,7 @@ import {Arrow} from '../../model/arrow';
  * This class represents the Card component.
  */
 @Component({
-  selector: '[uxg-card]',
+  selector: '[uxg-card]',  // tslint:disable-line:component-selector
   templateUrl: 'card.component.html',
   styleUrls: ['card.component.css']
 })
@@ -33,14 +33,14 @@ export class CardComponent implements OnInit {
   @Input() canvasBoundsGetter!: (() => ClientRect);
 
   // The current scale factor of the card shape.
-  scale: number = 1;
+  scale = 1;
   // The current display position in the viewport's coordinate space.
-  position: ViewportCoord = {x:0, y:0};
+  position: ViewportCoord = {x: 0, y: 0};
   // The radius of the rounded corners in the canvas' coordinate space.
-  cornerRadius: number = 1;
+  cornerRadius = 1;
 
   // Whether or not dragging is in progress.
-  private dragging: boolean = false;
+  private dragging = false;
   // The last point seen during the drag that is currently in progress.
   private lastDragPnt: ViewportCoord|null = null;
 
@@ -73,9 +73,8 @@ export class CardComponent implements OnInit {
 
   onMousedown(event: MouseEvent) {
     if (EventUtils.eventIsFromPrimaryButton(event)
-        // // Don't let the user initiate "drag" if initiated from within the
-        // // card's <textarea>.
-        && !(event.srcElement instanceof HTMLTextAreaElement)) {
+        // Don't initiate a drag if initiated from within the card's <textarea>.
+        && !(event.target instanceof HTMLTextAreaElement)) {
       this.dragging = true;
       const canvasBounds = this.canvasBoundsGetter();
       this.lastDragPnt = {
@@ -90,19 +89,18 @@ export class CardComponent implements OnInit {
   }
 
   // Put mousemove on document to allow dragging outside of canvas
-  //noinspection JSUnusedGlobalSymbols
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
-    if (this.dragging) {
+    // TODO(eyuelt): see comment about CanvasPanner in canvas.component.ts.
+    if (this.dragging && this.lastDragPnt !== null) {
       event.preventDefault();
       const canvasBounds = this.canvasBoundsGetter();
       const newDragPnt = {
         x: event.clientX - canvasBounds.left,
         y: event.clientY - canvasBounds.top
       };
-      // TODO(eyuelt): see comment about CanvasPanner in canvas.component.ts.
-      this.position.x += newDragPnt.x - this.lastDragPnt!.x;
-      this.position.y += newDragPnt.y - this.lastDragPnt!.y;
+      this.position.x += newDragPnt.x - this.lastDragPnt.x;
+      this.position.y += newDragPnt.y - this.lastDragPnt.y;
       const newCardPosition =
         this.canvasService.viewportCoordToCanvasCoord(this.position);
       this.card.position = {x: newCardPosition.x, y: newCardPosition.y};
@@ -119,7 +117,6 @@ export class CardComponent implements OnInit {
   }
 
   // Put mouseup on document to end drag even if mouseup is outside of canvas
-  //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     if (this.dragging) {

@@ -10,7 +10,7 @@ import {Title} from '@angular/platform-browser';
  * This class represents the App Header component.
  */
 @Component({
-  selector: 'graph-header',
+  selector: 'uxg-graph-header',
   templateUrl: 'graph-header.component.html',
   styleUrls: ['graph-header.component.css']
 })

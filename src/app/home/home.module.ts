@@ -10,7 +10,7 @@ import { SharedModule } from '../shared';
 @NgModule({
     imports: [
       CommonModule,
-      HttpModule,
+      HttpModule,  // tslint:disable-line:deprecation
       RouterModule,
       SharedModule
     ],

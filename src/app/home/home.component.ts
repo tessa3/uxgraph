@@ -15,7 +15,7 @@ import {GoogleDriveService} from '../service/google-drive.service';
 
 export class HomeComponent implements OnDestroy {
 
-  userLoggedIn: boolean = false;
+  userLoggedIn = false;
   graphPreviews: DriveFile[] = [];
 
   private oauthSub: Subscription;

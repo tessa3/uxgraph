@@ -1,18 +1,20 @@
+/* tslint:disable:deprecation */
+
 import {Injectable, NgZone} from '@angular/core';
 import {AsyncSubject, Observable} from 'rxjs';
 import {
-  Http,
+  Http,  // TODO(eyuelt): this is deprecated. switch to HttpClient
   URLSearchParams,
   Response,
   Headers,
   RequestOptions,
-  QueryEncoder
 } from '@angular/http';
 import {Router} from '@angular/router';
 import {DriveFile} from '../model/drive-file';
 import {Card} from '../model/card';
 import {Arrow} from '../model/arrow';
 import {map, switchAll} from 'rxjs/operators';
+import {GoogleDriveQueryEncoder} from './utils/google-drive-query-encoder';
 
 
 // TODO(eyuelt): move this stuff
@@ -41,6 +43,28 @@ export class GoogleDriveService {
       new AsyncSubject<GoogleApiOAuth2TokenObject>();
 
 
+  /**
+   * Creates and returns a set of default headers that go up with every HTTP
+   * request.
+   * @param accessToken Access token pulled from the
+   *                    {@link GoogleApiOAuth2TokenObject} we have on hand.
+   * @returns HTTP headers, in Angular's HTTP service object type.
+   */
+  private static getDefaultHeaders(accessToken: string): Headers {
+    const defaultHeaders = new Headers();
+    defaultHeaders.set('Authorization', 'Bearer ' + accessToken);
+
+    return defaultHeaders;
+  }
+
+  /**
+   * Takes some URL params and adds some more, default URL params that should
+   * go up with every request.
+   */
+  private static addDefaultUrlParams(params: URLSearchParams) {
+    params.set('key', API_KEY);
+  }
+
   constructor(private http: Http,
               private zone: NgZone,
               private router: Router) {
@@ -63,7 +87,6 @@ export class GoogleDriveService {
       });
     });
   }
-
 
   /**
    * Attempt to authorize with Google.
@@ -108,7 +131,7 @@ export class GoogleDriveService {
    */
   listFiles(): Observable<DriveFile[]> {
     return this.oauthToken.pipe(map(oauthToken => {
-      let params = new URLSearchParams('', new GoogleDriveQueryEncoder());
+      const params = new URLSearchParams('', new GoogleDriveQueryEncoder());
       params.set('pageSize', '' + PAGE_SIZE);
       params.set('fields', GOOGLE_DRIVE_FIELDS_TO_QUERY);
       params.set('q', 'mimeType = "' + UXGRAPH_MIME_TYPE + '"');
@@ -127,7 +150,7 @@ export class GoogleDriveService {
    */
   createFile(name: string): Observable<DriveFile> {
     return this.oauthToken.pipe(map(oauthToken => {
-      let postBody = {
+      const postBody = {
         name: name,
         mimeType: UXGRAPH_MIME_TYPE
       };
@@ -148,7 +171,7 @@ export class GoogleDriveService {
    */
   getFile(fileId: string): Observable<DriveFile> {
     return this.oauthToken.pipe(map(oauthToken => {
-      let params = new URLSearchParams('', new GoogleDriveQueryEncoder());
+      const params = new URLSearchParams('', new GoogleDriveQueryEncoder());
       const fileUrl = GOOGLE_APIS_FILES_URL + '/' + fileId;
 
       return this.get(oauthToken.access_token, fileUrl, params).pipe(
@@ -161,7 +184,7 @@ export class GoogleDriveService {
 
   openShareDialog(fileId: string) {
     return this.oauthToken.subscribe(oauthToken => {
-      let shareClient = new gapi.drive.share.ShareClient();
+      const shareClient = new gapi.drive.share.ShareClient();
       shareClient.setOAuthToken(oauthToken.access_token);
       shareClient.setItemIds([fileId]);
       shareClient.showSettingsDialog();
@@ -178,7 +201,7 @@ export class GoogleDriveService {
    */
   updateFile(driveFile: DriveFile): Observable<DriveFile> {
     return this.oauthToken.pipe(map(oauthToken => {
-      let patchBody = {
+      const patchBody = {
         name: driveFile.name
       };
 
@@ -217,8 +240,8 @@ export class GoogleDriveService {
    */
   private post(accessToken: string,
                requestUrl: string,
-               body: Object): Observable<Response> {
-    let urlParams = new URLSearchParams();
+               body: object): Observable<Response> {
+    const urlParams = new URLSearchParams();
     GoogleDriveService.addDefaultUrlParams(urlParams);
 
     return this.http.post(requestUrl, body, new RequestOptions({
@@ -232,8 +255,8 @@ export class GoogleDriveService {
    */
   private patch(accessToken: string,
                 requestUrl: string,
-                body: Object): Observable<Response> {
-    let urlParams = new URLSearchParams();
+                body: object): Observable<Response> {
+    const urlParams = new URLSearchParams();
     GoogleDriveService.addDefaultUrlParams(urlParams);
 
     return this.http.patch(requestUrl, body, new RequestOptions({
@@ -242,43 +265,6 @@ export class GoogleDriveService {
     }));
   }
 
-  /**
-   * Creates and returns a set of default headers that go up with every HTTP
-   * request.
-   * @param accessToken Access token pulled from the
-   *                    {@link GoogleApiOAuth2TokenObject} we have on hand.
-   * @returns {Headers} HTTP headers, in Angular's HTTP service object type.
-   */
-  private static getDefaultHeaders(accessToken: string): Headers {
-    const defaultHeaders = new Headers();
-    defaultHeaders.set('Authorization', 'Bearer ' + accessToken);
-
-    return defaultHeaders;
-  }
-
-  /**
-   * Takes some URL params and adds some more, default URL params that should
-   * go up with every request.
-   */
-  private static addDefaultUrlParams(params: URLSearchParams) {
-    params.set('key', API_KEY);
-  }
-
-
 }
 
-
-
-/**
- * A little helper class to correctly encode URL parameters. We need this at
- * the moment to URL-encode our custom MIME type as a URL parameter.
- */
-class GoogleDriveQueryEncoder extends QueryEncoder {
-  encodeKey(key: string) {
-    return encodeURIComponent(key);
-  }
-
-  encodeValue(value: string) {
-    return encodeURIComponent(value);
-  }
-}
+/* tslint:enable:deprecation */

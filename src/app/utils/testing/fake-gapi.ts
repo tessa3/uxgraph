@@ -1,18 +1,4 @@
 
-
-export class FakeGapi {
-
-  auth = new FakeGapiAuth();
-  drive = new FakeGapiDrive();
-  isLoaded = false;
-
-  load(whatToLoad:string, callback: () => void) {
-    this.isLoaded = true;
-    callback();
-  }
-
-}
-
 class FakeGapiAuth {
   isAuthorized = false;
 
@@ -29,23 +15,11 @@ class FakeGapiAuth {
 }
 
 
-class FakeGapiDrive {
-
-  realtime = new FakeGapiDriveRealtime();
-
-}
-
-class FakeGapiDriveRealtime {
-
-  custom = new FakeGapiDriveRealtimeCustom();
-
-}
-
 class FakeGapiDriveRealtimeCustom {
 
   registeredTypes: string[] = [];
   collaborativeFields: string[] = [];
-  initializers: Function[] = [];
+  initializers: (() => void)[] = [];
 
   registerType(type: any, typename: string) {
     this.registeredTypes.push(typename);
@@ -55,8 +29,33 @@ class FakeGapiDriveRealtimeCustom {
     this.collaborativeFields.push(fieldName);
   }
 
-  setInitializer(type: any, initializerFn: Function) {
+  setInitializer(type: any, initializerFn: () => void) {
     this.initializers.push(initializerFn);
+  }
+
+}
+
+class FakeGapiDriveRealtime {
+
+  custom = new FakeGapiDriveRealtimeCustom();
+
+}
+
+class FakeGapiDrive {
+
+  realtime = new FakeGapiDriveRealtime();
+
+}
+
+export class FakeGapi {
+
+  auth = new FakeGapiAuth();
+  drive = new FakeGapiDrive();
+  isLoaded = false;
+
+  load(whatToLoad: string, callback: () => void) {
+    this.isLoaded = true;
+    callback();
   }
 
 }

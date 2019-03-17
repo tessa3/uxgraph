@@ -1,3 +1,5 @@
+/* tslint:disable:deprecation */
+
 import {Injectable} from '@angular/core';
 import {RequestOptionsArgs, Response, ResponseOptions} from '@angular/http';
 import {Observable, from} from 'rxjs';
@@ -12,14 +14,12 @@ export class FakeHttp {
     return from([this.fakeResponse]);
   }
 
-  //noinspection JSUnusedGlobalSymbols
   put(url: string,
       body: any,
       options?: RequestOptionsArgs): Observable<Response> {
     return from([this.fakeResponse]);
   }
 
-  //noinspection JSUnusedGlobalSymbols
   patch(url: string,
         body: any,
         options?: RequestOptionsArgs): Observable<Response> {
@@ -27,3 +27,5 @@ export class FakeHttp {
   }
 
 }
+
+/* tslint:enable:deprecation */
