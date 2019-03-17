@@ -1,6 +1,6 @@
 import { CanvasService } from './canvas.service';
 import { TestBed } from '@angular/core/testing';
-import { GoogleRealtimeService } from './google-realtime.service';
+import { GoogleRealtimeService } from '../service/google-realtime.service';
 import { FakeGapi } from '../utils/testing/fake-gapi';
 import { FakeGoogleRealtimeService } from '../utils/testing/fake-google-realtime.service';
 

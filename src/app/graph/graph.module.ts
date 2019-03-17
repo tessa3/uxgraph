@@ -5,9 +5,7 @@ import { RouterModule } from '@angular/router';
 import { GraphComponent } from './graph.component';
 import { SharedModule } from '../shared/shared.module';
 import { SecondaryToolbarComponent } from './secondary-toolbar/secondary-toolbar';
-import { CanvasComponent } from './canvas/canvas.component';
-import { CardComponent } from './card/card.component';
-import { ArrowComponent } from './arrow/arrow.component';
+import { CanvasModule } from '../canvas/canvas.module';
 import { SidePanelComponent } from './side-panel/side-panel.component';
 import { GraphHeaderComponent } from './graph-header/graph-header.component';
 import { UserIconComponent } from './user-icon/user-icon.component';
@@ -20,11 +18,9 @@ import { UserIconComponent } from './user-icon/user-icon.component';
     SharedModule,
     ReactiveFormsModule,
     RouterModule,
+    CanvasModule,
   ],
   declarations: [
-    CardComponent,
-    ArrowComponent,
-    CanvasComponent,
     GraphComponent,
     UserIconComponent,
     GraphHeaderComponent,

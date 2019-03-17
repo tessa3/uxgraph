@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {
   GoogleRealtimeService,
-} from './google-realtime.service';
+} from '../service/google-realtime.service';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 import { Card } from '../model/card';
 import { Arrow } from '../model/arrow';

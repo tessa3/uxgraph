@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { CanvasService, ViewportCoord, ArrowConnectionType } from '../../service/canvas.service';
+import { CanvasService, ViewportCoord, ArrowConnectionType } from '../../canvas/canvas.service';
 import {
   GoogleRealtimeService,
   OBJECT_CHANGED

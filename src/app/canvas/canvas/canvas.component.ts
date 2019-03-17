@@ -1,5 +1,5 @@
 import {Component, HostListener, ElementRef} from '@angular/core';
-import {CanvasService, ViewportCoord} from '../../service/canvas.service';
+import {CanvasService, ViewportCoord} from '../../canvas/canvas.service';
 import {EventUtils} from '../../utils/event-utils';
 
 /**

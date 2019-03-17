@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {CanvasService, ArrowConnectionType} from '../../service/canvas.service';
+import {CanvasService, ArrowConnectionType} from '../../canvas/canvas.service';
 
 @Component({
   selector: 'uxg-secondary-toolbar',
