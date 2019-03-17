@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser'
 import { HomeModule } from './home.module';
 import { HomeComponent } from './home.component';
 import { GoogleDriveService } from '../service/google-drive.service';
-import { FakeGoogleDriveService } from '../../testing/fake/fake-google-drive.service'
+import { FakeGoogleDriveService } from '../utils/testing/fake-google-drive.service'
 
 describe('Home', () => {
   let fixture: ComponentFixture<HomeComponent>;

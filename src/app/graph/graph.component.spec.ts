@@ -4,9 +4,9 @@ import { By } from '@angular/platform-browser'
 import { GraphModule } from './graph.module';
 import { GraphComponent } from './graph.component';
 import { GoogleRealtimeService } from '../service/google-realtime.service';
-import { FakeGoogleRealtimeService } from 'src/testing/fake/fake-google-realtime.service';
+import { FakeGoogleRealtimeService } from '../utils/testing/fake-google-realtime.service';
 import { GoogleDriveService } from '../service/google-drive.service';
-import { FakeGoogleDriveService } from 'src/testing/fake/fake-google-drive.service';
+import { FakeGoogleDriveService } from '../utils/testing/fake-google-drive.service';
 
 describe('Graph', () => {
   let fixture: ComponentFixture<GraphComponent>;

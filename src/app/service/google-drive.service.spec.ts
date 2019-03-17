@@ -1,8 +1,8 @@
 import { TestBed, async } from '@angular/core/testing';
 import { GoogleDriveService } from './google-drive.service';
-import { FakeGapi } from '../../testing/fake/fake-gapi';
+import { FakeGapi } from '../utils/testing/fake-gapi';
 import { Http } from '@angular/http';
-import { FakeHttp } from '../../testing/fake/fake-http';
+import { FakeHttp } from '../utils/testing/fake-http';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('Google Drive Service', () => {
