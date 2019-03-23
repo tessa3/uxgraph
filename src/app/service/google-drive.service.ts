@@ -11,8 +11,7 @@ import {
 } from '@angular/http';
 import {Router} from '@angular/router';
 import {DriveFile} from '../model/drive-file';
-import {Card} from '../model/card';
-import {Arrow} from '../model/arrow';
+import {Arrow, Card} from '../model';
 import {map, switchAll} from 'rxjs/operators';
 import {GoogleDriveQueryEncoder} from './utils/google-drive-query-encoder';
 

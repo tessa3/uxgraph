@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import CollaborativeList = gapi.drive.realtime.CollaborativeList;
-import { Card } from '../model/card';
-import { Arrow } from '../model/arrow';
+import { Arrow, Card } from '../model';
 import { GoogleRealtimeService, OBJECT_CHANGED } from 'src/app/service';
 import { CanvasElementService, ArrowElementModel, CardElementModel } from '../canvas/canvas-element.service';
 import { Point } from 'src/app/model/geometry';
+import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 
 @Injectable()
 export class GoogleRealtimeCanvasElementService extends CanvasElementService {

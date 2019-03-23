@@ -8,9 +8,8 @@ import {
   CanvasInteractionService,
   ViewportCoord,
 } from '../canvas-interaction.service';
-import {EventUtils} from '../../utils/event-utils';
-import { Card } from '../../model/card';
-import {Arrow} from '../../model/arrow';
+import { EventUtils } from '../../utils/event-utils';
+import { Arrow, Card } from '../../model';
 import { CanvasElementService } from '../canvas-element.service';
 
 /**
@@ -92,12 +91,20 @@ export class CardComponent implements OnInit {
       const newCardPosition =
         this.canvasInteractionService.viewportCoordToCanvasCoord(this.position);
       this.card.position = {x: newCardPosition.x, y: newCardPosition.y};
+      // TODO(eyuelt): This if statement is for backwards compatability with the
+      // existing GoogleRealtime uxgraphs. I'll delete this eventually.
+      let incomingArrows: Arrow[] = this.card.incomingArrows;
+      let outgoingArrows: Arrow[] = this.card.outgoingArrows;
+      if ((incomingArrows as any).asArray) {
+        incomingArrows = (incomingArrows as any).asArray();
+        outgoingArrows = (outgoingArrows as any).asArray();
+      }
       // Move all associated arrows too
       // TODO(eyuelt): instead, have arrows subscribe to card position changes
-      this.card.incomingArrows.asArray().forEach((arrow: Arrow) => {
+      incomingArrows.forEach((arrow: Arrow) => {
         this.canvasElementService.repositionArrow(arrow);
       });
-      this.card.outgoingArrows.asArray().forEach((arrow: Arrow) => {
+      outgoingArrows.forEach((arrow: Arrow) => {
         this.canvasElementService.repositionArrow(arrow);
       });
       this.lastDragPnt = newDragPnt;

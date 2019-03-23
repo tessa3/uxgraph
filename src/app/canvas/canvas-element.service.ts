@@ -1,5 +1,4 @@
-import {Injectable} from '@angular/core';
-import CollaborativeList = gapi.drive.realtime.CollaborativeList;
+import { Injectable } from '@angular/core';
 import { Point, Size } from '../model/geometry';
 
 // Specifies the type of connection an arrow has to a card. Note that an arrow
@@ -16,8 +15,8 @@ export interface CardElementModel {
   position: Point;
   text: string;
   selected: boolean;
-  incomingArrows: CollaborativeList<ArrowElementModel>;  // TODO: change to list
-  outgoingArrows: CollaborativeList<ArrowElementModel>;  // TODO: change to list
+  incomingArrows: ArrowElementModel[];
+  outgoingArrows: ArrowElementModel[];
 }
 
 export interface ArrowElementModel {
@@ -49,17 +48,30 @@ export abstract class CanvasElementService {
   // Creates an arrow and adds it to the canvas.
   abstract addArrow(tailPosition?: Point, tipPosition?: Point): ArrowElementModel|null;
 
+  // Find the arrow with the given id in the array and delete it.
+  private removeArrowById(arrows: ArrowElementModel[], id: string) {
+    // TODO(eyuelt): This if statement is for backwards compatability with the
+    // existing GoogleRealtime uxgraphs. I'll delete this eventually.
+    if ((arrows as any).asArray) {
+      arrows = (arrows as any).asArray();
+    }
+    const index = arrows.findIndex((arrow) => {
+      return arrow.id === id;
+    });
+    arrows.splice(index, 1);
+  }
+
   connectArrowAndCard(arrow: ArrowElementModel, card: CardElementModel,
                       arrowConnection: ArrowConnectionType) {
     if (arrowConnection === ArrowConnectionType.INCOMING) {
       if (arrow.toCard) {
-        arrow.toCard.incomingArrows.removeValue(arrow);
+        this.removeArrowById(arrow.toCard.incomingArrows, arrow.id);
       }
       arrow.toCard = card;
       card.incomingArrows.push(arrow);
     } else if (arrowConnection === ArrowConnectionType.OUTGOING) {
       if (arrow.fromCard) {
-        arrow.fromCard.outgoingArrows.removeValue(arrow);
+        this.removeArrowById(arrow.fromCard.outgoingArrows, arrow.id);
       }
       arrow.fromCard = card;
       card.outgoingArrows.push(arrow);
