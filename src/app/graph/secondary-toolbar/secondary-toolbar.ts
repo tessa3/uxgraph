@@ -1,5 +1,9 @@
 import {Component} from '@angular/core';
-import {CanvasService, ArrowConnectionType} from '../../canvas/canvas.service';
+import {CanvasService} from '../../canvas/canvas.service';
+import {
+  CanvasElementManagerService,
+  ArrowConnectionType
+} from 'src/app/canvas/canvas-element-manager/canvas-element-manager.service';
 
 @Component({
   selector: 'uxg-secondary-toolbar',
@@ -7,15 +11,17 @@ import {CanvasService, ArrowConnectionType} from '../../canvas/canvas.service';
   styleUrls: ['secondary-toolbar.css']
 })
 export class SecondaryToolbarComponent {
-  constructor(private canvasService: CanvasService) {
+  constructor(
+    private canvasService: CanvasService,
+    private canvasElementManagerService: CanvasElementManagerService) {
   }
 
   onAddCardButtonPressed(event: MouseEvent) {
-    this.canvasService.realtimeTransaction(() => {
-      const card = this.canvasService.addCard();
-      const arrow = this.canvasService.addArrow();
+    this.canvasElementManagerService.realtimeTransaction(() => {
+      const card = this.canvasElementManagerService.addCard();
+      const arrow = this.canvasElementManagerService.addArrow();
       if (card !== null && arrow !== null) {
-        this.canvasService.connectArrowAndCard(arrow, card, ArrowConnectionType.OUTGOING);
+        this.canvasElementManagerService.connectArrowAndCard(arrow, card, ArrowConnectionType.OUTGOING);
         this.canvasService.repositionArrow(arrow);
       }
     });

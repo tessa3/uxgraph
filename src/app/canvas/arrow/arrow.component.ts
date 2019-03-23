@@ -1,9 +1,5 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { CanvasService, ViewportCoord, ArrowConnectionType } from '../../canvas/canvas.service';
-import {
-  GoogleRealtimeService,
-  OBJECT_CHANGED
-} from '../../service/google-realtime.service';
+import { CanvasService, ViewportCoord } from '../../canvas/canvas.service';
 import { Arrow } from '../../model/arrow';
 import { EventUtils } from '../../utils/event-utils';
 
@@ -36,26 +32,16 @@ export class ArrowComponent implements OnInit {
   // The last point seen during the drag that is currently in progress.
   private lastDragPoint: ViewportCoord|null = null;
 
-  constructor(private canvasService: CanvasService,
-              private googleRealtimeService: GoogleRealtimeService) {
+  constructor(private canvasService: CanvasService) {
   }
 
   ngOnInit() {
     this.update();
     this.canvasService.addListener(this.update.bind(this));
-    this.googleRealtimeService.currentDocument.subscribe(document => {
-      if (document === null) {
-        return;
-      }
-
-      // TODO(eyuelt): change this. this causes a redraw whenever any object in
-      // the whole document changes.
-      document.getModel().getRoot()
-          .addEventListener(OBJECT_CHANGED, this.update.bind(this));
-    });
   }
 
-  // Called by the CanvasService when a zoom or pan occurs
+  // Called by the CanvasService when a zoom or pan occurs or when the
+  // CanvasService is told that the elements data may have been changed.
   update() {
     this.scale = this.canvasService.zoomScale;
     this.tipPosition = this.canvasService.canvasCoordToViewportCoord(this.arrow.tipPosition);
@@ -150,12 +136,7 @@ export class ArrowComponent implements OnInit {
       if (topCard !== null) {
         const cardId = topCard.getAttribute('card-id');
         if (cardId !== null) {
-          console.log('clicked on card id: ' + cardId);
-          const card = this.canvasService.getCardById(cardId);
-          if (card !== null) {
-            this.canvasService.connectArrowAndCard(this.arrow, card, ArrowConnectionType.INCOMING);
-            this.canvasService.repositionArrow(this.arrow);
-          }
+          this.canvasService.arrowTipDroppedOnCard(this.arrow, cardId);
         }
       }
       this.tipDragging = false;

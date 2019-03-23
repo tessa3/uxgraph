@@ -9,10 +9,6 @@ import {
   ViewportCoord,
 } from '../../canvas/canvas.service';
 import {EventUtils} from '../../utils/event-utils';
-import {
-  GoogleRealtimeService,
-  OBJECT_CHANGED
-} from '../../service/google-realtime.service';
 import { Card } from '../../model/card';
 import {Arrow} from '../../model/arrow';
 
@@ -44,28 +40,16 @@ export class CardComponent implements OnInit {
   // The last point seen during the drag that is currently in progress.
   private lastDragPnt: ViewportCoord|null = null;
 
-  constructor(private canvasService: CanvasService,
-              private googleRealtimeService: GoogleRealtimeService) {
+  constructor(private canvasService: CanvasService) {
   }
 
   ngOnInit() {
     this.position = this.canvasService.canvasCoordToViewportCoord(this.card.position);
     this.canvasService.addListener(this.update.bind(this));
-
-    // TODO(girum): Only call update() for this card for change events for this
-    // card. That is, don't call update() for this card if some other card
-    // changed.
-    this.googleRealtimeService.currentDocument.subscribe(document => {
-      if (document === null) {
-        return;
-      }
-
-      document.getModel().getRoot()
-          .addEventListener(OBJECT_CHANGED, this.update.bind(this));
-    });
   }
 
-  // Called by the CanvasService when a zoom or pan occurs
+  // Called by the CanvasService when a zoom or pan occurs or when the
+  // CanvasService is told that the elements data may have been changed.
   update() {
     this.scale = this.canvasService.zoomScale;
     this.position = this.canvasService.canvasCoordToViewportCoord(this.card.position);

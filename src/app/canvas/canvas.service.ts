@@ -1,27 +1,24 @@
 import {Injectable} from '@angular/core';
-import {
-  GoogleRealtimeService,
-} from '../service/google-realtime.service';
-import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 import { Card } from '../model/card';
 import { Arrow } from '../model/arrow';
 import { Point } from '../model/geometry';
+import {
+  CanvasElementManagerService,
+  ArrowConnectionType,
+} from './canvas-element-manager/canvas-element-manager.service';
 
 // NOTE: These type aliases are not type-checked. They are just for readability.
 // TODO(eyuelt): is there a way of getting these type-checked?
+// Follow up from future me: Yes, classes! Duh! They should both implement the
+// Point interface and provide methods to convert between each other.
+// TODO(eyuelt): move these to geometry.ts
+//
 // A point in the coordinate system of the viewport.
 export type ViewportCoord = Point;
 // A point in the coordinate system of the canvas.
 export type CanvasCoord = Point;
 
-// Specifies the type of connection an arrow has to a card. Note that an arrow
-// may be connected to up to two cards, so it could have an INCOMING connection
-// and an OUTGOING connection.
-export enum ArrowConnectionType {
-  INCOMING,
-  OUTGOING
-}
-
+// TODO(eyuelt): this class should only handle UI stuff like pan, zoom, select.
 /*
  * The CanvasService maintains the data of the cards to show on the canvas,
  * handles zooming and panning on the canvas.
@@ -38,9 +35,9 @@ export enum ArrowConnectionType {
 })
 export class CanvasService {
   // The models of the cards to show on the canvas.
-  cards: CollaborativeList<Card>|undefined;
+  cards: Card[] = [];
   // The models of the arrows to show on the canvas.
-  arrows: CollaborativeList<Arrow>|undefined;
+  arrows: Arrow[] = [];
 
   // The zoom scale relative to the original viewport size.
   zoomScale = 1;
@@ -61,38 +58,21 @@ export class CanvasService {
   private kMinZoomScale = 0.1;
   private kMaxZoomScale = 10.0;
 
-  // A reference to the Realtime Document. Used here to create Cards and Arrows.
-  private realtimeDocument: gapi.drive.realtime.Document|null = null;
-
-  constructor(private googleRealtimeService: GoogleRealtimeService) {
-    this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
-      this.realtimeDocument = currentDocument;
-      if (currentDocument === null) {
-        return;
-      }
-
-      const model = currentDocument.getModel();
-
-      // Lazily instantiate the collaborative cards array.
-      if (model.getRoot().get('cards') === null) {
-        console.log('no "cards" object at root');
-        const collaborativeCards = model.createList([]);
-        model.getRoot().set('cards', collaborativeCards);
-      }
-
-      this.cards = model.getRoot().get('cards');
-
-      // Lazily instantiate the collaborative arrows array.
-      if (model.getRoot().get('arrows') === null) {
-        console.log('no "arrows" object at root');
-        const collaborativeArrows = model.createList([]);
-        model.getRoot().set('arrows', collaborativeArrows);
-      }
-
-      this.arrows = model.getRoot().get('arrows');
-    });
+  // TODO(eyuelt): This is a stop gap solution. This class actually should not
+  // know about the element manager. The canvas elements should talk directly to
+  // it. This class should not own the data for the elements. It just handles
+  // the UI stuff like zooming and panning.
+  constructor(private canvasElementManager: CanvasElementManagerService) {
+    canvasElementManager.letmeknow(this.updateCanvasElements.bind(this));
   }
 
+  updateCanvasElements() {
+    this.cards = this.canvasElementManager.getCards();
+    this.arrows = this.canvasElementManager.getArrows();
+    this.notifyListeners();
+  }
+
+  // TODO(eyuelt): move this to the Point subclasses
   // Convert a point in the viewport coordinate space to a point in the canvas
   // coordinate space.
   viewportCoordToCanvasCoord(vp: ViewportCoord): CanvasCoord {
@@ -101,6 +81,7 @@ export class CanvasService {
     return {x, y};
   }
 
+  // TODO(eyuelt): move this to the Point subclasses
   // Convert a point in the canvas coordinate space to a point in the viewport
   // coordinate space.
   canvasCoordToViewportCoord(cv: CanvasCoord): ViewportCoord {
@@ -133,15 +114,16 @@ export class CanvasService {
   deselectCards() {
     if (this.cards) {
       for (let i = 0; i < this.cards.length; i++) {
-        this.cards.get(i).selected = false;
+        this.cards[i].selected = false;
       }
     }
   }
 
+  // TODO(eyuelt): move this
   getCardById(id: string): Card|null {
     // TODO(eyuelt): change CollaborativeList to CollaborativeMap
     if (this.cards) {
-      const cardsArray = this.cards.asArray();
+      const cardsArray = this.cards;
       for (const card of cardsArray) {
         if (card.id === id) {
           return card;
@@ -151,57 +133,7 @@ export class CanvasService {
     return null;
   }
 
-  // Creates a card and adds it to the canvas.
-  addCard(position: Point = {x: 0, y: 0},
-          text: string = '',
-          selected = false): Card|null {
-    if (this.realtimeDocument !== null) {
-      const model = this.realtimeDocument.getModel();
-      if (model) {
-        const card = model.create(Card);
-        card.position = position;
-        card.text = text;
-        card.selected = selected;
-        model.getRoot().get('cards').push(card);  // TODO(eyuelt): shouldn't we be adding directly to this.cards?
-        return card;
-      }
-    }
-    return null;
-  }
-
-  // Creates an arrow and adds it to the canvas.
-  addArrow(tailPosition: Point = {x: 0, y: 0},
-           tipPosition: Point = {x: 0, y: 0}): Arrow|null {
-    if (this.realtimeDocument !== null) {
-      const model = this.realtimeDocument.getModel();
-      if (model) {
-        const arrow = model.create(Arrow);
-        arrow.tailPosition = tailPosition;
-        arrow.tipPosition = tipPosition;
-        model.getRoot().get('arrows').push(arrow);  // TODO(eyuelt): same as above
-        return arrow;
-      }
-    }
-    return null;
-  }
-
-  connectArrowAndCard(arrow: Arrow, card: Card,
-                      arrowConnection: ArrowConnectionType) {
-    if (arrowConnection === ArrowConnectionType.INCOMING) {
-      if (arrow.toCard) {
-        arrow.toCard.incomingArrows.removeValue(arrow);
-      }
-      arrow.toCard = card;
-      card.incomingArrows.push(arrow);
-    } else if (arrowConnection === ArrowConnectionType.OUTGOING) {
-      if (arrow.fromCard) {
-        arrow.fromCard.outgoingArrows.removeValue(arrow);
-      }
-      arrow.fromCard = card;
-      card.outgoingArrows.push(arrow);
-    }
-  }
-
+  // TODO(eyuelt): move this
   // Repositions the given arrow's tail and tip based on its attached cards.
   repositionArrow(arrow: Arrow) {
     if (!arrow.fromCard && !arrow.toCard) {
@@ -233,6 +165,19 @@ export class CanvasService {
     }
   }
 
+  // TODO(eyuelt): move this
+  // connects the arrow to the card and repositions it
+  arrowTipDroppedOnCard(arrow: Arrow, cardId: string) {
+    if (cardId !== null) {
+      console.log('clicked on card id: ' + cardId);
+      const card = this.getCardById(cardId);
+      if (card !== null) {
+        this.canvasElementManager.connectArrowAndCard(arrow, card, ArrowConnectionType.INCOMING);
+        this.repositionArrow(arrow);
+      }
+    }
+  }
+
   // TODO(eyuelt): Get rid of this listener stuff. Instead, the objects that
   // want to listen should just register with realtime for changes to the scale
   // or originOffset properties of the canvasService.
@@ -244,16 +189,5 @@ export class CanvasService {
     this.listeners.forEach((listener) => {
       listener();
     });
-  }
-
-  // This function calls the given function within a Realtime compound
-  // operation, which treats the function as a transaction.
-  realtimeTransaction(fn: () => void) {
-    if (this.realtimeDocument !== null) {
-      const model = this.realtimeDocument.getModel();
-      model.beginCompoundOperation();
-      fn();
-      model.endCompoundOperation();
-    }
   }
 }
