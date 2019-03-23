@@ -1,6 +1,7 @@
-import {Component, HostListener, ElementRef} from '@angular/core';
-import {CanvasService, ViewportCoord} from '../../canvas/canvas.service';
+import {Component, HostListener, ElementRef, ApplicationRef, ChangeDetectorRef} from '@angular/core';
+import {CanvasInteractionService, ViewportCoord} from '../canvas-interaction.service';
 import {EventUtils} from '../../utils/event-utils';
+import { CanvasElementManagerService } from '../canvas-element-manager/canvas-element-manager.service';
 
 /**
  * This class represents the Canvas component.
@@ -9,7 +10,7 @@ import {EventUtils} from '../../utils/event-utils';
   selector: 'uxg-canvas',
   templateUrl: 'canvas.component.html',
   styleUrls: ['canvas.component.css'],
-  providers: [CanvasService]
+  providers: [CanvasInteractionService]
 })
 export class CanvasComponent {
   // Whether or not panning is in progress.
@@ -28,7 +29,11 @@ export class CanvasComponent {
   private eventTargetIsCanvas: ((event: Event) => boolean);
 
   // Note: ElementRef should be treated as read-only to avoid XSS vulnerabilites
-  constructor(elementRef: ElementRef, private canvasService: CanvasService) {
+  constructor(elementRef: ElementRef,
+              private canvasElementManager: CanvasElementManagerService,
+              private ar: ApplicationRef,
+              private cdr: ChangeDetectorRef,
+              private canvasInteractionService: CanvasInteractionService) {
     this.getBounds = () => {
       return elementRef.nativeElement.getBoundingClientRect();
     };
@@ -47,7 +52,7 @@ export class CanvasComponent {
       x: event.clientX - this.getBounds().left,
       y: event.clientY - this.getBounds().top
     };
-    this.canvasService.zoom(zoomPnt, zoomScale);
+    this.canvasInteractionService.zoom(zoomPnt, zoomScale);
   }
 
   onMousedown(event: MouseEvent) {
@@ -78,7 +83,7 @@ export class CanvasComponent {
         x: this.lastPanPnt.x - newPanPnt.x,
         y: this.lastPanPnt.y - newPanPnt.y
       };
-      this.canvasService.pan(panVector);
+      this.canvasInteractionService.pan(panVector);
       this.lastPanPnt = newPanPnt;
     }
   }
@@ -95,16 +100,16 @@ export class CanvasComponent {
   // TODO add comment
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-      if (this.canvasService.MULTI_SELECT_KEY_CODES.indexOf(event.code) > -1) {
-        this.canvasService.multiSelectMode = true;
+      if (this.canvasInteractionService.MULTI_SELECT_KEY_CODES.indexOf(event.code) > -1) {
+        this.canvasInteractionService.multiSelectMode = true;
       }
   }
 
   // TODO add comment
   @HostListener('document:keyup', ['$event'])
   onKeyUp(event: KeyboardEvent) {
-    if (this.canvasService.MULTI_SELECT_KEY_CODES.indexOf(event.code) > -1) {
-      this.canvasService.multiSelectMode = false;
+    if (this.canvasInteractionService.MULTI_SELECT_KEY_CODES.indexOf(event.code) > -1) {
+      this.canvasInteractionService.multiSelectMode = false;
     }
   }
 

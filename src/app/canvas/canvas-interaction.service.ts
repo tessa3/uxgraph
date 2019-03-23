@@ -1,17 +1,11 @@
-import {Injectable} from '@angular/core';
-import { Card } from '../model/card';
-import { Arrow } from '../model/arrow';
+import { Injectable } from '@angular/core';
 import { Point } from '../model/geometry';
-import {
-  CanvasElementManagerService,
-  ArrowConnectionType,
-} from './canvas-element-manager/canvas-element-manager.service';
 
 // NOTE: These type aliases are not type-checked. They are just for readability.
 // TODO(eyuelt): is there a way of getting these type-checked?
 // Follow up from future me: Yes, classes! Duh! They should both implement the
 // Point interface and provide methods to convert between each other.
-// TODO(eyuelt): move these to geometry.ts
+// TODO(eyuelt): move these to geometry.ts. (nvm. these are canvas-specific and need to know about originOffset)
 //
 // A point in the coordinate system of the viewport.
 export type ViewportCoord = Point;
@@ -20,8 +14,7 @@ export type CanvasCoord = Point;
 
 // TODO(eyuelt): this class should only handle UI stuff like pan, zoom, select.
 /*
- * The CanvasService maintains the data of the cards to show on the canvas,
- * handles zooming and panning on the canvas.
+ * The CanvasInteractionService handles zooming and panning on the canvas.
  * Zooming grows and shrinks the viewport relative to the canvas and panning
  * translates the viewport relative to the canvas.
  * This class also handles converting between the viewport's coordinate system,
@@ -33,12 +26,7 @@ export type CanvasCoord = Point;
 @Injectable({
   providedIn: 'root'
 })
-export class CanvasService {
-  // The models of the cards to show on the canvas.
-  cards: Card[] = [];
-  // The models of the arrows to show on the canvas.
-  arrows: Arrow[] = [];
-
+export class CanvasInteractionService {
   // The zoom scale relative to the original viewport size.
   zoomScale = 1;
   // The offset of the viewport from its original position.
@@ -58,19 +46,7 @@ export class CanvasService {
   private kMinZoomScale = 0.1;
   private kMaxZoomScale = 10.0;
 
-  // TODO(eyuelt): This is a stop gap solution. This class actually should not
-  // know about the element manager. The canvas elements should talk directly to
-  // it. This class should not own the data for the elements. It just handles
-  // the UI stuff like zooming and panning.
-  constructor(private canvasElementManager: CanvasElementManagerService) {
-    canvasElementManager.letmeknow(this.updateCanvasElements.bind(this));
-  }
-
-  updateCanvasElements() {
-    this.cards = this.canvasElementManager.getCards();
-    this.arrows = this.canvasElementManager.getArrows();
-    this.notifyListeners();
-  }
+  constructor() {}
 
   // TODO(eyuelt): move this to the Point subclasses
   // Convert a point in the viewport coordinate space to a point in the canvas
@@ -111,76 +87,9 @@ export class CanvasService {
     this.notifyListeners();
   }
 
-  deselectCards() {
-    if (this.cards) {
-      for (let i = 0; i < this.cards.length; i++) {
-        this.cards[i].selected = false;
-      }
-    }
-  }
-
-  // TODO(eyuelt): move this
-  getCardById(id: string): Card|null {
-    // TODO(eyuelt): change CollaborativeList to CollaborativeMap
-    if (this.cards) {
-      const cardsArray = this.cards;
-      for (const card of cardsArray) {
-        if (card.id === id) {
-          return card;
-        }
-      }
-    }
-    return null;
-  }
-
-  // TODO(eyuelt): move this
-  // Repositions the given arrow's tail and tip based on its attached cards.
-  repositionArrow(arrow: Arrow) {
-    if (!arrow.fromCard && !arrow.toCard) {
-      return;
-    }
-    if (arrow.toCard) {
-      arrow.tipPosition = {
-        x: arrow.toCard.position.x,
-        y: arrow.toCard.position.y + arrow.toCard.size.height / 2
-      };
-      if (arrow.fromCard === null) {
-        arrow.tailPosition = {
-          x: arrow.toCard.position.x - 50,
-          y: arrow.toCard.position.y + arrow.toCard.size.height / 2
-        };
-      }
-    }
-    if (arrow.fromCard) {
-      arrow.tailPosition = {
-        x: arrow.fromCard.position.x + arrow.fromCard.size.width,
-        y: arrow.fromCard.position.y + arrow.fromCard.size.height / 2
-      };
-      if (arrow.toCard === null) {
-        arrow.tipPosition = {
-          x: arrow.fromCard.position.x + arrow.fromCard.size.width + 50,
-          y: arrow.fromCard.position.y + arrow.fromCard.size.height / 2
-        };
-      }
-    }
-  }
-
-  // TODO(eyuelt): move this
-  // connects the arrow to the card and repositions it
-  arrowTipDroppedOnCard(arrow: Arrow, cardId: string) {
-    if (cardId !== null) {
-      console.log('clicked on card id: ' + cardId);
-      const card = this.getCardById(cardId);
-      if (card !== null) {
-        this.canvasElementManager.connectArrowAndCard(arrow, card, ArrowConnectionType.INCOMING);
-        this.repositionArrow(arrow);
-      }
-    }
-  }
-
   // TODO(eyuelt): Get rid of this listener stuff. Instead, the objects that
   // want to listen should just register with realtime for changes to the scale
-  // or originOffset properties of the canvasService.
+  // or originOffset properties of the canvasInteractionService.
   addListener(listener: () => void) {
     this.listeners.push(listener);
   }

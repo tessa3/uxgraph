@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { CanvasService, ViewportCoord } from '../../canvas/canvas.service';
+import { CanvasInteractionService, ViewportCoord } from '../canvas-interaction.service';
 import { Arrow } from '../../model/arrow';
 import { EventUtils } from '../../utils/event-utils';
+import { CanvasElementManagerService } from '../canvas-element-manager/canvas-element-manager.service';
 
 /**
  * This class represents the Arrow component.
@@ -14,7 +15,7 @@ import { EventUtils } from '../../utils/event-utils';
 export class ArrowComponent implements OnInit {
   // The arrow data to render on the canvas.
   @Input() arrow!: Arrow;
-  // A function pointer to the CanvasService's "getBounds()" function.
+  // A function pointer to the CanvasInteractionService's "getBounds()" function.
   @Input() canvasBoundsGetter!: (() => ClientRect);
 
   // The current scale factor of the arrow shape.
@@ -32,19 +33,22 @@ export class ArrowComponent implements OnInit {
   // The last point seen during the drag that is currently in progress.
   private lastDragPoint: ViewportCoord|null = null;
 
-  constructor(private canvasService: CanvasService) {
+  constructor(private canvasElementManager: CanvasElementManagerService,
+              private canvasInteractionService: CanvasInteractionService) {
   }
 
   ngOnInit() {
     this.update();
-    this.canvasService.addListener(this.update.bind(this));
+    this.canvasInteractionService.addListener(this.update.bind(this));
+    // TODO(eyuelt): why isn't change detection automatically handling this?
+    this.canvasElementManager.addListener(this.update.bind(this));
   }
 
-  // Called by the CanvasService when a zoom or pan occurs or when the
-  // CanvasService is told that the elements data may have been changed.
+  // Called by the CanvasInteractionService when a zoom or pan occurs or when the
+  // CanvasInteractionService is told that the elements data may have been changed.
   update() {
-    this.scale = this.canvasService.zoomScale;
-    this.tipPosition = this.canvasService.canvasCoordToViewportCoord(this.arrow.tipPosition);
+    this.scale = this.canvasInteractionService.zoomScale;
+    this.tipPosition = this.canvasInteractionService.canvasCoordToViewportCoord(this.arrow.tipPosition);
     this.anchorPoints = this.getAnchorPoints();
   }
 
@@ -52,14 +56,14 @@ export class ArrowComponent implements OnInit {
   getAnchorPoints() {
     // TODO(eyuelt): clean this up
     const anchorPoints: ViewportCoord[] = [];
-    anchorPoints.push(this.canvasService.canvasCoordToViewportCoord(this.arrow.tailPosition));
+    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(this.arrow.tailPosition));
     const foo1 = { x: this.arrow.tailPosition.x, y: this.arrow.tailPosition.y };
     foo1.x += 10;
-    anchorPoints.push(this.canvasService.canvasCoordToViewportCoord(foo1));
+    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(foo1));
     const foo2 = { x: this.arrow.tipPosition.x, y: this.arrow.tipPosition.y };
     foo2.x -= 20;
-    anchorPoints.push(this.canvasService.canvasCoordToViewportCoord(foo2));
-    anchorPoints.push(this.canvasService.canvasCoordToViewportCoord(this.arrow.tipPosition));
+    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(foo2));
+    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(this.arrow.tipPosition));
     return anchorPoints;
   }
 
@@ -104,7 +108,7 @@ export class ArrowComponent implements OnInit {
         y: this.tipPosition.y + newDragPoint.y - this.lastDragPoint.y
       };
       const newTipPosition =
-        this.canvasService.viewportCoordToCanvasCoord(this.tipPosition);
+        this.canvasInteractionService.viewportCoordToCanvasCoord(this.tipPosition);
       this.arrow.tipPosition = {x: newTipPosition.x, y: newTipPosition.y};
       this.lastDragPoint = newDragPoint;
     }
@@ -136,7 +140,7 @@ export class ArrowComponent implements OnInit {
       if (topCard !== null) {
         const cardId = topCard.getAttribute('card-id');
         if (cardId !== null) {
-          this.canvasService.arrowTipDroppedOnCard(this.arrow, cardId);
+          this.canvasElementManager.arrowTipDroppedOnCard(this.arrow, cardId);
         }
       }
       this.tipDragging = false;

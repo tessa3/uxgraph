@@ -16,6 +16,12 @@ export enum ArrowConnectionType {
   OUTGOING
 }
 
+// TODO(eyuelt): split this into two classes. one that is responsible for
+// messing with other canvas elements. one that provides the methods that
+// need to be overridden for each backend type. e.g. deselectCards doesn't
+// depend on the backend type, but a card will need to call it in order to
+// affect the other cards on the canvas.
+
 @Injectable({
   providedIn: 'root'
 })
@@ -26,10 +32,12 @@ export class CanvasElementManagerService {
   // The models of the arrows to show on the canvas.
   arrows: CollaborativeList<Arrow>|undefined;
 
+  // TODO(eyuelt): delete this once I've figured out why change detection isn't
+  // working for canvas elements.
+  private listeners: (() => void)[] = [];
+
   // A reference to the Realtime Document. Used here to create Cards and Arrows.
   private realtimeDocument: gapi.drive.realtime.Document|null = null;
-
-  private savedListener: (() => void) | undefined;
 
   constructor(private googleRealtimeService: GoogleRealtimeService) {
     this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
@@ -58,38 +66,22 @@ export class CanvasElementManagerService {
 
       this.arrows = model.getRoot().get('arrows');
 
-      this.letemknow();
+      this.notifyListeners();
 
       // If anything in the document changes, update all of the canvas elements.
       // TODO(eyuelt): only update the specific canvas elements that changed.
       currentDocument.getModel().getRoot()
-        .addEventListener(OBJECT_CHANGED, this.letemknow.bind(this));
+        .addEventListener(OBJECT_CHANGED, this.notifyListeners.bind(this));
     });
   }
 
-  letmeknow(listener: ()=>void) {
-    if (this.cards) {
-      let str = ''
-      this.cards.asArray().forEach((elem) => {
-        str += `{x:${Math.ceil(elem.position.x)},y:${Math.ceil(elem.position.y)}}, `;
-      });
-      console.log('[' + str.slice(0, -2) + ']');
-    }
-    this.savedListener = listener;
-  }
-  letemknow() {
-    if (this.savedListener) {
-      this.savedListener();
-    }
-  }
+  //getCards(): Card[] {
+  //  return this.cards!.asArray();
+  //}
 
-  getCards(): Card[] {
-    return this.cards!.asArray();
-  }
-
-  getArrows(): Arrow[] {
-    return this.arrows!.asArray();
-  }
+  //getArrows(): Arrow[] {
+  //  return this.arrows!.asArray();
+  //}
 
   // Creates a card and adds it to the canvas.
   addCard(position: Point = {x: 0, y: 0},
@@ -97,12 +89,12 @@ export class CanvasElementManagerService {
           selected = false): Card|null {
     if (this.realtimeDocument !== null) {
       const model = this.realtimeDocument.getModel();
-      if (model) {
+      if (model && this.cards) {
         const card = model.create(Card);
         card.position = position;
         card.text = text;
         card.selected = selected;
-        model.getRoot().get('cards').push(card);  // TODO(eyuelt): shouldn't we be adding directly to this.cards?
+        this.cards.push(card);
         return card;
       }
     }
@@ -114,11 +106,11 @@ export class CanvasElementManagerService {
            tipPosition: Point = {x: 0, y: 0}): Arrow|null {
     if (this.realtimeDocument !== null) {
       const model = this.realtimeDocument.getModel();
-      if (model) {
+      if (model && this.arrows) {
         const arrow = model.create(Arrow);
         arrow.tailPosition = tailPosition;
         arrow.tipPosition = tipPosition;
-        model.getRoot().get('arrows').push(arrow);  // TODO(eyuelt): same as above
+        this.arrows.push(arrow);
         return arrow;
       }
     }
@@ -151,6 +143,79 @@ export class CanvasElementManagerService {
       fn();
       model.endCompoundOperation();
     }
+  }
+
+  getCardById(id: string): Card|null {
+    // TODO(eyuelt): change CollaborativeList to CollaborativeMap
+    if (this.cards) {
+      for (const card of this.cards.asArray()) {
+        if (card.id === id) {
+          return card;
+        }
+      }
+    }
+    return null;
+  }
+
+  // Repositions the given arrow's tail and tip based on its attached cards.
+  repositionArrow(arrow: Arrow) {
+    if (!arrow.fromCard && !arrow.toCard) {
+      return;
+    }
+    if (arrow.toCard) {
+      arrow.tipPosition = {
+        x: arrow.toCard.position.x,
+        y: arrow.toCard.position.y + arrow.toCard.size.height / 2
+      };
+      if (arrow.fromCard === null) {
+        arrow.tailPosition = {
+          x: arrow.toCard.position.x - 50,
+          y: arrow.toCard.position.y + arrow.toCard.size.height / 2
+        };
+      }
+    }
+    if (arrow.fromCard) {
+      arrow.tailPosition = {
+        x: arrow.fromCard.position.x + arrow.fromCard.size.width,
+        y: arrow.fromCard.position.y + arrow.fromCard.size.height / 2
+      };
+      if (arrow.toCard === null) {
+        arrow.tipPosition = {
+          x: arrow.fromCard.position.x + arrow.fromCard.size.width + 50,
+          y: arrow.fromCard.position.y + arrow.fromCard.size.height / 2
+        };
+      }
+    }
+  }
+
+  // connects the arrow to the card and repositions it
+  arrowTipDroppedOnCard(arrow: Arrow, cardId: string) {
+    if (cardId !== null) {
+      console.log('clicked on card id: ' + cardId);
+      const card = this.getCardById(cardId);
+      if (card !== null) {
+        this.connectArrowAndCard(arrow, card, ArrowConnectionType.INCOMING);
+        this.repositionArrow(arrow);
+      }
+    }
+  }
+
+  deselectCards() {
+    if (this.cards) {
+      for (const card of this.cards.asArray()) {
+        card.selected = false;
+      }
+    }
+  }
+
+  // TODO(eyuelt): Get rid of this listener stuff.
+  addListener(listener: () => void) {
+    this.listeners.push(listener);
+  }
+  private notifyListeners() {
+    this.listeners.forEach((listener) => {
+      listener();
+    });
   }
 
 }

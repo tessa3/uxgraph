@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {CanvasService} from '../../canvas/canvas.service';
 import {
   CanvasElementManagerService,
   ArrowConnectionType
@@ -12,7 +11,6 @@ import {
 })
 export class SecondaryToolbarComponent {
   constructor(
-    private canvasService: CanvasService,
     private canvasElementManagerService: CanvasElementManagerService) {
   }
 
@@ -22,7 +20,7 @@ export class SecondaryToolbarComponent {
       const arrow = this.canvasElementManagerService.addArrow();
       if (card !== null && arrow !== null) {
         this.canvasElementManagerService.connectArrowAndCard(arrow, card, ArrowConnectionType.OUTGOING);
-        this.canvasService.repositionArrow(arrow);
+        this.canvasElementManagerService.repositionArrow(arrow);
       }
     });
   }

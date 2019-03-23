@@ -5,12 +5,13 @@ import {
   HostListener,
 } from '@angular/core';
 import {
-  CanvasService,
+  CanvasInteractionService,
   ViewportCoord,
-} from '../../canvas/canvas.service';
+} from '../canvas-interaction.service';
 import {EventUtils} from '../../utils/event-utils';
 import { Card } from '../../model/card';
 import {Arrow} from '../../model/arrow';
+import { CanvasElementManagerService } from '../canvas-element-manager/canvas-element-manager.service';
 
 /**
  * This class represents the Card component.
@@ -25,7 +26,7 @@ export class CardComponent implements OnInit {
   // The card data to render on the canvas.
   @Input() card!: Card;
 
-  // A function pointer to the CanvasService's "getBounds()" function.
+  // A function pointer to the CanvasInteractionService's "getBounds()" function.
   @Input() canvasBoundsGetter!: (() => ClientRect);
 
   // The current scale factor of the card shape.
@@ -40,19 +41,22 @@ export class CardComponent implements OnInit {
   // The last point seen during the drag that is currently in progress.
   private lastDragPnt: ViewportCoord|null = null;
 
-  constructor(private canvasService: CanvasService) {
+  constructor(private canvasElementManager: CanvasElementManagerService,
+              private canvasInteractionService: CanvasInteractionService) {
   }
 
   ngOnInit() {
-    this.position = this.canvasService.canvasCoordToViewportCoord(this.card.position);
-    this.canvasService.addListener(this.update.bind(this));
+    this.position = this.canvasInteractionService.canvasCoordToViewportCoord(this.card.position);
+    this.canvasInteractionService.addListener(this.update.bind(this));
+    // TODO(eyuelt): why isn't change detection automatically handling this?
+    this.canvasElementManager.addListener(this.update.bind(this));
   }
 
-  // Called by the CanvasService when a zoom or pan occurs or when the
-  // CanvasService is told that the elements data may have been changed.
+  // Called by the CanvasInteractionService when a zoom or pan occurs or when the
+  // CanvasInteractionService is told that the elements data may have been changed.
   update() {
-    this.scale = this.canvasService.zoomScale;
-    this.position = this.canvasService.canvasCoordToViewportCoord(this.card.position);
+    this.scale = this.canvasInteractionService.zoomScale;
+    this.position = this.canvasInteractionService.canvasCoordToViewportCoord(this.card.position);
   }
 
   onMousedown(event: MouseEvent) {
@@ -65,8 +69,8 @@ export class CardComponent implements OnInit {
         x: event.clientX - canvasBounds.left,
         y: event.clientY - canvasBounds.top
       };
-      if (!this.canvasService.multiSelectMode) {
-        this.canvasService.deselectCards();
+      if (!this.canvasInteractionService.multiSelectMode) {
+        this.canvasElementManager.deselectCards();
       }
       this.card.selected = !this.card.selected;
     }
@@ -86,15 +90,15 @@ export class CardComponent implements OnInit {
       this.position.x += newDragPnt.x - this.lastDragPnt.x;
       this.position.y += newDragPnt.y - this.lastDragPnt.y;
       const newCardPosition =
-        this.canvasService.viewportCoordToCanvasCoord(this.position);
+        this.canvasInteractionService.viewportCoordToCanvasCoord(this.position);
       this.card.position = {x: newCardPosition.x, y: newCardPosition.y};
       // Move all associated arrows too
       // TODO(eyuelt): instead, have arrows subscribe to card position changes
       this.card.incomingArrows.asArray().forEach((arrow: Arrow) => {
-        this.canvasService.repositionArrow(arrow);
+        this.canvasElementManager.repositionArrow(arrow);
       });
       this.card.outgoingArrows.asArray().forEach((arrow: Arrow) => {
-        this.canvasService.repositionArrow(arrow);
+        this.canvasElementManager.repositionArrow(arrow);
       });
       this.lastDragPnt = newDragPnt;
     }
@@ -114,7 +118,7 @@ export class CardComponent implements OnInit {
   }
 
   onCardTextareaFocus() {
-    this.canvasService.deselectCards();
+    this.canvasElementManager.deselectCards();
     this.card.selected = true;
   }
 
