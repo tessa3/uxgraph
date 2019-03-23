@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Point } from '../model/geometry';
 
-// NOTE: These type aliases are not type-checked. They are just for readability.
-// TODO(eyuelt): is there a way of getting these type-checked?
-// Follow up from future me: Yes, classes! Duh! They should both implement the
-// Point interface and provide methods to convert between each other.
-// TODO(eyuelt): move these to geometry.ts. (nvm. these are canvas-specific and need to know about originOffset)
-//
 // A point in the coordinate system of the viewport.
-export type ViewportCoord = Point;
-// A point in the coordinate system of the canvas.
-export type CanvasCoord = Point;
+export class ViewportCoord implements Point {
+  constructor(public x: number, public y: number) {}
+}
 
-// TODO(eyuelt): this class should only handle UI stuff like pan, zoom, select.
+// A point in the coordinate system of the canvas.
+export class CanvasCoord implements Point {
+  constructor(public x: number, public y: number) {}
+}
+
 /*
  * The CanvasInteractionService handles zooming and panning on the canvas.
  * Zooming grows and shrinks the viewport relative to the canvas and panning
@@ -48,7 +46,6 @@ export class CanvasInteractionService {
 
   constructor() {}
 
-  // TODO(eyuelt): move this to the Point subclasses
   // Convert a point in the viewport coordinate space to a point in the canvas
   // coordinate space.
   viewportCoordToCanvasCoord(vp: ViewportCoord): CanvasCoord {
@@ -57,7 +54,6 @@ export class CanvasInteractionService {
     return {x, y};
   }
 
-  // TODO(eyuelt): move this to the Point subclasses
   // Convert a point in the canvas coordinate space to a point in the viewport
   // coordinate space.
   canvasCoordToViewportCoord(cv: CanvasCoord): ViewportCoord {
