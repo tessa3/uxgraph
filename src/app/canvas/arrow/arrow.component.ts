@@ -2,7 +2,7 @@ import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { CanvasInteractionService, ViewportCoord } from '../canvas-interaction.service';
 import { Arrow } from '../../model/arrow';
 import { EventUtils } from '../../utils/event-utils';
-import { CanvasElementManagerService } from '../canvas-element-manager/canvas-element-manager.service';
+import { CanvasElementService } from '../canvas-element.service';
 
 /**
  * This class represents the Arrow component.
@@ -33,7 +33,7 @@ export class ArrowComponent implements OnInit {
   // The last point seen during the drag that is currently in progress.
   private lastDragPoint: ViewportCoord|null = null;
 
-  constructor(private canvasElementManager: CanvasElementManagerService,
+  constructor(private canvasElementService: CanvasElementService,
               private canvasInteractionService: CanvasInteractionService) {
   }
 
@@ -41,7 +41,7 @@ export class ArrowComponent implements OnInit {
     this.update();
     this.canvasInteractionService.addListener(this.update.bind(this));
     // TODO(eyuelt): why isn't change detection automatically handling this?
-    this.canvasElementManager.addListener(this.update.bind(this));
+    this.canvasElementService.addListener(this.update.bind(this));
   }
 
   // Called by the CanvasInteractionService when a zoom or pan occurs or when the
@@ -140,7 +140,7 @@ export class ArrowComponent implements OnInit {
       if (topCard !== null) {
         const cardId = topCard.getAttribute('card-id');
         if (cardId !== null) {
-          this.canvasElementManager.arrowTipDroppedOnCard(this.arrow, cardId);
+          this.canvasElementService.arrowTipDroppedOnCard(this.arrow, cardId);
         }
       }
       this.tipDragging = false;

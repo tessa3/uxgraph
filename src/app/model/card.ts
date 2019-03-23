@@ -2,8 +2,9 @@ import { Point, Size } from './geometry';
 import { Arrow } from './arrow';
 import { CollaborativeObjectModel } from './collaborative-object-model';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
+import { CardElementModel } from '../canvas/canvas-element.service';
 
-export class Card extends CollaborativeObjectModel {
+export class Card extends CollaborativeObjectModel implements CardElementModel {
   protected static modelName = 'Card';
   readonly size: Size = {
     width: 120,

@@ -11,7 +11,7 @@ import {
 import {EventUtils} from '../../utils/event-utils';
 import { Card } from '../../model/card';
 import {Arrow} from '../../model/arrow';
-import { CanvasElementManagerService } from '../canvas-element-manager/canvas-element-manager.service';
+import { CanvasElementService } from '../canvas-element.service';
 
 /**
  * This class represents the Card component.
@@ -41,7 +41,7 @@ export class CardComponent implements OnInit {
   // The last point seen during the drag that is currently in progress.
   private lastDragPnt: ViewportCoord|null = null;
 
-  constructor(private canvasElementManager: CanvasElementManagerService,
+  constructor(private canvasElementService: CanvasElementService,
               private canvasInteractionService: CanvasInteractionService) {
   }
 
@@ -49,7 +49,7 @@ export class CardComponent implements OnInit {
     this.position = this.canvasInteractionService.canvasCoordToViewportCoord(this.card.position);
     this.canvasInteractionService.addListener(this.update.bind(this));
     // TODO(eyuelt): why isn't change detection automatically handling this?
-    this.canvasElementManager.addListener(this.update.bind(this));
+    this.canvasElementService.addListener(this.update.bind(this));
   }
 
   // Called by the CanvasInteractionService when a zoom or pan occurs or when the
@@ -70,7 +70,7 @@ export class CardComponent implements OnInit {
         y: event.clientY - canvasBounds.top
       };
       if (!this.canvasInteractionService.multiSelectMode) {
-        this.canvasElementManager.deselectCards();
+        this.canvasElementService.deselectCards();
       }
       this.card.selected = !this.card.selected;
     }
@@ -95,10 +95,10 @@ export class CardComponent implements OnInit {
       // Move all associated arrows too
       // TODO(eyuelt): instead, have arrows subscribe to card position changes
       this.card.incomingArrows.asArray().forEach((arrow: Arrow) => {
-        this.canvasElementManager.repositionArrow(arrow);
+        this.canvasElementService.repositionArrow(arrow);
       });
       this.card.outgoingArrows.asArray().forEach((arrow: Arrow) => {
-        this.canvasElementManager.repositionArrow(arrow);
+        this.canvasElementService.repositionArrow(arrow);
       });
       this.lastDragPnt = newDragPnt;
     }
@@ -118,7 +118,7 @@ export class CardComponent implements OnInit {
   }
 
   onCardTextareaFocus() {
-    this.canvasElementManager.deselectCards();
+    this.canvasElementService.deselectCards();
     this.card.selected = true;
   }
 

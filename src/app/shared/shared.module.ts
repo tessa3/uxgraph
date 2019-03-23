@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FabComponent } from './fab/index';
 import { ToIterablePipe } from './pipe/to-iterable.pipe';
+import { CanvasElementService } from '../canvas/canvas-element.service';
+import { GoogleRealtimeCanvasElementService } from '../service/google-realtime-canvas-element.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -22,6 +24,9 @@ import { ToIterablePipe } from './pipe/to-iterable.pipe';
   exports: [
     FabComponent,
     ToIterablePipe,
+  ],
+  providers: [
+    { provide: CanvasElementService, useClass: GoogleRealtimeCanvasElementService }
   ]
 })
 export class SharedModule {

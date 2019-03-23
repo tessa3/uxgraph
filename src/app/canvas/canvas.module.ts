@@ -8,7 +8,6 @@ import { CanvasComponent } from './canvas/canvas.component';
 import { CardComponent } from './card/card.component';
 import { ArrowComponent } from './arrow/arrow.component';
 
-
 @NgModule({
   imports: [
     CommonModule,

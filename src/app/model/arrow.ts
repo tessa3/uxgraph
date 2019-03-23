@@ -1,8 +1,9 @@
 import { Point } from './geometry';
 import { Card } from './card';
 import { CollaborativeObjectModel } from './collaborative-object-model';
+import { ArrowElementModel } from '../canvas/canvas-element.service';
 
-export class Arrow extends CollaborativeObjectModel {
+export class Arrow extends CollaborativeObjectModel implements ArrowElementModel {
   protected static modelName = 'Arrow';
   // Collaborative fields
   // TODO(eyuelt): get rid of non-null assertions

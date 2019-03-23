@@ -1,7 +1,7 @@
-import {Component, HostListener, ElementRef, ApplicationRef, ChangeDetectorRef} from '@angular/core';
+import {Component, HostListener, ElementRef} from '@angular/core';
 import {CanvasInteractionService, ViewportCoord} from '../canvas-interaction.service';
 import {EventUtils} from '../../utils/event-utils';
-import { CanvasElementManagerService } from '../canvas-element-manager/canvas-element-manager.service';
+import { CanvasElementService } from '../canvas-element.service';
 
 /**
  * This class represents the Canvas component.
@@ -30,9 +30,7 @@ export class CanvasComponent {
 
   // Note: ElementRef should be treated as read-only to avoid XSS vulnerabilites
   constructor(elementRef: ElementRef,
-              private canvasElementManager: CanvasElementManagerService,
-              private ar: ApplicationRef,
-              private cdr: ChangeDetectorRef,
+              private canvasElementService: CanvasElementService,
               private canvasInteractionService: CanvasInteractionService) {
     this.getBounds = () => {
       return elementRef.nativeElement.getBoundingClientRect();
