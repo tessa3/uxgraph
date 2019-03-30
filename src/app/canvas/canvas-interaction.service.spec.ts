@@ -1,23 +1,13 @@
 import { CanvasInteractionService } from './canvas-interaction.service';
 import { TestBed } from '@angular/core/testing';
-import { GoogleRealtimeService } from '../service/google-realtime.service';
-import { FakeGapi } from '../utils/testing/fake-gapi';
-import { FakeGoogleRealtimeService } from '../utils/testing/fake-google-realtime.service';
 import { ViewportCoord, CanvasCoord } from './utils/coord';
 
 describe('CanvasInteractionService', () => {
   let cs: CanvasInteractionService;
 
   beforeEach(() => {
-    // Override the window.gapi global API with our fake implementation.
-    (window as any).gapi = new FakeGapi();
-
     TestBed.configureTestingModule({
       providers: [
-        {
-          provide: GoogleRealtimeService,
-          useClass: FakeGoogleRealtimeService
-        },
         CanvasInteractionService
       ]
     });

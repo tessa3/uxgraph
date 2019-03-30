@@ -1,13 +1,7 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  HostListener,
-} from '@angular/core';
+import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { CanvasInteractionService } from '../canvas-interaction.service';
 import { EventUtils } from '../../utils/event-utils';
-import { Arrow, Card } from '../../model';
-import { CanvasElementService } from '../canvas-element.service';
+import { CanvasElementService, CardElementModel } from '../canvas-element.service';
 import { ViewportDrag } from '../utils/viewport-drag';
 import { ViewportCoord, CanvasCoord } from '../utils/coord';
 
@@ -22,7 +16,7 @@ import { ViewportCoord, CanvasCoord } from '../utils/coord';
 export class CardComponent implements OnInit {
 
   // The card data to render on the canvas.
-  @Input() card!: Card;
+  @Input() card!: CardElementModel;
 
   // A function pointer to the CanvasInteractionService's "getBounds()" function.
   @Input() canvasBoundsGetter!: (() => ClientRect);

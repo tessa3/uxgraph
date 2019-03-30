@@ -1,8 +1,7 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { CanvasInteractionService } from '../canvas-interaction.service';
-import { Arrow } from '../../model/arrow';
 import { EventUtils } from '../../utils/event-utils';
-import { CanvasElementService } from '../canvas-element.service';
+import { CanvasElementService, ArrowElementModel } from '../canvas-element.service';
 import { ViewportDrag } from '../utils/viewport-drag';
 import { ViewportCoord, CanvasCoord } from '../utils/coord';
 
@@ -16,7 +15,7 @@ import { ViewportCoord, CanvasCoord } from '../utils/coord';
 })
 export class ArrowComponent implements OnInit {
   // The arrow data to render on the canvas.
-  @Input() arrow!: Arrow;
+  @Input() arrow!: ArrowElementModel;
   // A function pointer to the CanvasInteractionService's "getBounds()" function.
   @Input() canvasBoundsGetter!: (() => ClientRect);
 
