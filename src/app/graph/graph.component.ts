@@ -24,7 +24,7 @@ export class GraphComponent implements OnDestroy {
               private activatedRoute: ActivatedRoute) {
     this.activatedRoute.params.forEach((params: Params) => {
       this.graphId = params[GraphComponent.paramKeys.graphId];
-      if (this.graphId) {
+      if (this.graphId !== undefined) {
         this.googleRealtimeService.loadRealtimeDocument(this.graphId);
         this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
           this.realtimeDocument = currentDocument;

@@ -67,16 +67,14 @@ export class GoogleRealtimeCanvasElementService extends CanvasElementService {
   addCard(position: Point = {x: 0, y: 0},
           text: string = '',
           selected = false): CardElementModel|null {
-    if (this.realtimeDocument !== null) {
+    if (this.realtimeDocument && this.collaborativeCards) {
       const model = this.realtimeDocument.getModel();
-      if (model && this.collaborativeCards) {
-        const card = model.create(Card);
-        card.position = position;
-        card.text = text;
-        card.selected = selected;
-        this.collaborativeCards.push(card);
-        return card;
-      }
+      const card = model.create(Card);
+      card.position = position;
+      card.text = text;
+      card.selected = selected;
+      this.collaborativeCards.push(card);
+      return card;
     }
     return null;
   }
@@ -85,15 +83,13 @@ export class GoogleRealtimeCanvasElementService extends CanvasElementService {
   // Creates an arrow and adds it to the canvas.
   addArrow(tailPosition: Point = {x: 0, y: 0},
            tipPosition: Point = {x: 0, y: 0}): ArrowElementModel|null {
-    if (this.realtimeDocument !== null) {
+    if (this.realtimeDocument && this.collaborativeArrows) {
       const model = this.realtimeDocument.getModel();
-      if (model && this.collaborativeArrows) {
-        const arrow = model.create(Arrow);
-        arrow.tailPosition = tailPosition;
-        arrow.tipPosition = tipPosition;
-        this.collaborativeArrows.push(arrow);
-        return arrow;
-      }
+      const arrow = model.create(Arrow);
+      arrow.tailPosition = tailPosition;
+      arrow.tipPosition = tipPosition;
+      this.collaborativeArrows.push(arrow);
+      return arrow;
     }
     return null;
   }

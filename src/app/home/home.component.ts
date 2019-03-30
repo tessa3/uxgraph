@@ -29,7 +29,7 @@ export class HomeComponent implements OnDestroy {
               private router: Router) {
     this.oauthSub = this.googleDriveService.oauthToken
         .subscribe((oauthToken) => {
-          if (!!oauthToken) {
+          if (!!oauthToken) {  // tslint:disable-line:strict-boolean-expressions
             this.userLoggedIn = true;
           }
         });

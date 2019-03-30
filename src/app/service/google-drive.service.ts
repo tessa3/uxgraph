@@ -104,14 +104,14 @@ export class GoogleDriveService {
       immediate: !usePopup
     }, (response) => {
       this.zone.run(() => {
-        if (usePopup === false && !!response.error) {
+        if (usePopup === false && !!response.error) {  // tslint:disable-line:strict-boolean-expressions
           // If auto-login failed, then auto-send the user back to the home
           // screen to manually log back in.
           this.router.navigateByUrl('/');
         }
 
         // If login worked fine, then save the OAuth token.
-        if (!response.error) {
+        if (!response.error) {  // tslint:disable-line:strict-boolean-expressions
           this.oauthToken.next(response);
           this.oauthToken.complete();
         }

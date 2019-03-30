@@ -71,7 +71,11 @@
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
     "directive-class-suffix": true,
-    "strict-boolean-expressions": true,
-    "object-literal-shorthand": false
+    "object-literal-shorthand": false,
+    "strict-boolean-expressions": [
+      true,
+      "allow-null-union",
+      "allow-undefined-union"
+    ]
   }
 }
