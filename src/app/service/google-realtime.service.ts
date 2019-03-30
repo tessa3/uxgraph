@@ -2,9 +2,11 @@ import {Injectable, ApplicationRef} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {Collaborator} from '../model/collaborator';
 import {Router} from '@angular/router';
-import {GoogleDriveService} from './google-drive.service';
 import Document = gapi.drive.realtime.Document;
 import ObjectChangedEvent = gapi.drive.realtime.ObjectChangedEvent;
+import { StorageService } from './storage.service';
+import { typeIs } from '../utils/runtime-utils';
+import { GoogleDriveService } from './google-drive.service';
 
 
 const COLLABORATOR_JOINED = 'collaborator_joined';
@@ -43,22 +45,24 @@ export class GoogleRealtimeService {
     return filteredList;
   }
 
-  constructor(private googleDriveService: GoogleDriveService,
+  constructor(private storageService: StorageService,
               private applicationRef: ApplicationRef,
               private router: Router) {
+    typeIs(storageService, GoogleDriveService.name);
   }
 
 
   /**
    * Loads the Realtime-version of a Google Drive file by Id.
-   * Again, this code will automatically run anytime this.oauthToken changes
+   * Again, this code will automatically run anytime this.userLoggedIn changes
    * according to RxJS.
    *
    * @param driveFileId The ID of the Google Drive file you'd like to load
    *                    Realtime for.
    */
   loadRealtimeDocument(driveFileId: string) {
-    this.googleDriveService.oauthToken.subscribe(() => {
+    this.storageService.getUserLoggedIn().subscribe((userLoggedIn) => {
+      if (!userLoggedIn) { return; }
       gapi.drive.realtime.load(driveFileId, (document) => {
         // Read the current array of collaborators from the document.
         this.collaborators.next(document.getCollaborators());

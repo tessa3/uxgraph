@@ -6,6 +6,7 @@ import { Point } from 'src/app/model/geometry';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 import { DocumentService } from './document.service';
 import { typeIs } from '../utils/runtime-utils';
+import { GoogleRealtimeDocumentService } from './google-realtime-document.service';
 
 @Injectable()
 export class GoogleRealtimeCanvasElementService extends CanvasElementService {
@@ -19,7 +20,7 @@ export class GoogleRealtimeCanvasElementService extends CanvasElementService {
 
   constructor(documentService: DocumentService) {
     super();
-    typeIs(documentService, 'GoogleRealtimeDocumentService');
+    typeIs(documentService, GoogleRealtimeDocumentService.name);
     documentService.getModel().subscribe((model) => {
       this.realtimeModel = model as gapi.drive.realtime.Model|null;
       if (model === null) { return; }

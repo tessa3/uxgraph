@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AsyncSubject, Observable, of } from 'rxjs';
-import { DriveFile } from 'src/app/model';
+import { StorageFile } from '../../service/storage.service';
 
 @Injectable()
 export class FakeGoogleDriveService {
 
-  private driveFile: DriveFile = {
+  private file: StorageFile = {
     name: 'fakeName',
     mimeType: 'fakeMimeType',
     kind: 'fakeKind',
@@ -17,11 +17,15 @@ export class FakeGoogleDriveService {
 
   authorize(usePopup: boolean) {}
 
-  listFiles(): Observable<DriveFile[]> {
-    return of([this.driveFile]);
+  listFiles(): Observable<StorageFile[]> {
+    return of([this.file]);
   }
 
-  getFile(fileId: string): Observable<DriveFile> {
-    return of(this.driveFile);
+  getFile(fileId: string): Observable<StorageFile> {
+    return of(this.file);
+  }
+
+  getUserLoggedIn(): Observable<boolean> {
+    return of(false);
   }
 }

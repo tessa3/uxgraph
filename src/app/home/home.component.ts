@@ -2,7 +2,7 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {DriveFile} from '../model/drive-file';
-import {GoogleDriveService} from '../service/google-drive.service';
+import {StorageService} from '../service/storage.service';
 
 /**
  * This class represents the HomeComponent.
@@ -18,34 +18,31 @@ export class HomeComponent implements OnDestroy {
   userLoggedIn = false;
   graphPreviews: DriveFile[] = [];
 
-  private oauthSub: Subscription;
+  private userLoggedInSub: Subscription;
   private listFilesSub: Subscription;
   private createGraphSub?: Subscription;
 
   /**
    * Creates an instance of the HomeComponent.
    */
-  constructor(private googleDriveService: GoogleDriveService,
+  constructor(private storageService: StorageService,
               private router: Router) {
-    this.oauthSub = this.googleDriveService.oauthToken
-        .subscribe((oauthToken) => {
-          if (!!oauthToken) {  // tslint:disable-line:strict-boolean-expressions
-            this.userLoggedIn = true;
-          }
-        });
+    this.userLoggedInSub = this.storageService.getUserLoggedIn().subscribe((userLoggedIn) => {
+      this.userLoggedIn = userLoggedIn;
+    });
 
-    this.listFilesSub = this.googleDriveService.listFiles()
-        .subscribe((driveFiles: DriveFile[]) => {
-          this.graphPreviews = driveFiles;
+    this.listFilesSub = this.storageService.listFiles()
+        .subscribe((files) => {
+          this.graphPreviews = files;
         });
   }
 
   authorize() {
-    this.googleDriveService.authorize(true);
+    this.storageService.authorize(true);
   }
 
   createNewGraph() {
-    this.createGraphSub = this.googleDriveService
+    this.createGraphSub = this.storageService
         .createFile('Untitled')
         .subscribe((newGraph: DriveFile) => {
           this.router.navigateByUrl('/graph/' + newGraph.id);
@@ -53,7 +50,7 @@ export class HomeComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.oauthSub.unsubscribe();
+    this.userLoggedInSub.unsubscribe();
     this.listFilesSub.unsubscribe();
     if (this.createGraphSub !== undefined) {
       this.createGraphSub.unsubscribe();

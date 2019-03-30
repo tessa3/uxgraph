@@ -8,6 +8,9 @@ import { CanvasElementService } from '../canvas/canvas-element.service';
 import { GoogleRealtimeCanvasElementService } from '../service/google-realtime-canvas-element.service';
 import { DocumentService } from '../service/document.service';
 import { GoogleRealtimeDocumentService } from '../service/google-realtime-document.service';
+import { StorageService } from '../service/storage.service';
+import { GoogleDriveService } from '../service/google-drive.service';
+import { HttpModule } from '@angular/http';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -17,7 +20,8 @@ import { GoogleRealtimeDocumentService } from '../service/google-realtime-docume
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    HttpModule,  // tslint:disable-line:deprecation
   ],
   declarations: [
     FabComponent,
@@ -29,6 +33,7 @@ import { GoogleRealtimeDocumentService } from '../service/google-realtime-docume
   ],
   providers: [
     { provide: DocumentService, useClass: GoogleRealtimeDocumentService },
+    { provide: StorageService, useClass: GoogleDriveService },
     { provide: CanvasElementService, useClass: GoogleRealtimeCanvasElementService }
   ]
 })

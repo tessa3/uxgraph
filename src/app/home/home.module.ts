@@ -4,13 +4,11 @@ import { HomeComponent } from './home.component';
 import { GraphPreviewComponent } from './graph-preview/graph-preview.component';
 import { HomeHeaderComponent } from './home-header/home-header.component';
 import { RouterModule } from '@angular/router';
-import { HttpModule } from '@angular/http';
 import { SharedModule } from '../shared';
 
 @NgModule({
     imports: [
       CommonModule,
-      HttpModule,  // tslint:disable-line:deprecation
       RouterModule,
       SharedModule
     ],

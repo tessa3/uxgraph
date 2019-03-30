@@ -3,8 +3,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { HomeModule } from './home.module';
 import { HomeComponent } from './home.component';
-import { GoogleDriveService } from '../service/google-drive.service';
 import { FakeGoogleDriveService } from '../utils/testing/fake-google-drive.service';
+import { StorageService } from '../service/storage.service';
 
 describe('Home', () => {
   let fixture: ComponentFixture<HomeComponent>;
@@ -17,7 +17,7 @@ describe('Home', () => {
         RouterTestingModule
       ],
       providers: [
-        { provide: GoogleDriveService, useClass: FakeGoogleDriveService },
+        { provide: StorageService, useClass: FakeGoogleDriveService },
       ]
     }).compileComponents();
     fixture = TestBed.createComponent(HomeComponent);

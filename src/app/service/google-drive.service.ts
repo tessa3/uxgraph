@@ -1,7 +1,7 @@
 /* tslint:disable:deprecation */
 
 import {Injectable, NgZone} from '@angular/core';
-import {AsyncSubject, Observable} from 'rxjs';
+import {AsyncSubject, Observable, BehaviorSubject} from 'rxjs';
 import {
   Http,  // TODO(eyuelt): this is deprecated. switch to HttpClient
   URLSearchParams,
@@ -14,6 +14,8 @@ import {DriveFile} from '../model/drive-file';
 import {Arrow, Card} from '../model';
 import {map, switchAll} from 'rxjs/operators';
 import {GoogleDriveQueryEncoder} from './utils/google-drive-query-encoder';
+import { StorageService, StorageFile } from './storage.service';
+
 
 
 // TODO(eyuelt): move this stuff
@@ -28,10 +30,8 @@ const PAGE_SIZE = 10;
 const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 
 
-@Injectable({
-  providedIn: 'root'
-})
-export class GoogleDriveService {
+@Injectable()
+export class GoogleDriveService extends StorageService {
 
   /**
    * The OAuth token that Google gives back for the current client.
@@ -67,6 +67,7 @@ export class GoogleDriveService {
   constructor(private http: Http,
               private zone: NgZone,
               private router: Router) {
+    super();
     // Immediately load additional JavaScript code to interact with gapi
     // (gapi = "Google API" for JS).
     gapi.load('auth:client,drive-realtime,drive-share', () => {
@@ -87,6 +88,18 @@ export class GoogleDriveService {
     });
   }
 
+  // @override
+  getUserLoggedIn(): Observable<boolean> {
+    // TODO(eyuelt): This seems wrong. I'm creating a new subscription on each
+    // call and never unsubscribing.
+    const userLoggedIn = new BehaviorSubject<boolean>(false);
+    this.oauthToken.subscribe((oauthToken) => {
+      userLoggedIn.next(oauthToken != null);
+    });
+    return userLoggedIn;
+  }
+
+  // @override
   /**
    * Attempt to authorize with Google.
    *
@@ -120,6 +133,7 @@ export class GoogleDriveService {
   }
 
 
+  // @override
   /**
    * Schedules an HTTP request to Google Drive's /listFiles API endpoint, once
    * RxJS tells us that we have an OAuthToken to use.
@@ -142,6 +156,7 @@ export class GoogleDriveService {
     }), switchAll());
   }
 
+  // @override
   /**
    * Creates a new Google Drive file. Will be of our custom "uxgraph" MIME type.
    *
@@ -162,13 +177,14 @@ export class GoogleDriveService {
     }), switchAll());
   }
 
+  // @override
   /**
    * Schedules an HTTP request to Google Drive's /files API endpoint, once
    * RxJS tells us that we have an OAuth token to use.
    *
-   * This method gets us the {@link DriveFile} data for a single Drive ID.
+   * This method gets us the {@link StorageFile} data for a single Drive ID.
    */
-  getFile(fileId: string): Observable<DriveFile> {
+  getFile(fileId: string): Observable<StorageFile> {
     return this.oauthToken.pipe(map(oauthToken => {
       const params = new URLSearchParams('', new GoogleDriveQueryEncoder());
       const fileUrl = GOOGLE_APIS_FILES_URL + '/' + fileId;
@@ -181,6 +197,7 @@ export class GoogleDriveService {
   }
 
 
+  // @override
   openShareDialog(fileId: string) {
     return this.oauthToken.subscribe(oauthToken => {
       const shareClient = new gapi.drive.share.ShareClient();
@@ -192,6 +209,7 @@ export class GoogleDriveService {
 
 
 
+  // @override
   /**
    * Schedules an HTTP PATCH request to Google Drive's /files API endpoint,
    * once RxJS tells us that we have an OAuth token to use.

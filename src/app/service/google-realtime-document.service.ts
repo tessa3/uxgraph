@@ -49,6 +49,8 @@ export class GoogleRealtimeDocumentService extends DocumentService {
 
   // @override
   getModel(): Observable<DocumentModel|null> {
+    // TODO(eyuelt): This seems wrong. I'm creating a new subscription on each
+    // call and never unsubscribing.
     const model = new BehaviorSubject<DocumentModel|null>(null);
     this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
       model.next(currentDocument ? currentDocument.getModel() : null);
