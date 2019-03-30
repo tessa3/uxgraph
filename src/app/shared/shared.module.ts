@@ -6,6 +6,8 @@ import { FabComponent } from './fab/index';
 import { ToIterablePipe } from './pipe/to-iterable.pipe';
 import { CanvasElementService } from '../canvas/canvas-element.service';
 import { GoogleRealtimeCanvasElementService } from '../service/google-realtime-canvas-element.service';
+import { DocumentService } from '../service/document.service';
+import { GoogleRealtimeDocumentService } from '../service/google-realtime-document.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -26,6 +28,7 @@ import { GoogleRealtimeCanvasElementService } from '../service/google-realtime-c
     ToIterablePipe,
   ],
   providers: [
+    { provide: DocumentService, useClass: GoogleRealtimeDocumentService },
     { provide: CanvasElementService, useClass: GoogleRealtimeCanvasElementService }
   ]
 })

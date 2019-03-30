@@ -21,7 +21,6 @@ const FORBIDDEN = 'forbidden';
 @Injectable({
   providedIn: 'root'
 })
-@Injectable()
 export class GoogleRealtimeService {
 
   currentDocument: BehaviorSubject<Document|null> =

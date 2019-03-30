@@ -6,7 +6,7 @@ export abstract class CollaborativeObjectModel {
   // TODO(eyuelt): get rid of non-null assertions
   private internalId!: string;
 
-  // Set getter for id but no setter to prevent overwriting.
+  // Provide getter for id but no setter to prevent overwriting.
   get id() {
     return this.internalId;
   }

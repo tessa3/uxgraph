@@ -3,8 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { GraphModule } from './graph.module';
 import { GraphComponent } from './graph.component';
-import { GoogleRealtimeService } from '../service/google-realtime.service';
-import { FakeGoogleRealtimeService } from '../utils/testing/fake-google-realtime.service';
 import { GoogleDriveService } from '../service/google-drive.service';
 import { FakeGoogleDriveService } from '../utils/testing/fake-google-drive.service';
 
@@ -19,7 +17,6 @@ describe('Graph', () => {
       ],
       providers: [
         { provide: GoogleDriveService, useClass: FakeGoogleDriveService },
-        { provide: GoogleRealtimeService, useClass: FakeGoogleRealtimeService },
       ]
     }).compileComponents();
     fixture = TestBed.createComponent(GraphComponent);

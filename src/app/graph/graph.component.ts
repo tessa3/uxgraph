@@ -1,6 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Params, convertToParamMap} from '@angular/router';
-import {GoogleRealtimeService} from '../service/google-realtime.service';
+import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { DocumentService } from '../service/document.service';
 
 /**
  * This class represents the GraphComponent.
@@ -18,25 +18,18 @@ export class GraphComponent implements OnDestroy {
   };
 
   graphId: string|undefined;
-  private realtimeDocument: gapi.drive.realtime.Document|null = null;
 
-  constructor(private googleRealtimeService: GoogleRealtimeService,
+  constructor(private documentService: DocumentService,
               private activatedRoute: ActivatedRoute) {
     this.activatedRoute.params.forEach((params: Params) => {
       this.graphId = params[GraphComponent.paramKeys.graphId];
       if (this.graphId !== undefined) {
-        this.googleRealtimeService.loadRealtimeDocument(this.graphId);
-        this.googleRealtimeService.currentDocument.subscribe((currentDocument) => {
-          this.realtimeDocument = currentDocument;
-        });
+        this.documentService.load(this.graphId);
       }
     });
   }
 
   ngOnDestroy() {
-    if (this.realtimeDocument) {
-      this.realtimeDocument.close();
-      this.googleRealtimeService.currentDocument.next(null);
-    }
+    this.documentService.close();
   }
 }
