@@ -23,8 +23,8 @@ export interface ArrowElementModel {
   id: string;
   tailPosition: Point;
   tipPosition: Point;
-  fromCard: CardElementModel|null;
-  toCard: CardElementModel|null;
+  fromCard: CardElementModel|undefined;
+  toCard: CardElementModel|undefined;
 }
 
 @Injectable()

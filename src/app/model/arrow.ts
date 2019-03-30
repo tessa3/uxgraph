@@ -9,8 +9,8 @@ export class Arrow extends CollaborativeObjectModel implements ArrowElementModel
   // TODO(eyuelt): get rid of non-null assertions
   tailPosition!: Point;
   tipPosition!: Point;
-  fromCard: Card|null = null;
-  toCard: Card|null = null;
+  fromCard: Card|undefined;
+  toCard: Card|undefined;
 
   static registerModel() {
     super.registerModel();
