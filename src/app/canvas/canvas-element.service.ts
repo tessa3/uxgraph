@@ -48,13 +48,20 @@ export abstract class CanvasElementService {
   // Creates an arrow and adds it to the canvas.
   abstract addArrow(tailPosition?: Point, tipPosition?: Point): ArrowElementModel|null;
 
-  // Find the arrow with the given id in the array and delete it.
-  private removeArrowById(arrows: ArrowElementModel[], id: string) {
-    // TODO(eyuelt): This if statement is for backwards compatability with the
-    // existing GoogleRealtime uxgraphs. I'll delete this eventually.
+  // TODO(eyuelt): This is for backwards compatability with the existing
+  // GoogleRealtime uxgraphs. I'll delete this eventually. It's required
+  // because I changed the type of the arrow lists on Card from
+  // CollaborativeLists to regular arrays.
+  private backwardsCompatibleArrows(arrows: ArrowElementModel[]): ArrowElementModel[] {
     if ((arrows as any).asArray) {
       arrows = (arrows as any).asArray();
     }
+    return arrows;
+  }
+
+  // Find the arrow with the given id in the array and delete it.
+  private removeArrowById(arrows: ArrowElementModel[], id: string) {
+    arrows = this.backwardsCompatibleArrows(arrows);
     const index = arrows.findIndex((arrow) => {
       return arrow.id === id;
     });
@@ -76,6 +83,18 @@ export abstract class CanvasElementService {
       arrow.fromCard = card;
       card.outgoingArrows.push(arrow);
     }
+  }
+
+  adjustConnectedArrows(card: CardElementModel) {
+    const incomingArrows: ArrowElementModel[] = this.backwardsCompatibleArrows(card.incomingArrows);
+    const outgoingArrows: ArrowElementModel[] = this.backwardsCompatibleArrows(card.outgoingArrows);
+    // TODO(eyuelt): instead, have arrows subscribe to card position changes
+    incomingArrows.forEach((arrow: ArrowElementModel) => {
+      this.repositionArrow(arrow);
+    });
+    outgoingArrows.forEach((arrow: ArrowElementModel) => {
+      this.repositionArrow(arrow);
+    });
   }
 
   getCardById(id: string): CardElementModel|null {

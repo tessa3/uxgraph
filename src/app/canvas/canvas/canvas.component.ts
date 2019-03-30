@@ -1,7 +1,9 @@
-import {Component, HostListener, ElementRef} from '@angular/core';
-import {CanvasInteractionService, ViewportCoord} from '../canvas-interaction.service';
-import {EventUtils} from '../../utils/event-utils';
+import { Component, HostListener, ElementRef } from '@angular/core';
+import { CanvasInteractionService } from '../canvas-interaction.service';
+import { EventUtils } from '../../utils/event-utils';
 import { CanvasElementService } from '../canvas-element.service';
+import { ViewportDrag } from '../utils/viewport-drag';
+import { ViewportCoord } from '../utils/coord';
 
 /**
  * This class represents the Canvas component.
@@ -13,10 +15,8 @@ import { CanvasElementService } from '../canvas-element.service';
   providers: [CanvasInteractionService]
 })
 export class CanvasComponent {
-  // Whether or not panning is in progress.
-  private panning = false;
-  // The last point seen during the pan that is currently in progress.
-  private lastPanPnt: ViewportCoord|null = null;
+  // Represents the drag action on the canvas that is used to pan.
+  private canvasDrag: ViewportDrag = new ViewportDrag();
 
   /*
    * Note: The following two methods are properties because they are defined at
@@ -46,52 +46,43 @@ export class CanvasComponent {
   onMousewheel(event: WheelEvent) {
     event.preventDefault();
     const zoomScale = 1 + (event.deltaY * -0.002);
-    const zoomPnt = {
-      x: event.clientX - this.getBounds().left,
-      y: event.clientY - this.getBounds().top
-    };
+    const zoomPnt = new ViewportCoord(
+      event.clientX - this.getBounds().left,
+      event.clientY - this.getBounds().top
+    );
     this.canvasInteractionService.zoom(zoomPnt, zoomScale);
   }
 
   onMousedown(event: MouseEvent) {
     if (this.eventTargetIsCanvas(event) &&
         EventUtils.eventIsFromPrimaryButton(event)) {
-      this.panning = true;
-      this.lastPanPnt = {
-        x: event.clientX - this.getBounds().left,
-        y: event.clientY - this.getBounds().top
-      };
+      this.canvasDrag.start(new ViewportCoord(
+        event.clientX - this.getBounds().left,
+        event.clientY - this.getBounds().top
+      ));
     }
   }
 
   // Put mousemove on document to allow panning outside of canvas
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
-    // TODO(eyuelt): We know lastPanPnt is defined if panning is true but we
-    // shouldn't have these separate fields implicitly tied together like this.
-    // What if somehow they get out of sync. Maybe create a CanvasPanner class?
-    if (this.panning && this.lastPanPnt !== null) {
+    if (this.canvasDrag.isInProgress()) {
       event.preventDefault();
-      const newPanPnt = {
-        x: event.clientX - this.getBounds().left,
-        y: event.clientY - this.getBounds().top
-      };
-      // Panning is in the opposite direction of the drag gesture.
-      const panVector = {
-        x: this.lastPanPnt.x - newPanPnt.x,
-        y: this.lastPanPnt.y - newPanPnt.y
-      };
+      const newPanPnt = new ViewportCoord(
+        event.clientX - this.getBounds().left,
+        event.clientY - this.getBounds().top
+      );
+      // Reverse because panning goes in opposite direction of the drag gesture.
+      const panVector = this.canvasDrag.continue(newPanPnt).reversed();
       this.canvasInteractionService.pan(panVector);
-      this.lastPanPnt = newPanPnt;
     }
   }
 
   // Put mouseup on document to end pan even if mouseup is outside of canvas
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
-    if (this.panning) {
-      this.panning = false;
-      this.lastPanPnt = null;
+    if (this.canvasDrag.isInProgress()) {
+      this.canvasDrag.end();
     }
   }
 

@@ -1,8 +1,10 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
-import { CanvasInteractionService, ViewportCoord } from '../canvas-interaction.service';
+import { CanvasInteractionService } from '../canvas-interaction.service';
 import { Arrow } from '../../model/arrow';
 import { EventUtils } from '../../utils/event-utils';
 import { CanvasElementService } from '../canvas-element.service';
+import { ViewportDrag } from '../utils/viewport-drag';
+import { ViewportCoord, CanvasCoord } from '../utils/coord';
 
 /**
  * This class represents the Arrow component.
@@ -24,14 +26,10 @@ export class ArrowComponent implements OnInit {
   anchorPoints: ViewportCoord[] = [];
   // The current display position of the tip of the arrow. This is the same as
   // the last point in anchorPoints, so this property is just for convenience.
-  tipPosition: ViewportCoord = { x: 0, y: 0 };
+  tipPosition = new ViewportCoord(0, 0);
 
-  // Whether or not tail dragging is in progress.
-  private tailDragging = false;
-  // Whether or not tip dragging is in progress.
-  private tipDragging = false;
-  // The last point seen during the drag that is currently in progress.
-  private lastDragPoint: ViewportCoord|null = null;
+  // Represents the drag action on the tip of the arrow.
+  private tipDrag: ViewportDrag = new ViewportDrag();
 
   constructor(private canvasElementService: CanvasElementService,
               private canvasInteractionService: CanvasInteractionService) {
@@ -48,7 +46,8 @@ export class ArrowComponent implements OnInit {
   // CanvasInteractionService is told that the elements data may have been changed.
   update() {
     this.scale = this.canvasInteractionService.zoomScale;
-    this.tipPosition = this.canvasInteractionService.canvasCoordToViewportCoord(this.arrow.tipPosition);
+    this.tipPosition = this.canvasInteractionService.canvasCoordToViewportCoord(
+      new CanvasCoord(this.arrow.tipPosition.x, this.arrow.tipPosition.y));
     this.anchorPoints = this.getAnchorPoints();
   }
 
@@ -56,14 +55,16 @@ export class ArrowComponent implements OnInit {
   getAnchorPoints() {
     // TODO(eyuelt): clean this up
     const anchorPoints: ViewportCoord[] = [];
-    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(this.arrow.tailPosition));
-    const foo1 = { x: this.arrow.tailPosition.x, y: this.arrow.tailPosition.y };
+    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(
+      new CanvasCoord(this.arrow.tailPosition.x, this.arrow.tailPosition.y)));
+    const foo1 = new CanvasCoord(this.arrow.tailPosition.x, this.arrow.tailPosition.y);
     foo1.x += 10;
     anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(foo1));
-    const foo2 = { x: this.arrow.tipPosition.x, y: this.arrow.tipPosition.y };
+    const foo2 = new CanvasCoord(this.arrow.tipPosition.x, this.arrow.tipPosition.y);
     foo2.x -= 20;
     anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(foo2));
-    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(this.arrow.tipPosition));
+    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(
+      new CanvasCoord(this.arrow.tipPosition.x, this.arrow.tipPosition.y)));
     return anchorPoints;
   }
 
@@ -83,34 +84,29 @@ export class ArrowComponent implements OnInit {
   // dragging anywhere on the arrow will move the tip
   onMousedown(event: MouseEvent) {
     if (EventUtils.eventIsFromPrimaryButton(event)) {
-      this.tipDragging = true;
       const canvasBounds = this.canvasBoundsGetter();
-      this.lastDragPoint = {
-        x: event.clientX - canvasBounds.left,
-        y: event.clientY - canvasBounds.top
-      };
+      this.tipDrag.start(new ViewportCoord(
+        event.clientX - canvasBounds.left,
+        event.clientY - canvasBounds.top
+      ));
     }
   }
 
   // Put mousemove on document to allow dragging outside of canvas
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
-    // TODO(eyuelt): see comment about CanvasPanner in canvas.component.ts.
-    if (this.tipDragging && this.lastDragPoint !== null) {
+    if (this.tipDrag.isInProgress()) {
       event.preventDefault();
       const canvasBounds = this.canvasBoundsGetter();
-      const newDragPoint = {
-        x: event.clientX - canvasBounds.left,
-        y: event.clientY - canvasBounds.top
-      };
-      this.tipPosition = {
-        x: this.tipPosition.x + newDragPoint.x - this.lastDragPoint.x,
-        y: this.tipPosition.y + newDragPoint.y - this.lastDragPoint.y
-      };
+      const newDragPoint = new ViewportCoord(
+        event.clientX - canvasBounds.left,
+        event.clientY - canvasBounds.top
+      );
+      const dragVector = this.tipDrag.continue(newDragPoint);
+      this.tipPosition = this.tipPosition.translated(dragVector);
       const newTipPosition =
         this.canvasInteractionService.viewportCoordToCanvasCoord(this.tipPosition);
       this.arrow.tipPosition = {x: newTipPosition.x, y: newTipPosition.y};
-      this.lastDragPoint = newDragPoint;
     }
   }
 
@@ -135,7 +131,7 @@ export class ArrowComponent implements OnInit {
   // Put mouseup on document to end drag even if mouseup is outside of canvas
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
-    if (this.tipDragging) {
+    if (this.tipDrag.isInProgress()) {
       const topCard = this.topCardElementFromList(document.elementsFromPoint(event.clientX, event.clientY));
       if (topCard !== null) {
         const cardId = topCard.getAttribute('card-id');
@@ -143,8 +139,7 @@ export class ArrowComponent implements OnInit {
           this.canvasElementService.arrowTipDroppedOnCard(this.arrow, cardId);
         }
       }
-      this.tipDragging = false;
-      this.lastDragPoint = null;
+      this.tipDrag.end();
     }
   }
 

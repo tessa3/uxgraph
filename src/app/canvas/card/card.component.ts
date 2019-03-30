@@ -4,13 +4,12 @@ import {
   OnInit,
   HostListener,
 } from '@angular/core';
-import {
-  CanvasInteractionService,
-  ViewportCoord,
-} from '../canvas-interaction.service';
+import { CanvasInteractionService } from '../canvas-interaction.service';
 import { EventUtils } from '../../utils/event-utils';
 import { Arrow, Card } from '../../model';
 import { CanvasElementService } from '../canvas-element.service';
+import { ViewportDrag } from '../utils/viewport-drag';
+import { ViewportCoord, CanvasCoord } from '../utils/coord';
 
 /**
  * This class represents the Card component.
@@ -31,21 +30,20 @@ export class CardComponent implements OnInit {
   // The current scale factor of the card shape.
   scale = 1;
   // The current display position in the viewport's coordinate space.
-  position: ViewportCoord = {x: 0, y: 0};
+  position = new ViewportCoord(0, 0);
   // The radius of the rounded corners in the canvas' coordinate space.
   cornerRadius = 1;
 
-  // Whether or not dragging is in progress.
-  private dragging = false;
-  // The last point seen during the drag that is currently in progress.
-  private lastDragPnt: ViewportCoord|null = null;
+  // Represents the drag action on the card.
+  private drag: ViewportDrag = new ViewportDrag();
 
   constructor(private canvasElementService: CanvasElementService,
               private canvasInteractionService: CanvasInteractionService) {
   }
 
   ngOnInit() {
-    this.position = this.canvasInteractionService.canvasCoordToViewportCoord(this.card.position);
+    this.position = this.canvasInteractionService.canvasCoordToViewportCoord(
+      new CanvasCoord(this.card.position.x, this.card.position.y));
     this.canvasInteractionService.addListener(this.update.bind(this));
     // TODO(eyuelt): why isn't change detection automatically handling this?
     this.canvasElementService.addListener(this.update.bind(this));
@@ -55,19 +53,19 @@ export class CardComponent implements OnInit {
   // CanvasInteractionService is told that the elements data may have been changed.
   update() {
     this.scale = this.canvasInteractionService.zoomScale;
-    this.position = this.canvasInteractionService.canvasCoordToViewportCoord(this.card.position);
+    this.position = this.canvasInteractionService.canvasCoordToViewportCoord(
+      new CanvasCoord(this.card.position.x, this.card.position.y));
   }
 
   onMousedown(event: MouseEvent) {
     if (EventUtils.eventIsFromPrimaryButton(event)
         // Don't initiate a drag if initiated from within the card's <textarea>.
         && !(event.target instanceof HTMLTextAreaElement)) {
-      this.dragging = true;
       const canvasBounds = this.canvasBoundsGetter();
-      this.lastDragPnt = {
-        x: event.clientX - canvasBounds.left,
-        y: event.clientY - canvasBounds.top
-      };
+      this.drag.start(new ViewportCoord(
+        event.clientX - canvasBounds.left,
+        event.clientY - canvasBounds.top
+      ));
       if (!this.canvasInteractionService.multiSelectMode) {
         this.canvasElementService.deselectCards();
       }
@@ -78,45 +76,27 @@ export class CardComponent implements OnInit {
   // Put mousemove on document to allow dragging outside of canvas
   @HostListener('document:mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
-    // TODO(eyuelt): see comment about CanvasPanner in canvas.component.ts.
-    if (this.dragging && this.lastDragPnt !== null) {
+    if (this.drag.isInProgress()) {
       event.preventDefault();
       const canvasBounds = this.canvasBoundsGetter();
-      const newDragPnt = {
-        x: event.clientX - canvasBounds.left,
-        y: event.clientY - canvasBounds.top
-      };
-      this.position.x += newDragPnt.x - this.lastDragPnt.x;
-      this.position.y += newDragPnt.y - this.lastDragPnt.y;
-      const newCardPosition =
-        this.canvasInteractionService.viewportCoordToCanvasCoord(this.position);
-      this.card.position = {x: newCardPosition.x, y: newCardPosition.y};
-      // TODO(eyuelt): This if statement is for backwards compatability with the
-      // existing GoogleRealtime uxgraphs. I'll delete this eventually.
-      let incomingArrows: Arrow[] = this.card.incomingArrows;
-      let outgoingArrows: Arrow[] = this.card.outgoingArrows;
-      if ((incomingArrows as any).asArray) {
-        incomingArrows = (incomingArrows as any).asArray();
-        outgoingArrows = (outgoingArrows as any).asArray();
-      }
+      const newDragPnt = new ViewportCoord(
+        event.clientX - canvasBounds.left,
+        event.clientY - canvasBounds.top
+      );
+      const dragVector = this.drag.continue(newDragPnt);
+      this.position = this.position.translated(dragVector);
+      this.card.position =
+          this.canvasInteractionService.viewportCoordToCanvasCoord(this.position);
       // Move all associated arrows too
-      // TODO(eyuelt): instead, have arrows subscribe to card position changes
-      incomingArrows.forEach((arrow: Arrow) => {
-        this.canvasElementService.repositionArrow(arrow);
-      });
-      outgoingArrows.forEach((arrow: Arrow) => {
-        this.canvasElementService.repositionArrow(arrow);
-      });
-      this.lastDragPnt = newDragPnt;
+      this.canvasElementService.adjustConnectedArrows(this.card);
     }
   }
 
   // Put mouseup on document to end drag even if mouseup is outside of canvas
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
-    if (this.dragging) {
-      this.dragging = false;
-      this.lastDragPnt = null;
+    if (this.drag.isInProgress()) {
+      this.drag.end();
     }
   }
 

@@ -33,7 +33,6 @@ export class Card extends CollaborativeObjectModel implements CardElementModel {
 
   initializeModel() {
     super.initializeModel();
-    const model = gapi.drive.realtime.custom.getModel(this);
     this.incomingArrows = [];
     this.outgoingArrows = [];
   }

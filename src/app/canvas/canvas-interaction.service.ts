@@ -1,15 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Point } from '../model/geometry';
-
-// A point in the coordinate system of the viewport.
-export class ViewportCoord implements Point {
-  constructor(public x: number, public y: number) {}
-}
-
-// A point in the coordinate system of the canvas.
-export class CanvasCoord implements Point {
-  constructor(public x: number, public y: number) {}
-}
+import { CanvasCoord, ViewportCoord, ViewportVector } from './utils/coord';
 
 /*
  * The CanvasInteractionService handles zooming and panning on the canvas.
@@ -28,7 +18,7 @@ export class CanvasInteractionService {
   // The zoom scale relative to the original viewport size.
   zoomScale = 1;
   // The offset of the viewport from its original position.
-  originOffset: CanvasCoord = {x: 0, y: 0};
+  originOffset: CanvasCoord = new CanvasCoord(0, 0);
   // If true, multipe
   multiSelectMode = false;
   // These are the keyboard keys that enable multi-select
@@ -36,6 +26,7 @@ export class CanvasInteractionService {
     'MetaLeft',  // Left cmd button on Mac
     'MetaRight'  // Right cmd button on Mac
   ];
+
   // TODO(eyuelt): I think I can use RXJS' Subject for this?
   // The list of functions to call when zoom or pan occurs. This is used to
   // essentially watch this class' properties.
@@ -49,17 +40,19 @@ export class CanvasInteractionService {
   // Convert a point in the viewport coordinate space to a point in the canvas
   // coordinate space.
   viewportCoordToCanvasCoord(vp: ViewportCoord): CanvasCoord {
-    const x = vp.x / this.zoomScale + this.originOffset.x;
-    const y = vp.y / this.zoomScale + this.originOffset.y;
-    return {x, y};
+    return new CanvasCoord(
+      vp.x / this.zoomScale + this.originOffset.x,
+      vp.y / this.zoomScale + this.originOffset.y
+    );
   }
 
   // Convert a point in the canvas coordinate space to a point in the viewport
   // coordinate space.
   canvasCoordToViewportCoord(cv: CanvasCoord): ViewportCoord {
-    const x = (cv.x - this.originOffset.x) * this.zoomScale;
-    const y = (cv.y - this.originOffset.y) * this.zoomScale;
-    return {x, y};
+    return new ViewportCoord(
+      (cv.x - this.originOffset.x) * this.zoomScale,
+      (cv.y - this.originOffset.y) * this.zoomScale
+    );
   }
 
   // Zoom the canvas incrementally by incZoomScale, while keeping zoomPnt at
@@ -67,6 +60,7 @@ export class CanvasInteractionService {
   zoom(zoomPoint: ViewportCoord, incrementalZoomScale: number) {
     const toZoom = this.zoomScale * incrementalZoomScale;
     if (toZoom > this.kMinZoomScale && toZoom < this.kMaxZoomScale) {
+      // TODO(eyuelt): make this clearer
       this.originOffset.x +=
           zoomPoint.x * (1 - (1 / incrementalZoomScale)) / this.zoomScale;
       this.originOffset.y +=
@@ -77,7 +71,7 @@ export class CanvasInteractionService {
   }
 
   // Pan the canvas by the vector specified by delta.
-  pan(delta: ViewportCoord) {
+  pan(delta: ViewportVector) {
     this.originOffset.x += delta.x / this.zoomScale;
     this.originOffset.y += delta.y / this.zoomScale;
     this.notifyListeners();
