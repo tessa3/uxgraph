@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {Collaborator} from '../../model/collaborator';
 import {Title} from '@angular/platform-browser';
 import { DocumentService } from 'src/app/service/document.service';
-import { StorageService } from 'src/app/service/storage.service';
+import { MetadataFileService } from 'src/app/service/metadata-file.service';
 
 /**
  * This class represents the App Header component.
@@ -30,7 +30,7 @@ export class GraphHeaderComponent implements OnInit {
 
   collaborators: Observable<Collaborator[]>;
 
-  constructor(private storageService: StorageService,
+  constructor(private metadataFileService: MetadataFileService,
               private titleService: Title,
               documentService: DocumentService) {
     // We can't do anything in the constructor yet because the [graphId]
@@ -44,7 +44,7 @@ export class GraphHeaderComponent implements OnInit {
   ngOnInit(): void {
     // Once the @Input binding is available, fetch the rest of the data to put
     // into "this.currentGraph".
-    this.storageService.getFile(this.graphId)
+    this.metadataFileService.getFile(this.graphId)
         .subscribe((driveFile: DriveFile) => {
           this.currentGraph = driveFile;
           this.titleService.setTitle(this.currentGraph.name + ' | uxgraph');
@@ -62,14 +62,14 @@ export class GraphHeaderComponent implements OnInit {
     // Once the PATCH request goes through, update the rest of the
     // "this.currentGraph" object to reflect the truth that the Google Drive API
     // just returned to us.
-    this.storageService.updateFile(this.currentGraph)
+    this.metadataFileService.updateFile(this.currentGraph)
         .subscribe((driveFile: DriveFile) => {
           this.currentGraph = driveFile;
         });
   }
 
   openShareDialog(): void {
-    this.storageService.openShareDialog(this.currentGraph.id);
+    this.metadataFileService.openShareDialog(this.currentGraph.id);
   }
 
 

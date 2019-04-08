@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AsyncSubject, Observable, of } from 'rxjs';
-import { StorageFile } from '../../service/storage.service';
+import { MetadataFile } from '../../service/metadata-file.service';
 
 @Injectable()
 export class FakeGoogleDriveService {
 
-  private file: StorageFile = {
+  private file: MetadataFile = {
     name: 'fakeName',
     mimeType: 'fakeMimeType',
     kind: 'fakeKind',
@@ -17,11 +17,11 @@ export class FakeGoogleDriveService {
 
   authorize(usePopup: boolean) {}
 
-  listFiles(): Observable<StorageFile[]> {
+  listFiles(): Observable<MetadataFile[]> {
     return of([this.file]);
   }
 
-  getFile(fileId: string): Observable<StorageFile> {
+  getFile(fileId: string): Observable<MetadataFile> {
     return of(this.file);
   }
 

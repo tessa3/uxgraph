@@ -2,20 +2,20 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DriveFile } from '../model/drive-file';
 
-export type StorageFile = DriveFile;
+export type MetadataFile = DriveFile;
 
 /**
- * A service to manage storage of the documents.
+ * A service to manage storage of the metadata files.
  */
 @Injectable()
-export abstract class StorageService {
+export abstract class MetadataFileService {
   constructor() {}
 
-  abstract getFile(fileId: string): Observable<StorageFile>;
+  abstract getFile(fileId: string): Observable<MetadataFile>;
   // Updates the file (as identified by the fileId), and returns the result.
-  abstract updateFile(file: StorageFile): Observable<StorageFile>;
-  abstract createFile(fileName: string): Observable<StorageFile>;
-  abstract listFiles(): Observable<StorageFile[]>;
+  abstract updateFile(file: MetadataFile): Observable<MetadataFile>;
+  abstract createFile(fileName: string): Observable<MetadataFile>;
+  abstract listFiles(): Observable<MetadataFile[]>;
 
   abstract getUserLoggedIn(): Observable<boolean>;
   abstract authorize(showPopup: boolean): void;

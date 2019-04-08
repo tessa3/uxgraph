@@ -4,7 +4,7 @@ import {Collaborator} from '../model/collaborator';
 import {Router} from '@angular/router';
 import Document = gapi.drive.realtime.Document;
 import ObjectChangedEvent = gapi.drive.realtime.ObjectChangedEvent;
-import { StorageService } from './storage.service';
+import { MetadataFileService } from './metadata-file.service';
 import { typeIs } from '../utils/runtime-utils';
 import { GoogleDriveService } from './google-drive.service';
 
@@ -45,10 +45,10 @@ export class GoogleRealtimeService {
     return filteredList;
   }
 
-  constructor(private storageService: StorageService,
+  constructor(private metadataFileService: MetadataFileService,
               private applicationRef: ApplicationRef,
               private router: Router) {
-    typeIs(storageService, GoogleDriveService.name);
+    typeIs(metadataFileService, GoogleDriveService.name);
   }
 
 
@@ -61,7 +61,7 @@ export class GoogleRealtimeService {
    *                    Realtime for.
    */
   loadRealtimeDocument(driveFileId: string) {
-    this.storageService.getUserLoggedIn().subscribe((userLoggedIn) => {
+    this.metadataFileService.getUserLoggedIn().subscribe((userLoggedIn) => {
       if (!userLoggedIn) { return; }
       gapi.drive.realtime.load(driveFileId, (document) => {
         // Read the current array of collaborators from the document.

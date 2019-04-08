@@ -5,7 +5,7 @@ import { Http } from '@angular/http';
 import { GoogleDriveService } from './google-drive.service';
 import { FakeHttp } from '../utils/testing/fake-http';
 import { RouterTestingModule } from '@angular/router/testing';
-import { StorageService } from './storage.service';
+import { MetadataFileService } from './metadata-file.service';
 
 describe('Google Realtime Service', () => {
   let googleRealtimeService: GoogleRealtimeService;
@@ -21,7 +21,7 @@ describe('Google Realtime Service', () => {
       ],
       providers: [
         { provide: Http, useClass: FakeHttp },  // tslint:disable-line:deprecation
-        { provide: StorageService, useClass: GoogleDriveService },
+        { provide: MetadataFileService, useClass: GoogleDriveService },
         GoogleRealtimeService
       ]
     });

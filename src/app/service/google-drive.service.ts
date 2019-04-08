@@ -14,7 +14,7 @@ import {DriveFile} from '../model/drive-file';
 import {Arrow, Card} from '../model';
 import {map, switchAll} from 'rxjs/operators';
 import {GoogleDriveQueryEncoder} from './utils/google-drive-query-encoder';
-import { StorageService, StorageFile } from './storage.service';
+import { MetadataFileService, MetadataFile } from './metadata-file.service';
 
 
 
@@ -31,7 +31,7 @@ const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 
 
 @Injectable()
-export class GoogleDriveService extends StorageService {
+export class GoogleDriveService extends MetadataFileService {
 
   /**
    * The OAuth token that Google gives back for the current client.
@@ -184,7 +184,7 @@ export class GoogleDriveService extends StorageService {
    *
    * This method gets us the {@link StorageFile} data for a single Drive ID.
    */
-  getFile(fileId: string): Observable<StorageFile> {
+  getFile(fileId: string): Observable<MetadataFile> {
     return this.oauthToken.pipe(map(oauthToken => {
       const params = new URLSearchParams('', new GoogleDriveQueryEncoder());
       const fileUrl = GOOGLE_APIS_FILES_URL + '/' + fileId;
