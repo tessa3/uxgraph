@@ -1,12 +1,12 @@
 import { TestBed, async } from '@angular/core/testing';
-import { GoogleDriveService } from './google-drive.service';
+import { GoogleDriveMetadataFileService } from './google-drive-metadata-file.service';
 import { FakeGapi } from '../utils/testing/fake-gapi';
 import { Http } from '@angular/http';
 import { FakeHttp } from '../utils/testing/fake-http';
 import { RouterTestingModule } from '@angular/router/testing';
 
-describe('Google Drive Service', () => {
-  let googleDriveService: GoogleDriveService;
+describe('Google Drive Metadata File Service', () => {
+  let googleDriveService: GoogleDriveMetadataFileService;
   let fakeGapi: FakeGapi;
 
   beforeEach(async(() => {
@@ -19,11 +19,11 @@ describe('Google Drive Service', () => {
       ],
       providers: [
         {provide: Http, useClass: FakeHttp},  // tslint:disable-line:deprecation
-        GoogleDriveService
+        GoogleDriveMetadataFileService
       ]
     });
 
-    googleDriveService = TestBed.get(GoogleDriveService);
+    googleDriveService = TestBed.get(GoogleDriveMetadataFileService);
   }));
 
 

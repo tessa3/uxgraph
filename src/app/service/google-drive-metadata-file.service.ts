@@ -31,7 +31,7 @@ const UXGRAPH_MIME_TYPE = 'application/vnd.google.drive.ext-type.uxgraph';
 
 
 @Injectable()
-export class GoogleDriveService extends MetadataFileService {
+export class GoogleDriveMetadataFileService extends MetadataFileService {
 
   /**
    * The OAuth token that Google gives back for the current client.
@@ -241,10 +241,10 @@ export class GoogleDriveService extends MetadataFileService {
   private get(accessToken: string,
               requestUrl: string,
               urlParams: URLSearchParams): Observable<Response> {
-    GoogleDriveService.addDefaultUrlParams(urlParams);
+    GoogleDriveMetadataFileService.addDefaultUrlParams(urlParams);
 
     return this.http.get(requestUrl, new RequestOptions({
-      headers: GoogleDriveService.getDefaultHeaders(accessToken),
+      headers: GoogleDriveMetadataFileService.getDefaultHeaders(accessToken),
       search: urlParams
     }));
   }
@@ -259,10 +259,10 @@ export class GoogleDriveService extends MetadataFileService {
                requestUrl: string,
                body: object): Observable<Response> {
     const urlParams = new URLSearchParams();
-    GoogleDriveService.addDefaultUrlParams(urlParams);
+    GoogleDriveMetadataFileService.addDefaultUrlParams(urlParams);
 
     return this.http.post(requestUrl, body, new RequestOptions({
-      headers: GoogleDriveService.getDefaultHeaders(accessToken),
+      headers: GoogleDriveMetadataFileService.getDefaultHeaders(accessToken),
       search: urlParams
     }));
   }
@@ -274,10 +274,10 @@ export class GoogleDriveService extends MetadataFileService {
                 requestUrl: string,
                 body: object): Observable<Response> {
     const urlParams = new URLSearchParams();
-    GoogleDriveService.addDefaultUrlParams(urlParams);
+    GoogleDriveMetadataFileService.addDefaultUrlParams(urlParams);
 
     return this.http.patch(requestUrl, body, new RequestOptions({
-      headers: GoogleDriveService.getDefaultHeaders(accessToken),
+      headers: GoogleDriveMetadataFileService.getDefaultHeaders(accessToken),
       search: urlParams
     }));
   }

@@ -9,7 +9,7 @@ import { GoogleRealtimeCanvasElementService } from '../service/google-realtime-c
 import { DocumentService } from '../service/document.service';
 import { GoogleRealtimeDocumentService } from '../service/google-realtime-document.service';
 import { MetadataFileService } from '../service/metadata-file.service';
-import { GoogleDriveService } from '../service/google-drive.service';
+import { GoogleDriveMetadataFileService } from '../service/google-drive-metadata-file.service';
 import { HttpModule } from '@angular/http';
 
 /**
@@ -33,7 +33,7 @@ import { HttpModule } from '@angular/http';
   ],
   providers: [
     { provide: DocumentService, useClass: GoogleRealtimeDocumentService },
-    { provide: MetadataFileService, useClass: GoogleDriveService },
+    { provide: MetadataFileService, useClass: GoogleDriveMetadataFileService },
     { provide: CanvasElementService, useClass: GoogleRealtimeCanvasElementService }
   ]
 })

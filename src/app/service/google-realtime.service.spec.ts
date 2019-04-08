@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { GoogleRealtimeService } from './google-realtime.service';
 import { FakeGapi } from '../utils/testing/fake-gapi';
 import { Http } from '@angular/http';
-import { GoogleDriveService } from './google-drive.service';
+import { GoogleDriveMetadataFileService } from './google-drive-metadata-file.service';
 import { FakeHttp } from '../utils/testing/fake-http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MetadataFileService } from './metadata-file.service';
@@ -21,7 +21,7 @@ describe('Google Realtime Service', () => {
       ],
       providers: [
         { provide: Http, useClass: FakeHttp },  // tslint:disable-line:deprecation
-        { provide: MetadataFileService, useClass: GoogleDriveService },
+        { provide: MetadataFileService, useClass: GoogleDriveMetadataFileService },
         GoogleRealtimeService
       ]
     });

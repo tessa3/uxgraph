@@ -6,7 +6,7 @@ import Document = gapi.drive.realtime.Document;
 import ObjectChangedEvent = gapi.drive.realtime.ObjectChangedEvent;
 import { MetadataFileService } from './metadata-file.service';
 import { typeIs } from '../utils/runtime-utils';
-import { GoogleDriveService } from './google-drive.service';
+import { GoogleDriveMetadataFileService } from './google-drive-metadata-file.service';
 
 
 const COLLABORATOR_JOINED = 'collaborator_joined';
@@ -48,7 +48,7 @@ export class GoogleRealtimeService {
   constructor(private metadataFileService: MetadataFileService,
               private applicationRef: ApplicationRef,
               private router: Router) {
-    typeIs(metadataFileService, GoogleDriveService.name);
+    typeIs(metadataFileService, GoogleDriveMetadataFileService.name);
   }
 
 
