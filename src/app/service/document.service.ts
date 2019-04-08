@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Collaborator } from '../model/collaborator';
+import { Point, Card, Arrow } from '../model';
 
 export type DocumentModel = gapi.drive.realtime.Model;
 
@@ -15,4 +16,6 @@ export abstract class DocumentService {
   abstract close(): void;
   abstract getCollaborators(): Observable<Collaborator[]>;
   abstract getModel(): Observable<DocumentModel|null>;
+  abstract createCard(position?: Point, text?: string, selected?: boolean): Card|null;
+  abstract createArrow(tailPosition?: Point, tipPosition?: Point): Arrow|null;
 }

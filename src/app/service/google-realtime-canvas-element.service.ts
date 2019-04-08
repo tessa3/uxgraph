@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Arrow, Card } from '../model';
 import { OBJECT_CHANGED } from 'src/app/service';
 import { CanvasElementService, ArrowElementModel, CardElementModel } from '../canvas/canvas-element.service';
-import { Point } from 'src/app/model/geometry';
 import CollaborativeList = gapi.drive.realtime.CollaborativeList;
 import { DocumentService } from './document.service';
 import { typeIs } from '../utils/runtime-utils';
@@ -49,33 +48,21 @@ export class GoogleRealtimeCanvasElementService extends CanvasElementService {
   }
 
   // @override
-  // Creates a card and adds it to the canvas.
-  addCard(position: Point = {x: 0, y: 0},
-          text: string = '',
-          selected = false): CardElementModel|null {
-    if (this.realtimeModel && this.collaborativeCards) {
-      const card = this.realtimeModel.create(Card);
-      card.position = position;
-      card.text = text;
-      card.selected = selected;
-      this.collaborativeCards.push(card);
-      return card;
+  // Adds the card to the canvas.
+  addCard(card: CardElementModel) {
+    if (this.collaborativeCards) {
+      typeIs(card, Card.name);
+      this.collaborativeCards.push(card as Card);
     }
-    return null;
   }
 
   // @override
-  // Creates an arrow and adds it to the canvas.
-  addArrow(tailPosition: Point = {x: 0, y: 0},
-           tipPosition: Point = {x: 0, y: 0}): ArrowElementModel|null {
-    if (this.realtimeModel && this.collaborativeArrows) {
-      const arrow = this.realtimeModel.create(Arrow);
-      arrow.tailPosition = tailPosition;
-      arrow.tipPosition = tipPosition;
-      this.collaborativeArrows.push(arrow);
-      return arrow;
+  // Adds the arrow to the canvas.
+  addArrow(arrow: ArrowElementModel) {
+    if (this.collaborativeArrows) {
+      typeIs(arrow, Arrow.name);
+      this.collaborativeArrows.push(arrow as Arrow);
     }
-    return null;
   }
 
   // @override

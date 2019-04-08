@@ -12,6 +12,7 @@ export class Arrow extends CollaborativeObjectModel implements ArrowElementModel
   fromCard: Card|undefined;
   toCard: Card|undefined;
 
+  // @override
   static registerModel() {
     super.registerModel();
     this.prototype.tailPosition =
@@ -23,4 +24,5 @@ export class Arrow extends CollaborativeObjectModel implements ArrowElementModel
     this.prototype.toCard =
       gapi.drive.realtime.custom.collaborativeField('toCard');
   }
+
 }

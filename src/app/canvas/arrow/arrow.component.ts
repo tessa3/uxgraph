@@ -138,6 +138,8 @@ export class ArrowComponent implements OnInit {
           this.canvasElementService.arrowTipDroppedOnCard(this.arrow, cardId);
         }
       }
+      // TODO: If the click was on the canvas, disconnect the arrow from its
+      // current card (if it has one).
       this.tipDrag.end();
     }
   }

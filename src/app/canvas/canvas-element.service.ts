@@ -42,11 +42,17 @@ export abstract class CanvasElementService {
   constructor() {}
 
   // Creates a card and adds it to the canvas.
-  abstract addCard(
-    position?: Point, text?: string, selected?: boolean): CardElementModel|null;
+  // TODO: abstract addCard(
+  // TODO:   position?: Point, text?: string, selected?: boolean): CardElementModel|null;
+  addCard(card: CardElementModel) {
+    this.cards.push(card);
+  }
 
   // Creates an arrow and adds it to the canvas.
-  abstract addArrow(tailPosition?: Point, tipPosition?: Point): ArrowElementModel|null;
+  // TODO: abstract addArrow(tailPosition?: Point, tipPosition?: Point): ArrowElementModel|null;
+  addArrow(arrow: ArrowElementModel) {
+    this.arrows.push(arrow);
+  }
 
   // TODO(eyuelt): This is for backwards compatability with the existing
   // GoogleRealtime uxgraphs. I'll delete this eventually. It's required

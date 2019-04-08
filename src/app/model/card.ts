@@ -17,6 +17,7 @@ export class Card extends CollaborativeObjectModel implements CardElementModel {
   incomingArrows!: Arrow[];
   outgoingArrows!: Arrow[];
 
+  // @override
   static registerModel() {
     super.registerModel();
     this.prototype.position =
@@ -31,9 +32,11 @@ export class Card extends CollaborativeObjectModel implements CardElementModel {
       gapi.drive.realtime.custom.collaborativeField('outgoingArrows');
   }
 
+  // @override
   initializeModel() {
     super.initializeModel();
     this.incomingArrows = [];
     this.outgoingArrows = [];
   }
+
 }

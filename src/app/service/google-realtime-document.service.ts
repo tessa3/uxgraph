@@ -3,6 +3,7 @@ import { GoogleRealtimeService } from './google-realtime.service';
 import { DocumentService, DocumentModel } from './document.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Collaborator } from '../model/collaborator';
+import { Point, Card, Arrow } from '../model';
 
 @Injectable()
 export class GoogleRealtimeDocumentService extends DocumentService {
@@ -56,6 +57,33 @@ export class GoogleRealtimeDocumentService extends DocumentService {
       model.next(currentDocument ? currentDocument.getModel() : null);
     });
     return model;
+  }
+
+
+  // @override
+  createCard(position: Point = {x: 0, y: 0},
+             text: string = '',
+             selected = false): Card|null {
+    if (this.realtimeDocument) {
+      const card = this.realtimeDocument.getModel().create(Card);
+      card.position = position;
+      card.text = text;
+      card.selected = selected;
+      return card;
+    }
+    return null;
+  }
+
+  // @override
+  createArrow(tailPosition: Point = {x: 0, y: 0},
+              tipPosition: Point = {x: 0, y: 0}): Arrow|null {
+    if (this.realtimeDocument) {
+      const arrow = this.realtimeDocument.getModel().create(Arrow);
+      arrow.tailPosition = tailPosition;
+      arrow.tipPosition = tipPosition;
+      return arrow;
+    }
+    return null;
   }
 
 }
