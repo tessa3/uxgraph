@@ -21,4 +21,10 @@ export abstract class CollaborativeObjectModel {
   initializeModel() {
     this.internalId = UUID.UUID();  // UUID4 (randomized)
   }
+
+  constructor(init?: boolean) {
+    if (init !== undefined && init) {
+      this.initializeModel();
+    }
+  }
 }

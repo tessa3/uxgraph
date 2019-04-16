@@ -1,3 +1,5 @@
+import { MetadataFile } from '../service/metadata-file.service';
+
 /**
  * Represents a single Google Drive file.
  *
@@ -6,9 +8,7 @@
  *
  * https://developers.google.com/drive/api/v3/reference/files
  */
-export interface DriveFile {
-  id: string;
-  name: string;
+export interface DriveFile extends MetadataFile {
   mimeType: string;
   kind: string;
 }

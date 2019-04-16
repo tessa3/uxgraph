@@ -7,8 +7,6 @@ export class FakeGoogleDriveService {
 
   private file: MetadataFile = {
     name: 'fakeName',
-    mimeType: 'fakeMimeType',
-    kind: 'fakeKind',
     id: 'chingy'
   };
 

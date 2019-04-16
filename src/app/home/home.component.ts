@@ -1,8 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {DriveFile} from '../model/drive-file';
-import {MetadataFileService} from '../service/metadata-file.service';
+import {MetadataFileService, MetadataFile} from '../service/metadata-file.service';
 
 /**
  * This class represents the HomeComponent.
@@ -16,7 +15,7 @@ import {MetadataFileService} from '../service/metadata-file.service';
 export class HomeComponent implements OnDestroy {
 
   userLoggedIn = false;
-  graphPreviews: DriveFile[] = [];
+  graphPreviews: MetadataFile[] = [];
 
   private userLoggedInSub: Subscription;
   private listFilesSub: Subscription;
@@ -43,8 +42,8 @@ export class HomeComponent implements OnDestroy {
 
   createNewGraph() {
     this.createGraphSub = this.metadataFileService
-        .createFile('Untitled')
-        .subscribe((newGraph: DriveFile) => {
+        .createFile()
+        .subscribe((newGraph: MetadataFile) => {
           this.router.navigateByUrl('/graph/' + newGraph.id);
         });
   }

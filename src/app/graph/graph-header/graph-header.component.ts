@@ -1,10 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DriveFile} from '../../model/drive-file';
 import {Observable} from 'rxjs';
 import {Collaborator} from '../../model/collaborator';
 import {Title} from '@angular/platform-browser';
 import { DocumentService } from 'src/app/service/document.service';
-import { MetadataFileService } from 'src/app/service/metadata-file.service';
+import { MetadataFileService, MetadataFile } from 'src/app/service/metadata-file.service';
 
 /**
  * This class represents the App Header component.
@@ -18,14 +17,11 @@ export class GraphHeaderComponent implements OnInit {
 
   @Input() graphId!: string;
 
-  currentGraph: DriveFile = {
+  currentGraph: MetadataFile = {
     // Give a temporary name to this graph while we load the real name...
     name: 'Loading...',
-
     // ... and put temporary values into every other property of this graph.
-    id: 'UNKNOWN',
-    mimeType: 'UNKNOWN',
-    kind: 'UNKNOWN'
+    id: 'UNKNOWN'
   };
 
   collaborators: Observable<Collaborator[]>;
@@ -44,14 +40,16 @@ export class GraphHeaderComponent implements OnInit {
   ngOnInit(): void {
     // Once the @Input binding is available, fetch the rest of the data to put
     // into "this.currentGraph".
-    this.metadataFileService.getFile(this.graphId)
-        .subscribe((driveFile: DriveFile) => {
-          this.currentGraph = driveFile;
-          this.titleService.setTitle(this.currentGraph.name + ' | uxgraph');
+    const file = this.metadataFileService.getFile(this.graphId);
+    if (file !== null) {
+      file.subscribe((driveFile: MetadataFile) => {
+        this.currentGraph = driveFile;
+        this.titleService.setTitle(this.currentGraph.name + ' | uxgraph');
 
-          // TODO(girum): Save the filename into the Realtime API for
-          // live-updates to other users.
-        });
+        // TODO(girum): Save the filename into the Realtime API for
+        // live-updates to other users.
+      });
+    }
   }
 
   updateGraphTitle(newGraphName: string): void {
@@ -62,10 +60,12 @@ export class GraphHeaderComponent implements OnInit {
     // Once the PATCH request goes through, update the rest of the
     // "this.currentGraph" object to reflect the truth that the Google Drive API
     // just returned to us.
-    this.metadataFileService.updateFile(this.currentGraph)
-        .subscribe((driveFile: DriveFile) => {
-          this.currentGraph = driveFile;
-        });
+    const file = this.metadataFileService.updateFile(this.currentGraph);
+    if (file !== null) {
+      file.subscribe((driveFile: MetadataFile) => {
+        this.currentGraph = driveFile;
+      });
+    }
   }
 
   openShareDialog(): void {

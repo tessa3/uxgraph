@@ -24,14 +24,14 @@ export class GoogleRealtimeCanvasElementService extends CanvasElementService {
       this.realtimeModel = model as gapi.drive.realtime.Model|null;
       if (model === null) { return; }
 
-      this.collaborativeCards = model.getRoot().get('cards');
-      this.collaborativeArrows = model.getRoot().get('arrows');
+      const modelRoot = (model as gapi.drive.realtime.Model).getRoot();
+      this.collaborativeCards = modelRoot.get('cards');
+      this.collaborativeArrows = modelRoot.get('arrows');
       this.updateElements();
 
       // If anything in the document changes, update all of the canvas elements.
       // TODO(eyuelt): only update the specific canvas elements that changed.
-      model.getRoot()
-        .addEventListener(OBJECT_CHANGED, this.updateElements.bind(this));
+      modelRoot.addEventListener(OBJECT_CHANGED, this.updateElements.bind(this));
     });
   }
 

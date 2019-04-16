@@ -16,8 +16,6 @@ import {map, switchAll} from 'rxjs/operators';
 import {GoogleDriveQueryEncoder} from './utils/google-drive-query-encoder';
 import { MetadataFileService, MetadataFile } from './metadata-file.service';
 
-
-
 // TODO(eyuelt): move this stuff
 const API_KEY = 'AIzaSyBcALBUoAgCQ--XxyHjIWW6ifBEyDSck08';
 const CLIENT_ID =
@@ -159,13 +157,11 @@ export class GoogleDriveMetadataFileService extends MetadataFileService {
   // @override
   /**
    * Creates a new Google Drive file. Will be of our custom "uxgraph" MIME type.
-   *
-   * @param name The (initial) filename for the Google Drive file.
    */
-  createFile(name: string): Observable<DriveFile> {
+  createFile(): Observable<DriveFile> {
     return this.oauthToken.pipe(map(oauthToken => {
       const postBody = {
-        name: name,
+        name: 'Untitled',
         mimeType: UXGRAPH_MIME_TYPE
       };
 
@@ -184,7 +180,7 @@ export class GoogleDriveMetadataFileService extends MetadataFileService {
    *
    * This method gets us the {@link StorageFile} data for a single Drive ID.
    */
-  getFile(fileId: string): Observable<MetadataFile> {
+  getFile(fileId: string): Observable<MetadataFile>|null {
     return this.oauthToken.pipe(map(oauthToken => {
       const params = new URLSearchParams('', new GoogleDriveQueryEncoder());
       const fileUrl = GOOGLE_APIS_FILES_URL + '/' + fileId;
@@ -216,7 +212,7 @@ export class GoogleDriveMetadataFileService extends MetadataFileService {
    *
    * Takes an entire {@link DriveFile} object and updates any fields it sees.
    */
-  updateFile(driveFile: DriveFile): Observable<DriveFile> {
+  updateFile(driveFile: DriveFile): Observable<DriveFile>|null {
     return this.oauthToken.pipe(map(oauthToken => {
       const patchBody = {
         name: driveFile.name
