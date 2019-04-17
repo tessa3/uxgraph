@@ -30,7 +30,7 @@ export class CanvasComponent {
 
   // Note: ElementRef should be treated as read-only to avoid XSS vulnerabilites
   constructor(elementRef: ElementRef,
-              private canvasElementService: CanvasElementService,
+              public canvasElementService: CanvasElementService,
               private canvasInteractionService: CanvasInteractionService) {
     this.getBounds = () => {
       return elementRef.nativeElement.getBoundingClientRect();

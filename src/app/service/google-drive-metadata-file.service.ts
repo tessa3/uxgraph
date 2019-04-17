@@ -228,6 +228,11 @@ export class GoogleDriveMetadataFileService extends MetadataFileService {
   }
 
 
+  // @override
+  clearAllFiles() {
+    // do nothing
+  }
+
   /**
    * A little private helper for sending HTTP GET requests via Angular's HTTP
    * service.

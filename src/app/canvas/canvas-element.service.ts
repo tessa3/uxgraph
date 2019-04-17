@@ -123,7 +123,7 @@ export abstract class CanvasElementService {
         x: arrow.toCard.position.x,
         y: arrow.toCard.position.y + arrow.toCard.size.height / 2
       };
-      if (arrow.fromCard === null) {
+      if (arrow.fromCard == null) {
         arrow.tailPosition = {
           x: arrow.toCard.position.x - 50,
           y: arrow.toCard.position.y + arrow.toCard.size.height / 2
@@ -135,7 +135,7 @@ export abstract class CanvasElementService {
         x: arrow.fromCard.position.x + arrow.fromCard.size.width,
         y: arrow.fromCard.position.y + arrow.fromCard.size.height / 2
       };
-      if (arrow.toCard === null) {
+      if (arrow.toCard == null) {
         arrow.tipPosition = {
           x: arrow.fromCard.position.x + arrow.fromCard.size.width + 50,
           y: arrow.fromCard.position.y + arrow.fromCard.size.height / 2

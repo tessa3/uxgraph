@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface MetadataFile {
@@ -9,7 +8,6 @@ export interface MetadataFile {
 /**
  * A service to manage storage of the metadata files.
  */
-@Injectable()
 export abstract class MetadataFileService {
   constructor() {}
 
@@ -24,4 +22,6 @@ export abstract class MetadataFileService {
 
   // This probably doesn't belong here.
   abstract openShareDialog(fileId: string): void;
+
+  abstract clearAllFiles(): void;
 }

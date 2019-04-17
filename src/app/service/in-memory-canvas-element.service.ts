@@ -18,8 +18,9 @@ export class InMemoryCanvasElementService extends CanvasElementService {
     documentService.getModel().subscribe((m) => {
       const model = m as InMemoryDocumentModel|null;
       if (model === null) { return; }
-      this.cards = model.cards;
-      this.arrows = model.arrows;
+      // Use slice to make a copy of the arrays.
+      this.cards = model.cards.slice();
+      this.arrows = model.arrows.slice();
       this.notifyListeners();
     });
   }

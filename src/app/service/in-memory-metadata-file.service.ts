@@ -71,4 +71,11 @@ export class InMemoryMetadataFileService extends MetadataFileService {
   openShareDialog(fileId: string): void {
     // do nothing
   }
+
+  // @override
+  clearAllFiles() {
+    this.files = [];
+    this.listObs.next([]);
+  }
+
 }

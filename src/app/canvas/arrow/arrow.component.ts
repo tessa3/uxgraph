@@ -51,31 +51,25 @@ export class ArrowComponent implements OnInit {
   }
 
   // Get the anchor points of the arrow based on the tailPosition and tipPosition
-  getAnchorPoints() {
-    // TODO(eyuelt): clean this up
-    const anchorPoints: ViewportCoord[] = [];
-    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(
-      new CanvasCoord(this.arrow.tailPosition.x, this.arrow.tailPosition.y)));
-    const foo1 = new CanvasCoord(this.arrow.tailPosition.x, this.arrow.tailPosition.y);
-    foo1.x += 10;
-    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(foo1));
-    const foo2 = new CanvasCoord(this.arrow.tipPosition.x, this.arrow.tipPosition.y);
-    foo2.x -= 20;
-    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(foo2));
-    anchorPoints.push(this.canvasInteractionService.canvasCoordToViewportCoord(
-      new CanvasCoord(this.arrow.tipPosition.x, this.arrow.tipPosition.y)));
-    return anchorPoints;
+  getAnchorPoints(): ViewportCoord[] {
+    const canvasAnchorPoints = [
+      new CanvasCoord(this.arrow.tailPosition.x, this.arrow.tailPosition.y),
+      new CanvasCoord(this.arrow.tailPosition.x + 10, this.arrow.tailPosition.y),
+      new CanvasCoord(this.arrow.tipPosition.x - 20, this.arrow.tipPosition.y),
+      new CanvasCoord(this.arrow.tipPosition.x, this.arrow.tipPosition.y),
+    ];
+    return canvasAnchorPoints.map((coord: CanvasCoord) => {
+      return this.canvasInteractionService.canvasCoordToViewportCoord(coord);
+    });
   }
 
   // Convert the tail/tip points to the string format expected by SVG polyline.
   // TODO: change this to a property that gets updated whenever the tail/tip change.
   // otherwise, this function will get called every time the change detector runs
   pointsString() {
-    let pointsStr = '';
-    for (const point of this.anchorPoints) {
-      pointsStr += `${point.x},${point.y} `;
-    }
-    return pointsStr;
+    return this.anchorPoints.reduce((accumulator: string, point) => {
+      return accumulator + `${point.x},${point.y} `;
+    }, '');
   }
 
   // TODO(eyuelt): increase arrow hitbox

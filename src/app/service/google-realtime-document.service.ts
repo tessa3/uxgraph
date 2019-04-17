@@ -86,4 +86,9 @@ export class GoogleRealtimeDocumentService extends DocumentService {
     return null;
   }
 
+  // @override
+  clearAllDocuments() {
+    // do nothing
+  }
+
 }

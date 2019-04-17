@@ -5,15 +5,13 @@ import { CanvasCoord, ViewportCoord, ViewportVector } from './utils/coord';
  * The CanvasInteractionService handles zooming and panning on the canvas.
  * Zooming grows and shrinks the viewport relative to the canvas and panning
  * translates the viewport relative to the canvas.
- * This class also handles converting between the viewport's coordinate system,
- * the size of which is finite, and the canvas' coordinate system, which is
- * infinitely large.
- * The viewport coord system's origin is at the top left of the viewport.
- * The canvas coord system's origin starts off at the center of the viewport.
+ * This class also handles converting between the viewport's coordinate system
+ * and the canvas' coordinate system.
+ * The viewport's coord system is finite and its origin is at the top left of
+ * the viewport, while the canvas' coord system is infinite and its origin
+ * starts off at the center of the viewport.
  */
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CanvasInteractionService {
   // The zoom scale relative to the original viewport size.
   zoomScale = 1;

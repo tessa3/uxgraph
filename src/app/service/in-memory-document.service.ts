@@ -75,4 +75,10 @@ export class InMemoryDocumentService extends DocumentService {
     return arrow;
   }
 
+  // @override
+  clearAllDocuments() {
+    this.close();
+    this.models = [];
+  }
+
 }

@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Collaborator } from '../model/collaborator';
 import { InMemoryDocumentModel } from './in-memory-document.service';
@@ -11,7 +10,6 @@ export type DocumentModel = gapi.drive.realtime.Model|InMemoryDocumentModel;
  * A service to maintain the current document. The document contains the state
  * of the uxgraph, including the model and the collaborators.
  */
-@Injectable()
 export abstract class DocumentService {
   constructor() {}
   abstract load(documentId: string): void;
@@ -22,4 +20,6 @@ export abstract class DocumentService {
 
   abstract createCard(position?: Point, text?: string, selected?: boolean): Card|null;
   abstract createArrow(tailPosition?: Point, tipPosition?: Point): Arrow|null;
+
+  abstract clearAllDocuments(): void;
 }
