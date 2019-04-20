@@ -1,9 +1,23 @@
-import { Component, Input, OnInit, HostListener } from '@angular/core';
+import { Component, Input, HostListener } from '@angular/core';
 import { CanvasInteractionService } from '../canvas-interaction.service';
 import { EventUtils } from '../../utils/event-utils';
 import { CanvasElementService, ArrowElementModel } from '../canvas-element.service';
 import { ViewportDrag } from '../utils/viewport-drag';
 import { ViewportCoord, CanvasCoord } from '../utils/coord';
+
+// TODO: Arrow tail/tip positions should be determined by toCard/fromCard. The
+// only time we should rely on tailPosition/tipPosition is when we're dragging.
+// Otherwise, compute the position.
+// E.g.:
+//   get tipPosition() {
+//     if  (this.tipDrag.isInProgress()) {
+//       return this.arrow.tipPosition();
+//     }
+//     return this.arrow.toCard.incomingArrowPoint();
+//   }
+//
+// Once this happens, we can get rid of the adjustConnectedArrows and
+// repositionArrow logic in ElemModelUtils.
 
 /**
  * This class represents the Arrow component.
@@ -13,19 +27,21 @@ import { ViewportCoord, CanvasCoord } from '../utils/coord';
   templateUrl: 'arrow.component.html',
   styleUrls: ['arrow.component.css']
 })
-export class ArrowComponent implements OnInit {
+export class ArrowComponent {
   // The arrow data to render on the canvas.
   @Input() arrow!: ArrowElementModel;
   // A function pointer to the CanvasInteractionService's "getBounds()" function.
   @Input() canvasBoundsGetter!: (() => ClientRect);
 
   // The current scale factor of the arrow shape.
-  scale = 1;
-  // The list of anchor points for the arrow's polyline.
-  anchorPoints: ViewportCoord[] = [];
-  // The current display position of the tip of the arrow. This is the same as
-  // the last point in anchorPoints, so this property is just for convenience.
-  tipPosition = new ViewportCoord(0, 0);
+  get scale(): number {
+    return this.canvasInteractionService.zoomScale;
+  }
+  // The current display position of the tip of the arrow.
+  get tipPosition(): ViewportCoord {
+    return this.canvasInteractionService.canvasCoordToViewportCoord(
+      new CanvasCoord(this.arrow.tipPosition.x, this.arrow.tipPosition.y));
+  }
 
   // Represents the drag action on the tip of the arrow.
   private tipDrag: ViewportDrag = new ViewportDrag();
@@ -34,24 +50,11 @@ export class ArrowComponent implements OnInit {
               private canvasInteractionService: CanvasInteractionService) {
   }
 
-  ngOnInit() {
-    this.update();
-    this.canvasInteractionService.addListener(this.update.bind(this));
-    // TODO(eyuelt): why isn't change detection automatically handling this?
-    this.canvasElementService.addListener(this.update.bind(this));
-  }
-
-  // Called by the CanvasInteractionService when a zoom or pan occurs or when the
-  // CanvasInteractionService is told that the elements data may have been changed.
-  update() {
-    this.scale = this.canvasInteractionService.zoomScale;
-    this.tipPosition = this.canvasInteractionService.canvasCoordToViewportCoord(
-      new CanvasCoord(this.arrow.tipPosition.x, this.arrow.tipPosition.y));
-    this.anchorPoints = this.getAnchorPoints();
-  }
-
-  // Get the anchor points of the arrow based on the tailPosition and tipPosition
-  getAnchorPoints(): ViewportCoord[] {
+  // Get the anchor points of the arrow based on the tailPosition and
+  // tipPosition and convert them to the string format expected by SVG polyline.
+  // TODO: change this to a property that gets updated whenever the tail/tip change.
+  // otherwise, this function will get called every time the change detector runs
+  getAnchorPointsString() {
     const canvasAnchorPoints = [
       new CanvasCoord(this.arrow.tailPosition.x, this.arrow.tailPosition.y),
       new CanvasCoord(this.arrow.tailPosition.x + 10, this.arrow.tailPosition.y),
@@ -60,14 +63,7 @@ export class ArrowComponent implements OnInit {
     ];
     return canvasAnchorPoints.map((coord: CanvasCoord) => {
       return this.canvasInteractionService.canvasCoordToViewportCoord(coord);
-    });
-  }
-
-  // Convert the tail/tip points to the string format expected by SVG polyline.
-  // TODO: change this to a property that gets updated whenever the tail/tip change.
-  // otherwise, this function will get called every time the change detector runs
-  pointsString() {
-    return this.anchorPoints.reduce((accumulator: string, point) => {
+    }).reduce((accumulator: string, point) => {
       return accumulator + `${point.x},${point.y} `;
     }, '');
   }
@@ -96,9 +92,9 @@ export class ArrowComponent implements OnInit {
         event.clientY - canvasBounds.top
       );
       const dragVector = this.tipDrag.continue(newDragPoint);
-      this.tipPosition = this.tipPosition.translated(dragVector);
       const newTipPosition =
-        this.canvasInteractionService.viewportCoordToCanvasCoord(this.tipPosition);
+        this.canvasInteractionService.viewportCoordToCanvasCoord(
+          this.tipPosition.translated(dragVector));
       this.arrow.tipPosition = {x: newTipPosition.x, y: newTipPosition.y};
     }
   }

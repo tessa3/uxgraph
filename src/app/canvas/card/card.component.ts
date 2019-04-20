@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, HostListener } from '@angular/core';
+import { Component, Input, HostListener } from '@angular/core';
 import { CanvasInteractionService } from '../canvas-interaction.service';
 import { EventUtils } from '../../utils/event-utils';
 import { CanvasElementService, CardElementModel } from '../canvas-element.service';
 import { ViewportDrag } from '../utils/viewport-drag';
 import { ViewportCoord, CanvasCoord } from '../utils/coord';
+import { ElemModelUtils } from 'src/app/utils/elem-model-utils';
 
 /**
  * This class represents the Card component.
@@ -13,7 +14,7 @@ import { ViewportCoord, CanvasCoord } from '../utils/coord';
   templateUrl: 'card.component.html',
   styleUrls: ['card.component.css']
 })
-export class CardComponent implements OnInit {
+export class CardComponent {
 
   // The card data to render on the canvas.
   @Input() card!: CardElementModel;
@@ -22,10 +23,17 @@ export class CardComponent implements OnInit {
   @Input() canvasBoundsGetter!: (() => ClientRect);
 
   // The current scale factor of the card shape.
-  scale = 1;
+  get scale(): number {
+    return this.canvasInteractionService.zoomScale;
+  }
   // The current display position in the viewport's coordinate space.
-  position = new ViewportCoord(0, 0);
+  get position(): ViewportCoord {
+    return this.canvasInteractionService.canvasCoordToViewportCoord(
+      new CanvasCoord(this.card.position.x, this.card.position.y));
+  }
+
   // The radius of the rounded corners in the canvas' coordinate space.
+  // TODO: this should be defined as a constant somewhere
   cornerRadius = 1;
 
   // Represents the drag action on the card.
@@ -33,22 +41,10 @@ export class CardComponent implements OnInit {
 
   constructor(private canvasElementService: CanvasElementService,
               private canvasInteractionService: CanvasInteractionService) {
-  }
-
-  ngOnInit() {
-    this.position = this.canvasInteractionService.canvasCoordToViewportCoord(
-      new CanvasCoord(this.card.position.x, this.card.position.y));
-    this.canvasInteractionService.addListener(this.update.bind(this));
-    // TODO(eyuelt): why isn't change detection automatically handling this?
-    this.canvasElementService.addListener(this.update.bind(this));
-  }
-
-  // Called by the CanvasInteractionService when a zoom or pan occurs or when the
-  // CanvasInteractionService is told that the elements data may have been changed.
-  update() {
-    this.scale = this.canvasInteractionService.zoomScale;
-    this.position = this.canvasInteractionService.canvasCoordToViewportCoord(
-      new CanvasCoord(this.card.position.x, this.card.position.y));
+    // TODO: Do this once we start using ChangeDetectorStrategy.OnPush, which we
+    // can only do once we've changed all the @Inputs to be immutable.
+    // // If a zoom or pan happens, we need to manually trigger change detection.
+    // this.canvasInteractionService.addListener(changeDetectorRef.markForCheck.bind(this));
   }
 
   onMousedown(event: MouseEvent) {
@@ -78,11 +74,11 @@ export class CardComponent implements OnInit {
         event.clientY - canvasBounds.top
       );
       const dragVector = this.drag.continue(newDragPnt);
-      this.position = this.position.translated(dragVector);
       this.card.position =
-          this.canvasInteractionService.viewportCoordToCanvasCoord(this.position);
+          this.canvasInteractionService.viewportCoordToCanvasCoord(
+            this.position.translated(dragVector));
       // Move all associated arrows too
-      this.canvasElementService.adjustConnectedArrows(this.card);
+      ElemModelUtils.adjustConnectedArrows(this.card);
     }
   }
 

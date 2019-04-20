@@ -1,10 +1,6 @@
-import {Component} from '@angular/core';
-import {
-  CanvasElementService,
-  ArrowConnectionType
-} from 'src/app/canvas/canvas-element.service';
-import { Arrow, Card } from 'src/app/model';
+import { Component } from '@angular/core';
 import { DocumentService } from 'src/app/service/document.service';
+import { ElemModelUtils, ArrowConnectionType } from 'src/app/utils/elem-model-utils';
 
 @Component({
   selector: 'uxg-secondary-toolbar',
@@ -12,20 +8,15 @@ import { DocumentService } from 'src/app/service/document.service';
   styleUrls: ['secondary-toolbar.css']
 })
 export class SecondaryToolbarComponent {
-  constructor(
-    private canvasElementService: CanvasElementService,
-    private documentService: DocumentService) {
-  }
+  constructor(private documentService: DocumentService) {}
 
   onAddCardButtonPressed(event: MouseEvent) {
-    this.canvasElementService.transaction(() => {
+    this.documentService.transaction(() => {
       const card = this.documentService.createCard();
       const arrow = this.documentService.createArrow();
       if (card && arrow) {
-        this.canvasElementService.addCard(card);
-        this.canvasElementService.addArrow(arrow);
-        this.canvasElementService.connectArrowAndCard(arrow, card, ArrowConnectionType.OUTGOING);
-        this.canvasElementService.repositionArrow(arrow);
+        ElemModelUtils.connectArrowAndCard(arrow, card, ArrowConnectionType.OUTGOING);
+        ElemModelUtils.repositionArrow(arrow);
       }
     });
   }

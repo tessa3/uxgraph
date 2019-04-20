@@ -44,7 +44,6 @@ export class GoogleRealtimeCanvasElementService extends CanvasElementService {
     if (this.collaborativeArrows) {
       this.arrows = this.collaborativeArrows.asArray();
     }
-    this.notifyListeners();
   }
 
   // @override
@@ -62,17 +61,6 @@ export class GoogleRealtimeCanvasElementService extends CanvasElementService {
     if (this.collaborativeArrows) {
       typeIs(arrow, Arrow.name);
       this.collaborativeArrows.push(arrow as Arrow);
-    }
-  }
-
-  // @override
-  // This function calls the given function within a Realtime compound
-  // operation, which treats the function as a transaction.
-  transaction(fn: () => void) {
-    if (this.realtimeModel !== null) {
-      this.realtimeModel.beginCompoundOperation();
-      fn();
-      this.realtimeModel.endCompoundOperation();
     }
   }
 

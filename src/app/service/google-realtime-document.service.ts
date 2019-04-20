@@ -91,4 +91,16 @@ export class GoogleRealtimeDocumentService extends DocumentService {
     // do nothing
   }
 
+  // @override
+  // This function calls the given function within a Realtime compound
+  // operation, which treats the function as a transaction.
+  transaction(fn: () => void) {
+    if (this.realtimeDocument) {
+      const model = this.realtimeDocument.getModel();
+      model.beginCompoundOperation();
+      fn();
+      model.endCompoundOperation();
+    }
+  }
+
 }

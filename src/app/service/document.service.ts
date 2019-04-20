@@ -22,4 +22,8 @@ export abstract class DocumentService {
   abstract createArrow(tailPosition?: Point, tipPosition?: Point): Arrow|null;
 
   abstract clearAllDocuments(): void;
+
+  // This function treats all of the operations in the given fn as a transaction.
+  // Currently only useful if we're using Google Realtime.
+  transaction(fn: () => void) { fn(); }
 }
