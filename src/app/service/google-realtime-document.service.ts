@@ -75,12 +75,9 @@ export class GoogleRealtimeDocumentService extends DocumentService {
   }
 
   // @override
-  createArrow(tailPosition: Point = {x: 0, y: 0},
-              tipPosition: Point = {x: 0, y: 0}): Arrow|null {
+  createArrow(): Arrow|null {
     if (this.realtimeDocument) {
       const arrow = this.realtimeDocument.getModel().create(Arrow);
-      arrow.tailPosition = tailPosition;
-      arrow.tipPosition = tipPosition;
       return arrow;
     }
     return null;

@@ -19,7 +19,7 @@ export abstract class DocumentService {
   // TODO: There should be a fn that gets the document for a given file id.
 
   abstract createCard(position?: Point, text?: string, selected?: boolean): Card|null;
-  abstract createArrow(tailPosition?: Point, tipPosition?: Point): Arrow|null;
+  abstract createArrow(): Arrow|null;
 
   abstract clearAllDocuments(): void;
 

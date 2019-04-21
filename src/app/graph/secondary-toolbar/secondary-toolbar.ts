@@ -16,7 +16,6 @@ export class SecondaryToolbarComponent {
       const arrow = this.documentService.createArrow();
       if (card && arrow) {
         ElemModelUtils.connectArrowAndCard(arrow, card, ArrowConnectionType.OUTGOING);
-        ElemModelUtils.repositionArrow(arrow);
       }
     });
   }

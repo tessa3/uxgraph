@@ -3,21 +3,8 @@ import { CanvasInteractionService } from '../canvas-interaction.service';
 import { EventUtils } from '../../utils/event-utils';
 import { CanvasElementService, ArrowElementModel } from '../canvas-element.service';
 import { ViewportDrag } from '../utils/viewport-drag';
-import { ViewportCoord, CanvasCoord } from '../utils/coord';
-
-// TODO: Arrow tail/tip positions should be determined by toCard/fromCard. The
-// only time we should rely on tailPosition/tipPosition is when we're dragging.
-// Otherwise, compute the position.
-// E.g.:
-//   get tipPosition() {
-//     if  (this.tipDrag.isInProgress()) {
-//       return this.arrow.tipPosition();
-//     }
-//     return this.arrow.toCard.incomingArrowPoint();
-//   }
-//
-// Once this happens, we can get rid of the adjustConnectedArrows and
-// repositionArrow logic in ElemModelUtils.
+import { ViewportCoord, CanvasCoord, ViewportVector } from '../utils/coord';
+import { ElemModelUtils } from 'src/app/utils/elem-model-utils';
 
 /**
  * This class represents the Arrow component.
@@ -37,10 +24,35 @@ export class ArrowComponent {
   get scale(): number {
     return this.canvasInteractionService.zoomScale;
   }
+
   // The current display position of the tip of the arrow.
-  get tipPosition(): ViewportCoord {
-    return this.canvasInteractionService.canvasCoordToViewportCoord(
-      new CanvasCoord(this.arrow.tipPosition.x, this.arrow.tipPosition.y));
+  get tipPosition(): CanvasCoord {
+    let tipPos: CanvasCoord;
+    if (this.arrow.tipPosition) {
+      tipPos = CanvasCoord.fromPoint(this.arrow.tipPosition);
+    } else if (this.arrow.toCard) {
+      tipPos = ElemModelUtils.incomingArrowPoint(this.arrow.toCard);
+    } else if (this.arrow.fromCard) {
+      tipPos = ElemModelUtils.outgoingArrowPoint(this.arrow.fromCard).translatedX(50);
+    } else {
+      tipPos = new CanvasCoord(50, 0);
+    }
+    return tipPos;
+  }
+
+  // The current display position of the tail of the arrow.
+  get tailPosition(): CanvasCoord {
+    let tailPos: CanvasCoord;
+    if (this.arrow.tailPosition) {
+      tailPos = CanvasCoord.fromPoint(this.arrow.tailPosition);
+    } else if (this.arrow.fromCard) {
+      tailPos = ElemModelUtils.outgoingArrowPoint(this.arrow.fromCard);
+    } else if (this.arrow.toCard) {
+      tailPos = ElemModelUtils.incomingArrowPoint(this.arrow.toCard).translatedX(-50);
+    } else {
+      tailPos = new CanvasCoord(0, 0);
+    }
+    return tailPos;
   }
 
   // Represents the drag action on the tip of the arrow.
@@ -54,18 +66,23 @@ export class ArrowComponent {
   // tipPosition and convert them to the string format expected by SVG polyline.
   // TODO: change this to a property that gets updated whenever the tail/tip change.
   // otherwise, this function will get called every time the change detector runs
-  getAnchorPointsString() {
-    const canvasAnchorPoints = [
-      new CanvasCoord(this.arrow.tailPosition.x, this.arrow.tailPosition.y),
-      new CanvasCoord(this.arrow.tailPosition.x + 10, this.arrow.tailPosition.y),
-      new CanvasCoord(this.arrow.tipPosition.x - 20, this.arrow.tipPosition.y),
-      new CanvasCoord(this.arrow.tipPosition.x, this.arrow.tipPosition.y),
+  getAnchorPointsString(): string {
+    const canvasAnchorPoints: CanvasCoord[] = [
+      this.tailPosition,
+      this.tailPosition.translatedX(10),
+      this.tipPosition.translatedX(-20),
+      this.tipPosition,
     ];
-    return canvasAnchorPoints.map((coord: CanvasCoord) => {
-      return this.canvasInteractionService.canvasCoordToViewportCoord(coord);
+    return canvasAnchorPoints.map((point: CanvasCoord) => {
+      return this.canvasInteractionService.canvasCoordToViewportCoord(point);
     }).reduce((accumulator: string, point) => {
       return accumulator + `${point.x},${point.y} `;
     }, '');
+  }
+
+  // Called from the template.
+  getTipPositionInViewport(): ViewportCoord {
+    return this.canvasInteractionService.canvasCoordToViewportCoord(this.tipPosition);
   }
 
   // TODO(eyuelt): increase arrow hitbox
@@ -92,9 +109,8 @@ export class ArrowComponent {
         event.clientY - canvasBounds.top
       );
       const dragVector = this.tipDrag.continue(newDragPoint);
-      const newTipPosition =
-        this.canvasInteractionService.viewportCoordToCanvasCoord(
-          this.tipPosition.translated(dragVector));
+      const newTipPosition = this.tipPosition.translated(
+        this.canvasInteractionService.viewportVectorToCanvasVector(dragVector));
       this.arrow.tipPosition = {x: newTipPosition.x, y: newTipPosition.y};
     }
   }
@@ -128,8 +144,9 @@ export class ArrowComponent {
           this.canvasElementService.arrowTipDroppedOnCard(this.arrow, cardId);
         }
       }
-      // TODO: If the click was on the canvas, disconnect the arrow from its
-      // current card (if it has one).
+      this.arrow.tipPosition = undefined;
+      // TODO: If the mouseup was on the trash can, disconnect the arrow from
+      // its current card (if it has one).
       this.tipDrag.end();
     }
   }

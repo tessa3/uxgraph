@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanvasCoord, ViewportCoord, ViewportVector } from './utils/coord';
+import { CanvasCoord, ViewportCoord, CanvasVector, ViewportVector } from './utils/coord';
 
 /*
  * The CanvasInteractionService handles zooming and panning on the canvas.
@@ -51,6 +51,18 @@ export class CanvasInteractionService {
       (cv.x - this.originOffset.x) * this.zoomScale,
       (cv.y - this.originOffset.y) * this.zoomScale
     );
+  }
+
+  // Convert a vector in the viewport coordinate space to a vector in the canvas
+  // coordinate space.
+  viewportVectorToCanvasVector(vp: ViewportVector): CanvasVector {
+    return new CanvasVector(vp.x / this.zoomScale, vp.y / this.zoomScale);
+  }
+
+  // Convert a vector in the canvas coordinate space to a vector in the viewport
+  // coordinate space.
+  canvasVectorToViewportVector(cv: CanvasVector): ViewportVector {
+    return new ViewportVector(cv.x * this.zoomScale, cv.y * this.zoomScale);
   }
 
   // Zoom the canvas incrementally by incZoomScale, while keeping zoomPnt at

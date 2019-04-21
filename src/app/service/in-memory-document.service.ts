@@ -65,12 +65,9 @@ export class InMemoryDocumentService extends DocumentService {
   }
 
   // @override
-  createArrow(tailPosition: Point = {x: 0, y: 0},
-              tipPosition: Point = {x: 0, y: 0}): Arrow|null {
+  createArrow(): Arrow|null {
     if (!this.currentModelObs.value) { return null; }
     const arrow = new Arrow(true);
-    arrow.tailPosition = tailPosition;
-    arrow.tipPosition = tipPosition;
     this.currentModelObs.value.addArrow(arrow);
     return arrow;
   }

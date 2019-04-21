@@ -1,6 +1,7 @@
 // Util functions for messing with the element models
 
 import { CardElementModel, ArrowElementModel } from '../canvas/canvas-element.service';
+import { CanvasCoord } from '../canvas/utils/coord';
 
 // Specifies the type of connection an arrow has to a card. Note that an arrow
 // may be connected to up to two cards, so it could have an INCOMING connection
@@ -50,49 +51,17 @@ export class ElemModelUtils {
     }
   }
 
-
-
-  // TODO: delete this
-  static adjustConnectedArrows(card: CardElementModel) {
-    const incomingArrows: ArrowElementModel[] =
-        this.backwardsCompatibleArrows(card.incomingArrows);
-    const outgoingArrows: ArrowElementModel[] =
-       this.backwardsCompatibleArrows(card.outgoingArrows);
-    // TODO(eyuelt): instead, have arrows subscribe to card position changes
-    incomingArrows.forEach((arrow: ArrowElementModel) => { this.repositionArrow(arrow); });
-    outgoingArrows.forEach((arrow: ArrowElementModel) => { this.repositionArrow(arrow); });
+  // The point that the incoming arrows for the card should point to.
+  static incomingArrowPoint(card: CardElementModel): CanvasCoord {
+    return new CanvasCoord(card.position.x,
+                           card.position.y + (card.size.height / 2));
   }
 
-  // TODO: delete this
-  // Repositions the given arrow's tail and tip based on its attached cards.
-  static repositionArrow(arrow: ArrowElementModel) {
-    if (!arrow.fromCard && !arrow.toCard) {
-      return;
-    }
-    if (arrow.toCard) {
-      arrow.tipPosition = {
-        x: arrow.toCard.position.x,
-        y: arrow.toCard.position.y + arrow.toCard.size.height / 2
-      };
-      if (arrow.fromCard == null) {
-        arrow.tailPosition = {
-          x: arrow.toCard.position.x - 50,
-          y: arrow.toCard.position.y + arrow.toCard.size.height / 2
-        };
-      }
-    }
-    if (arrow.fromCard) {
-      arrow.tailPosition = {
-        x: arrow.fromCard.position.x + arrow.fromCard.size.width,
-        y: arrow.fromCard.position.y + arrow.fromCard.size.height / 2
-      };
-      if (arrow.toCard == null) {
-        arrow.tipPosition = {
-          x: arrow.fromCard.position.x + arrow.fromCard.size.width + 50,
-          y: arrow.fromCard.position.y + arrow.fromCard.size.height / 2
-        };
-      }
-    }
+  // The point that the outgoing arrows for the card should point from.
+  static outgoingArrowPoint(card: CardElementModel): CanvasCoord {
+    return new CanvasCoord(
+      card.position.x + card.size.width,
+      card.position.y + (card.size.height / 2));
   }
 
 }

@@ -6,9 +6,8 @@ import { ArrowElementModel } from '../canvas/canvas-element.service';
 export class Arrow extends CollaborativeObjectModel implements ArrowElementModel {
   protected static modelName = 'Arrow';
   // Collaborative fields
-  // TODO(eyuelt): get rid of non-null assertions
-  tailPosition!: Point;
-  tipPosition!: Point;
+  tailPosition: Point|undefined;  // This is only set if tail is being dragged
+  tipPosition: Point|undefined;  // This is only set if tip is being dragged
   fromCard: Card|undefined;
   toCard: Card|undefined;
 

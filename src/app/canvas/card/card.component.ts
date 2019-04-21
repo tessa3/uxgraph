@@ -4,7 +4,6 @@ import { EventUtils } from '../../utils/event-utils';
 import { CanvasElementService, CardElementModel } from '../canvas-element.service';
 import { ViewportDrag } from '../utils/viewport-drag';
 import { ViewportCoord, CanvasCoord } from '../utils/coord';
-import { ElemModelUtils } from 'src/app/utils/elem-model-utils';
 
 /**
  * This class represents the Card component.
@@ -77,8 +76,6 @@ export class CardComponent {
       this.card.position =
           this.canvasInteractionService.viewportCoordToCanvasCoord(
             this.position.translated(dragVector));
-      // Move all associated arrows too
-      ElemModelUtils.adjustConnectedArrows(this.card);
     }
   }
 

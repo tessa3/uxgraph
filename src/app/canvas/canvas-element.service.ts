@@ -14,8 +14,8 @@ export interface CardElementModel {
 
 export interface ArrowElementModel {
   id: string;
-  tailPosition: Point;
-  tipPosition: Point;
+  tailPosition: Point|undefined;
+  tipPosition: Point|undefined;
   fromCard: CardElementModel|undefined;
   toCard: CardElementModel|undefined;
 }
@@ -57,7 +57,6 @@ export class CanvasElementService {
       const card = this.getCardById(cardId);
       if (card !== null) {
         ElemModelUtils.connectArrowAndCard(arrow, card, ArrowConnectionType.INCOMING);
-        ElemModelUtils.repositionArrow(arrow);
       }
     }
   }
