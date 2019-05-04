@@ -16,7 +16,7 @@ install:
 - npm install
 
 script:
-- npm run build.prod
+- npm run build
 
 before_deploy:
 - rm -rf node_modules
